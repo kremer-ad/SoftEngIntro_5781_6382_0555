@@ -10,7 +10,7 @@ import static primitives.Util.*;
  * 
  * @author Dan
  */
-public class Polygon /*implements Geometry*/ {
+public class Polygon implements Geometry {
 	/**
 	 * List of polygon's vertices
 	 */
@@ -83,6 +83,13 @@ public class Polygon /*implements Geometry*/ {
 
 	@Override
 	public Vector getNormal(Point3D point) {
-		return plane.getNormal();
+		return plane.getNormal(point);
+	}
+
+	@Override
+	public String toString() {
+		return "Polygon{" + vertices +
+				", plane=" + plane +
+				'}';
 	}
 }

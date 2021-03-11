@@ -6,7 +6,7 @@ import static java.lang.Math.sqrt;
 
 public class Vector {
 
-    private Point3D head = null;
+    private Point3D head;
 
     public Point3D getHead() {
         return head;
@@ -17,7 +17,11 @@ public class Vector {
         if (temp.equals(Point3D.ZERO)) {
             throw new IllegalArgumentException("WRONG INPUT: cannot receive zero vector");
         }
-        this.head=temp;
+        this.head = temp;
+    }
+
+    public Vector(Vector other) {
+        this.head = new Point3D(other.head);
     }
 
     public Vector(double x, double y, double z) {
@@ -25,7 +29,7 @@ public class Vector {
         if (temp.equals(Point3D.ZERO)) {
             throw new IllegalArgumentException("WRONG INPUT: cannot receive zero vector");
         }
-        this.head=temp;
+        this.head = temp;
     }
 
     public Vector(Point3D head) {
@@ -36,15 +40,11 @@ public class Vector {
     }
 
     public Vector add(Vector vec) {
-        return new Vector(this.head.x.coord + vec.head.x.coord,
-                this.head.y.coord + vec.head.y.coord,
-                this.head.z.coord + vec.head.z.coord);
+        return new Vector(this.head.add(vec));
     }
 
     public Vector subtract(Vector vec) {
-        return new Vector(this.head.x.coord - vec.head.x.coord,
-                this.head.y.coord - vec.head.y.coord,
-                this.head.z.coord - vec.head.z.coord);
+        return this.head.subtract(vec.head);
     }
 
     public Vector scale(double d) {
@@ -66,22 +66,24 @@ public class Vector {
     }
 
     public double lengthSquared() {
-        return pow(this.head.x.coord) +
-                pow(this.head.y.coord)+
-                pow(this.head.z.coord);
+        return this.head.distanceSquared(Point3D.ZERO);
     }
 
     public double length() {
-        return sqrt(this.lengthSquared());
+        return this.head.distance(Point3D.ZERO);
     }
 
-    public Vector normalize() {
-        this.head = this.normalized().head; // BEWARE! SHALLOW ASSIGNING!!!
+    public Vector normalize() { // BEWARE! SHALLOW ASSIGNING!!!
+        Point3D head = new Point3D(this.head.x.coord * 1 / this.length(),
+                this.head.y.coord * 1 / this.length(),
+                this.head.z.coord * 1 / this.length());
+        this.head = head;
         return this;
     }
 
     public Vector normalized() {
-        return this.scale(1 / this.length());
+        Vector ret = new Vector(this);
+        return ret.normalize();
     }
 
     @Override
@@ -92,17 +94,9 @@ public class Vector {
         Vector other = (Vector) o;
         return this.head.equals(other.head);
     }
+
     @Override
     public String toString() {
         return "Vec{" + head + '}';
     }
-
-    // Private methods
-
-    private double pow(double d)
-    {
-        return d*d;
-    }
-
-
 }

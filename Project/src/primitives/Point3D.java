@@ -24,6 +24,12 @@ public class Point3D {
         this.z = new Coordinate(z);
     }
 
+    public Point3D(Point3D other){
+        this.x=new Coordinate(other.x.coord);
+        this.y=new Coordinate(other.y.coord);
+        this.z=new Coordinate(other.z.coord);
+    }
+
     public Point3D add(Vector vec) {
         return new Point3D(this.x.coord + vec.getHead().x.coord,
                 this.y.coord + vec.getHead().y.coord,
@@ -31,14 +37,12 @@ public class Point3D {
     }
 
     public Vector subtract(Point3D pnt) {
-
         return new Vector(this.x.coord - pnt.x.coord,
                 this.y.coord - pnt.y.coord,
                 this.z.coord - pnt.z.coord);
     }
 
     public double distanceSquared(Point3D pnt) {
-
         return (this.x.coord - pnt.x.coord) * (this.x.coord - pnt.x.coord) +
                 (this.y.coord - pnt.y.coord) * (this.y.coord - pnt.y.coord) +
                 (this.z.coord - pnt.z.coord) * (this.z.coord - pnt.z.coord);
@@ -64,4 +68,5 @@ public class Point3D {
                 new DecimalFormat("#.00").format(y),
                 new DecimalFormat("#.00").format(z));
     }
+
 }

@@ -43,9 +43,7 @@ public class Vector {
     }
 
     public Vector scale(double d) {
-        return new Vector(this.head.x.coord * d,
-                this.head.y.coord * d,
-                this.head.z.coord * d);
+        return new Vector(this.head.mult(d));
     }
 
     public double dotProduct(Vector vec) {
@@ -69,10 +67,7 @@ public class Vector {
     }
 
     public Vector normalize() { // BEWARE! SHALLOW ASSIGNING!!!
-        Point3D head = new Point3D(this.head.x.coord * 1 / this.length(),
-                this.head.y.coord * 1 / this.length(),
-                this.head.z.coord * 1 / this.length());
-        this.head = head;
+        this.head = this.head.mult(1D/this.length());
         return this;
     }
 

@@ -87,4 +87,7 @@ public class Point3D {
                 new DecimalFormat("#.00").format(z));
     }
 
+    Point3D mult(double multiplier){
+        return new Point3D(this.x.coord*multiplier,this.y.coord*multiplier,this.z.coord*multiplier);
+    }
 }

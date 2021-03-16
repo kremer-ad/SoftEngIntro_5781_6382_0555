@@ -6,28 +6,46 @@ import java.util.Objects;
 import static java.lang.Math.sqrt;
 
 public class Point3D {
+    /**
+     * the point x axis data
+     */
     final Coordinate x;
+    /**
+     * the point y axis data
+     */
     final Coordinate y;
+    /**
+     * the point z axis data
+     */
     final Coordinate z;
 
+    /**
+     * point with the values (0,0,0)
+     */
     static public final Point3D ZERO = new Point3D(0, 0, 0);
 
+    /**
+     * Create new point
+     * @param x the point x axis
+     * @param y the point y axis
+     * @param z the point z axis
+     */
     public Point3D(Coordinate x, Coordinate y, Coordinate z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+    /**
+     *
+     * @param x the x axis of the point
+     * @param y the y axis of the point
+     * @param z the z axis of the point
+     */
     public Point3D(double x, double y, double z) {
         this.x = new Coordinate(x);
         this.y = new Coordinate(y);
         this.z = new Coordinate(z);
-    }
-
-    public Point3D(Point3D other){
-        this.x=new Coordinate(other.x.coord);
-        this.y=new Coordinate(other.y.coord);
-        this.z=new Coordinate(other.z.coord);
     }
 
     public Point3D add(Vector vec) {

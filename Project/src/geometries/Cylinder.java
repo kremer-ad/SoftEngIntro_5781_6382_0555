@@ -8,12 +8,21 @@ public class Cylinder extends Tube{
 
     private double height =0;
 
+    /**
+     *
+     * @param axisRay The axis of the Tube
+     * @param radius tha radius of the Tube
+     * @param height
+     */
     public Cylinder(Ray axisRay, double radius, double height) {
         super(axisRay, radius);
         this.height = height;
     }
 
-    // Getter
+    /**
+     *
+     * @return the height value
+     */
     public double getHeight() {
         return height;
     }

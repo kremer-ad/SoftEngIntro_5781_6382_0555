@@ -19,11 +19,6 @@ public class Vector {
         }
         this.head = temp;
     }
-
-    public Vector(Vector other) {
-        this.head = new Point3D(other.head);
-    }
-
     public Vector(double x, double y, double z) {
         Point3D temp = new Point3D(x, y, z);
         if (temp.equals(Point3D.ZERO)) {
@@ -82,7 +77,7 @@ public class Vector {
     }
 
     public Vector normalized() {
-        Vector ret = new Vector(this);
+        Vector ret = new Vector(this.head);
         return ret.normalize();
     }
 

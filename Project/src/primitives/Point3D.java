@@ -24,12 +24,6 @@ public class Point3D {
         this.z = new Coordinate(z);
     }
 
-    public Point3D(Point3D other){
-        this.x=new Coordinate(other.x.coord);
-        this.y=new Coordinate(other.y.coord);
-        this.z=new Coordinate(other.z.coord);
-    }
-
     public Point3D add(Vector vec) {
         return new Point3D(this.x.coord + vec.getHead().x.coord,
                 this.y.coord + vec.getHead().y.coord,
@@ -69,4 +63,7 @@ public class Point3D {
                 new DecimalFormat("#.00").format(z));
     }
 
+    Point3D mult(double multiplier){
+        return new Point3D(this.x.coord*multiplier,this.y.coord*multiplier,this.z.coord*multiplier);
+    }
 }

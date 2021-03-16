@@ -20,10 +20,6 @@ public class Vector {
         this.head = temp;
     }
 
-    public Vector(Vector other) {
-        this.head = new Point3D(other.head);
-    }
-
     public Vector(double x, double y, double z) {
         Point3D temp = new Point3D(x, y, z);
         if (temp.equals(Point3D.ZERO)) {
@@ -36,7 +32,6 @@ public class Vector {
         if (head.equals(Point3D.ZERO)) {
             throw new IllegalArgumentException("WRONG INPUT: cannot receive zero vector");
         }
-        this.head = head;
     }
 
     public Vector add(Vector vec) {
@@ -48,9 +43,7 @@ public class Vector {
     }
 
     public Vector scale(double d) {
-        return new Vector(this.head.x.coord * d,
-                this.head.y.coord * d,
-                this.head.z.coord * d);
+        return new Vector(this.head.mult(d));
     }
 
     public double dotProduct(Vector vec) {
@@ -74,15 +67,12 @@ public class Vector {
     }
 
     public Vector normalize() { // BEWARE! SHALLOW ASSIGNING!!!
-        Point3D head = new Point3D(this.head.x.coord * 1 / this.length(),
-                this.head.y.coord * 1 / this.length(),
-                this.head.z.coord * 1 / this.length());
-        this.head = head;
+        this.head = this.head.mult(1D/this.length());
         return this;
     }
 
     public Vector normalized() {
-        Vector ret = new Vector(this);
+        Vector ret = new Vector(this.head);
         return ret.normalize();
     }
 

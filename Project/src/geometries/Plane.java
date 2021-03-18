@@ -1,13 +1,18 @@
 package geometries;
 
-import org.jetbrains.annotations.NotNull;
 import primitives.Point3D;
 import primitives.Vector;
 
 public class Plane implements Geometry {
 
-
+    /**
+     * point on plane
+     */
     private Point3D q0;
+
+    /**
+     * normal vector of plane
+     */
     private Vector normal;
 
     /**

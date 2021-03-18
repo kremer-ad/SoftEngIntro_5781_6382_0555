@@ -48,24 +48,44 @@ public class Point3D {
         this.z = new Coordinate(z);
     }
 
+    /**
+     * add vector to point
+     * @param vec to add
+     * @return point
+     */
     public Point3D add(Vector vec) {
         return new Point3D(this.x.coord + vec.getHead().x.coord,
                 this.y.coord + vec.getHead().y.coord,
                 this.z.coord + vec.getHead().z.coord);
     }
 
+    /**
+     * subtract point from vector
+     * @param pnt to subtract
+     * @return vector
+     */
     public Vector subtract(Point3D pnt) {
         return new Vector(this.x.coord - pnt.x.coord,
                 this.y.coord - pnt.y.coord,
                 this.z.coord - pnt.z.coord);
     }
 
+    /**
+     * calculate squared distance between two points, using linear algebra formula
+     * @param pnt
+     * @return squared distance
+     */
     public double distanceSquared(Point3D pnt) {
         return (this.x.coord - pnt.x.coord) * (this.x.coord - pnt.x.coord) +
                 (this.y.coord - pnt.y.coord) * (this.y.coord - pnt.y.coord) +
                 (this.z.coord - pnt.z.coord) * (this.z.coord - pnt.z.coord);
     }
 
+    /**
+     * return distance, using squared distance function
+     * @param pnt
+     * @return
+     */
     public double distance(Point3D pnt) {
         return sqrt(distanceSquared(pnt));
     }
@@ -82,11 +102,16 @@ public class Point3D {
     @Override
     public String toString() {
         return String.format("(%s,%s,%s)",
-                new DecimalFormat("#.00").format(x),
-                new DecimalFormat("#.00").format(y),
-                new DecimalFormat("#.00").format(z));
+                new DecimalFormat("#.##").format(x.coord),
+                new DecimalFormat("#.##").format(y.coord),
+                new DecimalFormat("#.##").format(z.coord));
     }
 
+    /**
+     * handler internal function, multiplication between point3D and scalar (double)
+     * @param multiplier
+     * @return point3D
+     */
     Point3D mult(double multiplier){
         return new Point3D(this.x.coord*multiplier,this.y.coord*multiplier,this.z.coord*multiplier);
     }

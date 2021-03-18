@@ -3,10 +3,15 @@ package geometries;
 import primitives.*;
 
 public class Tube implements Geometry {
+    /**
+     * The axis of the Tube
+     */
+    protected Ray axisRay;
 
-
-    protected Ray axisRay = null;
-    protected double radius = 0;
+    /**
+     * tha radius of the Tube
+     */
+    protected double radius;
 
     public Ray getAxisRay() {
         return axisRay;
@@ -16,6 +21,10 @@ public class Tube implements Geometry {
         return radius;
     }
 
+    /**
+     * @param axisRay The axis of the Tube
+     * @param radius  tha radius of the Tube
+     */
     public Tube(Ray axisRay, double radius) {
         this.axisRay = axisRay;
         this.radius = radius;

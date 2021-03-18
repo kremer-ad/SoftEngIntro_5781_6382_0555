@@ -4,10 +4,21 @@ import primitives.Point3D;
 import primitives.Vector;
 
 public class Sphere implements Geometry {
-
+    /**
+     * center point of sphere
+     */
     private Point3D center = null;
+
+    /**
+     * radius of sphere
+     */
     private double radius = 0;
 
+    /**
+     * sphere constructor
+     * @param center center point of sphere
+     * @param radius radius of sphere
+     */
     public Sphere(Point3D center, double radius) {
         this.center = center;
         this.radius = radius;

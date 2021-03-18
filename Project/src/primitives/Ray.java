@@ -3,10 +3,21 @@ package primitives;
 import java.util.Objects;
 
 public class Ray {
+    /**
+     * beginning point of ray
+     */
+    private Point3D p0;
 
-    private Point3D p0 = null;
-    private Vector dir = null;
+    /**
+     * normalized direction vector of ray,
+     */
+    private Vector dir;
 
+    /**
+     * ray constructor
+     * @param p0 beginning point of ray
+     * @param dir gets direction vector of ray and normalize it
+     */
     public Ray(Point3D p0, Vector dir) {
         this.p0 = p0;
         this.dir = dir.normalized();

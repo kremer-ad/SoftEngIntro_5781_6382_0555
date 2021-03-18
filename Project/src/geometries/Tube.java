@@ -2,6 +2,9 @@ package geometries;
 
 import primitives.*;
 
+/**
+ * Infinity Tube
+ */
 public class Tube implements Geometry {
     /**
      * The axis of the Tube

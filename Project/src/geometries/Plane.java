@@ -16,7 +16,6 @@ public class Plane implements Geometry {
     private Vector normal;
 
     /**
-     *
      * @return the normal value
      */
     public Vector getNormal() {
@@ -24,7 +23,6 @@ public class Plane implements Geometry {
     }
 
     /**
-     *
      * @return point on the plane
      */
     public Point3D getQ0() {
@@ -32,8 +30,7 @@ public class Plane implements Geometry {
     }
 
     /**
-     *
-     * @param q0 point on the plane
+     * @param q0     point on the plane
      * @param normal the normal of that plane
      */
     public Plane(Point3D q0, Vector normal) {
@@ -42,18 +39,25 @@ public class Plane implements Geometry {
     }
 
     /**
-     *
      * @param q0 first pont on the plane
      * @param q1 second point on the plane
      * @param q2 third point on the plane
-     * @exception IllegalArgumentException Thrown when the points on the same line
+     * @throws IllegalArgumentException Thrown when the points on the same line
      */
-    public Plane( Point3D q0, Point3D q1, Point3D q2) {
-        if(q0.subtract(q1).normalized()==q0.subtract(q2).normalized()){
-            throw new IllegalArgumentException("The Points cant be on the same line");
+    public Plane(Point3D q0, Point3D q1, Point3D q2) {
+        if (q0.subtract(q1).normalized() == q0.subtract(q2).normalized()) {
+            throw new IllegalArgumentException("The points cant be on the same line");
         }
+
         this.q0 = q0;
-        this.normal = null;
+
+        /***
+         * Calculate normal, using normal equation:
+         * v1=q2-q1
+         * v2=q1-q0
+         * normal=normalize(v1xv2)
+         */
+        this.normal = q1.subtract(q2).crossProduct(q1.subtract(q0)).normalize();
     }
 
     @Override

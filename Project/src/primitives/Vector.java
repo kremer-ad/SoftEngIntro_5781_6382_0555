@@ -4,8 +4,10 @@ import java.util.Objects;
 
 import static java.lang.Math.sqrt;
 
-
+import static primitives.Util.*;
 public class Vector {
+
+    static public final double ACCURACY = 0.00001;
     /**
      * the head of the vector
      */
@@ -98,6 +100,13 @@ public class Vector {
      * @return vector
      */
     public Vector crossProduct(Vector vec) {
+
+        // check if vectors are parallel
+        /**if (Math.abs(this.normalized().dotProduct(vec.normalized())) > 1d - ACCURACY)
+        {
+            throw new IllegalArgumentException("cannot implement crossProduct() for parallel vectors");
+        }**/
+
         return new Vector(this.head.y.coord * vec.head.z.coord - this.head.z.coord * vec.head.y.coord,
                 this.head.z.coord * vec.head.x.coord - this.head.x.coord * vec.head.z.coord,
                 this.head.x.coord * vec.head.y.coord - this.head.y.coord * vec.head.x.coord);

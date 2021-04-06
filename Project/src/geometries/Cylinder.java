@@ -32,6 +32,7 @@ public class Cylinder extends Tube{
 
     @Override
     public Vector getNormal(Point3D pnt) {
+
         return super.getNormal(pnt);
     }
 

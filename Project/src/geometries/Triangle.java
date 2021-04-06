@@ -15,11 +15,6 @@ public class Triangle extends Polygon{
     }
 
     @Override
-    public Vector getNormal(Point3D point) {
-        return super.getNormal(point);
-    }
-
-    @Override
     public String toString() {
         return "Triangle{" + super.toString()+ '}';
     }

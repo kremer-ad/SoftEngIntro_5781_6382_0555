@@ -19,7 +19,7 @@ public class SphereTest {
     public void getNormal() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here
-        Sphere sp = new Sphere(new Point3D(0, 0, 0), 1d);
+        Sphere sp = new Sphere(Point3D.ZERO, 1d);
 
         assertEquals("Bad normal to plane", new Vector(1,0,0), sp.getNormal(new Point3D(1, 0, 0)));
 

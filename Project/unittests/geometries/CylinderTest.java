@@ -13,11 +13,10 @@ import static org.junit.Assert.*;
 public class CylinderTest {
 
     /**
-     * Test method for {@link geometries.Cylinder#getNormal(Point3D)}.
+     * Test method for {@link Cylinder#getNormal(Point3D)}.
      */
     @Test
     public void getNormal() {
         fail("not implemented yet");
-
     }
 }

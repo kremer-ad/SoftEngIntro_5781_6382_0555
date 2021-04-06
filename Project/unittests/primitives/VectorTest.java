@@ -72,13 +72,15 @@ public class VectorTest {
         // =============== Boundary Values Tests ==================
         // TC11: test zero vector from cross-product of co-lined vectors
         Vector v3 = new Vector(-2, -4, -6);
-        //assertThrows("crossProduct() for parallel vectors does not throw an exception",
-        //        IllegalArgumentException.class, () -> v1.crossProduct(v3));
+        assertThrows("crossProduct() for parallel vectors does not throw an exception",
+                IllegalArgumentException.class, () -> v1.crossProduct(v3));
+    /*
         try {
             v1.crossProduct(v3);
             fail("crossProduct() for parallel vectors does not throw an exception");
         } catch (Exception e) {
         }
+     */
     }
 
     /**
@@ -108,16 +110,20 @@ public class VectorTest {
      */
     @Test
     public void normalize() {
+        final int   ROUND_ACCURECY=7;
         Vector v = new Vector(1, 2, 3);
         Vector vCopy = new Vector(v.getHead());
         Vector vCopyNormalize = vCopy.normalize();
+        Point3D resultHead=new Point3D(1d/Math.sqrt(14d),Math.sqrt(2d/7d),3d/Math.sqrt(14d));
+
+
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: test vector normalization
         assertEquals("normalize() function creates a new vector", vCopy,vCopyNormalize);
         assertEquals("normalize() result is not a unit vector", vCopyNormalize.length(),1d,0.00001);
-        Vector u = v.normalized();
-        assertNotEquals("normalized() function does not create a new vector", u,v);
+        assertEquals("normalize() result direction is not in the source direction",resultHead,vCopyNormalize.getHead());
+
     }
 
     /**
@@ -125,5 +131,23 @@ public class VectorTest {
      */
     @Test
     public void normalized() {
+        Vector v = new Vector(1, 2, 3);
+        Point3D resultHead=new Point3D(1d/Math.sqrt(14d),Math.sqrt(2d/7d),3d/Math.sqrt(14d));
+
+        Vector u = v.normalized();//the result vector
+        assertNotEquals("normalized() function does not create a new vector", u,v);
+        assertEquals("normalize() result is not a unit vector", u.length(),1d,0.00001);
+        assertEquals("normalized() result direction is not in the source direction",resultHead,u.getHead());
     }
+
+    /**
+     * Round number with given amount of digits after the dot
+     * @param number the number to roynd
+     * @param digits the amount of digits after the dot
+     * @return
+     */
+    private double round(double number,int digits){
+        return (double)Math.round(number * (double)Math.pow(10,digits)) / (double)Math.pow(10,digits);
+    }
+
 }

@@ -32,7 +32,13 @@ public class Cylinder extends Tube{
 
     @Override
     public Vector getNormal(Point3D pnt) {
-
+        Point3D topBaseCenter=this.axisRay.getP0().add(this.axisRay.getDir().scale(this.height));//the center of the top base of the cylinder
+        //if the point is on the bottom base make plane normal calculation:
+        if(pnt.distance(this.axisRay.getP0())<=this.radius){//only on the base the distance between the center of the cylinder and the point is less then the radius, according to the Triangle inequality rule.
+            return this.axisRay.getDir().normalized().scale(-1);//the normal is the ray direction*-1 because we want to ger outside of the cylinder
+        }else if(pnt.distance(topBaseCenter)<=this.radius){//the same calculation as before, just for the top base
+            return this.axisRay.getDir();
+        }
         return super.getNormal(pnt);
     }
 

@@ -35,7 +35,7 @@ public class Plane implements Geometry {
      */
     public Plane(Point3D q0, Vector normal) {
         this.q0 = q0;
-        this.normal = normal;
+        this.normal = normal.normalize();
     }
 
     /**
@@ -51,7 +51,7 @@ public class Plane implements Geometry {
 
         this.q0 = q0;
 
-        /***
+        /**
          * Calculate normal, using normal equation:
          * v1=q2-q1
          * v2=q1-q0

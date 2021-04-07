@@ -12,7 +12,7 @@ public class Sphere implements Geometry {
     /**
      * radius of sphere
      */
-    private double radius = 0;
+    private double radius = 0D;
 
     /**
      * sphere constructor
@@ -27,7 +27,7 @@ public class Sphere implements Geometry {
     @Override
     public Vector getNormal(Point3D pnt) {
 
-        return pnt.subtract(center);
+        return pnt.subtract(center).normalize();
     }
 
     public Point3D getCenter() {

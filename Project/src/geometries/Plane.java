@@ -75,6 +75,8 @@ public class Plane implements Geometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
+
+        //TODO:: Implement that method
         return null;
     }
 }

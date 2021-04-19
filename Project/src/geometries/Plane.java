@@ -1,7 +1,10 @@
 package geometries;
 
 import primitives.Point3D;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 public class Plane implements Geometry {
 
@@ -68,5 +71,10 @@ public class Plane implements Geometry {
     @Override
     public String toString() {
         return "Plane{" + q0 + normal + '}';
+    }
+
+    @Override
+    public List<Point3D> findIntersections(Ray ray) {
+        return null;
     }
 }

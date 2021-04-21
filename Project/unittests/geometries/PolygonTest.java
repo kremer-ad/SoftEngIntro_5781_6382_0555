@@ -102,17 +102,48 @@ public class PolygonTest {
         assertEquals("Bad normal to triangle", new Vector(sqrt3, sqrt3, sqrt3), pl.getNormal(new Point3D(0, 0, 1)));
     }
 
+    /**
+     * Test method for {@link geometries.Polygon#findIntersections(Ray)}.
+     */
     @Test
-    public void findIntersections(){
+    public void findIntersections() {
         // TC01: Simple check - there is an intersection point
         //basic square
         Polygon pl = new Polygon(
-                new Point3D(0,0,0),
-                new Point3D(1,0,0),
-                new Point3D(1,1,0),
-                new Point3D(0,1,0)
+                new Point3D(1d, 4d, 0),
+                new Point3D(4d, 4d, 0),
+                new Point3D(4d, 0, 0),
+                new Point3D(1d, 0, 0)
         );
-        Ray intersectRay=new Ray(new Point3D(0.5,0.5,-1),new Vector(0,0,1));
+
+        Point3D pnt = new Point3D(0, 0, 4d);
+        // TC01: Inside triangle
+        List<Point3D> result = pl.findIntersections(new Ray(pnt, new Vector(2d, 2d, -4d)));
+        assertEquals("Inside polygon", List.of(new Point3D(2d, 2d, 0)), result);
+        // TC02: Outside against edge
+
+        result = pl.findIntersections(new Ray(pnt, new Vector(5d, 2d, -4d)));
+        assertNull("Outside against edge", result);
+
+        // TC03: Outside against vertex
+        result = pl.findIntersections(new Ray(pnt, new Vector(7d, 7d, -4d)));
+        assertNull("Outside against vertex", result);
+
+        // =============== Boundary Values Tests ==================
+
+        // TC04: On edge
+        result = pl.findIntersections(new Ray(pnt, new Vector(4d, 2, -4d)));
+        assertNull("On edge", result);
+
+        // TC05: In vertex
+        result = pl.findIntersections(new Ray(pnt, new Vector(4d, 4d, -4d)));
+        assertNull("In vertex", result);
+
+        // TC06: On edge's continuation
+        result = pl.findIntersections(new Ray(pnt, new Vector(7d, 8d, -4d)));
+        assertNull("On edge's continuation", result);
+    }
+       /* Ray intersectRay=new Ray(new Point3D(0.5,0.5,-1),new Vector(0,0,1));
         List<Point3D> intersections = pl.findIntersections(intersectRay);
         Point3D intersectionPoint = intersections==null?null:intersections.get(0);
         assertEquals("The basic check fail, not getting the intersection point",new Point3D(0.5,0.5,0),intersectionPoint);
@@ -124,6 +155,5 @@ public class PolygonTest {
         //TC03: The ray intersecting with the edge of the polygon
         Ray edgeIntersectRay=new Ray(new Point3D(0,0.5,-1),new Vector(0,0,1));
         assertNull("Not returning null when the ray in intersecting with the edge of the polygon", pl.findIntersections(edgeIntersectRay));
-
-    }
+    }*/
 }

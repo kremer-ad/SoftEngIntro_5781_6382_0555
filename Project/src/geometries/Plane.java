@@ -75,19 +75,26 @@ public class Plane implements Geometry {
         return "Plane{" + q0 + normal + '}';
     }
 
+    /**
+     * Calculate intersection point for a plane and a ray, using equation:
+     * N*(Q0-t*v-P0)=0
+     * N*(Q0-P0)-t*N*v=0
+     * t=N*(Q0-P0)/(N*v)
+     *
+     */
     @Override
     public List<Point3D> findIntersections(Ray ray) {
         if (q0.equals(ray.getP0())) {
             return null;
         }
-        if (Util.isZero(normal.dotProduct(ray.getDir()))) {
+        if (Util.isZero(normal.dotProduct(ray.getDir()))) { //ray and normal are parallel
             return null;
         }
         double t = Util.alignZero(normal.dotProduct(q0.subtract(ray.getP0()))/normal.dotProduct(ray.getDir()));
-        if (t<=0){
+        if (t<=0){ //there is no intersection points
             return null;
         }
-        List ret = new LinkedList<Point3D>();//we dont using of so we could remove points while using polygon findIntersections
+        List ret = new LinkedList<Point3D>(); //we dont using List.of so we could remove points while using polygon findIntersections
         ret.add(ray.getPoint(t));
         return ret;
         //return List.of(ray.getPoint(t));

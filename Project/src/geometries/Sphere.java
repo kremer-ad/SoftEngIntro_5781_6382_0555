@@ -51,7 +51,6 @@ public class Sphere implements Geometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-<<<<<<< HEAD
         List<Point3D> ret = new LinkedList<>();
 
         if(center.equals(ray.getP0())){ // Ray head is the center of the sphere
@@ -77,10 +76,5 @@ public class Sphere implements Geometry {
             ret.add(pnt2);
         }
         return ret.isEmpty()? null: ret;
-=======
-
-        //TODO::Implement that method
-        return null;
->>>>>>> 93992e13110d7d640804cfe41ebad53fe96406ec
     }
 }

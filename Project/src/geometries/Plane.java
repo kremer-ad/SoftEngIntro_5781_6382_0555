@@ -76,7 +76,6 @@ public class Plane implements Geometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-<<<<<<< HEAD
         if (q0.equals(ray.getP0())) {
             return null;
         }
@@ -88,10 +87,5 @@ public class Plane implements Geometry {
             return null;
         }
         return List.of(ray.getPoint(t));
-=======
-
-        //TODO:: Implement that method
-        return null;
->>>>>>> 93992e13110d7d640804cfe41ebad53fe96406ec
     }
 }

@@ -35,7 +35,7 @@ public class Geometries implements Intersectable {
 
     /**
      * Implement interface function
-     * @param ray
+     * @param ray the interacting ray
      * @return all intersections points
      */
     @Override

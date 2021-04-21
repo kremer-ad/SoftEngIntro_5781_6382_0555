@@ -33,7 +33,7 @@ public class Ray {
     }
 
     /**
-     * gets point on ray
+     * Gets point on ray
      * @param t scale
      * @return point
      */

@@ -20,12 +20,28 @@ public class Point3D {
     final Coordinate z;
 
     /**
+     * getters
+     */
+    public double getX() {
+        return x.coord;
+    }
+
+    public double getY() {
+        return y.coord;
+    }
+
+    public double getZ() {
+        return z.coord;
+    }
+
+    /**
      * point with the values (0,0,0)
      */
     static public final Point3D ZERO = new Point3D(0, 0, 0);
 
     /**
      * Create new point
+     *
      * @param x the point x axis
      * @param y the point y axis
      * @param z the point z axis
@@ -37,7 +53,6 @@ public class Point3D {
     }
 
     /**
-     *
      * @param x the x axis of the point
      * @param y the y axis of the point
      * @param z the z axis of the point
@@ -50,6 +65,7 @@ public class Point3D {
 
     /**
      * add vector to point
+     *
      * @param vec to add
      * @return point
      */
@@ -61,6 +77,7 @@ public class Point3D {
 
     /**
      * subtract point from vector
+     *
      * @param pnt to subtract
      * @return vector
      */
@@ -72,6 +89,7 @@ public class Point3D {
 
     /**
      * calculate squared distance between two points, using linear algebra formula
+     *
      * @param pnt
      * @return squared distance
      */
@@ -83,6 +101,7 @@ public class Point3D {
 
     /**
      * return distance, using squared distance function
+     *
      * @param pnt
      * @return
      */
@@ -109,14 +128,11 @@ public class Point3D {
 
     /**
      * handler internal function, multiplication between point3D and scalar (double)
+     *
      * @param multiplier
      * @return point3D
      */
-    Point3D mult(double multiplier){
-        return new Point3D(this.x.coord*multiplier,this.y.coord*multiplier,this.z.coord*multiplier);
-    }
-
-    public double getX() {
-        return x.coord;
+    Point3D mult(double multiplier) {
+        return new Point3D(this.x.coord * multiplier, this.y.coord * multiplier, this.z.coord * multiplier);
     }
 }

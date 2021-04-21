@@ -11,6 +11,8 @@ import org.junit.Test;
 import geometries.*;
 import primitives.*;
 
+import java.util.List;
+
 /**
  * Testing Polygons
  *
@@ -98,5 +100,30 @@ public class PolygonTest {
                 new Point3D(-1, 1, 1));
         double sqrt3 = Math.sqrt(1d / 3);
         assertEquals("Bad normal to triangle", new Vector(sqrt3, sqrt3, sqrt3), pl.getNormal(new Point3D(0, 0, 1)));
+    }
+
+    @Test
+    public void findIntersections(){
+        // TC01: Simple check - there is an intersection point
+        //basic square
+        Polygon pl = new Polygon(
+                new Point3D(0,0,0),
+                new Point3D(1,0,0),
+                new Point3D(1,1,0),
+                new Point3D(0,1,0)
+        );
+        Ray intersectRay=new Ray(new Point3D(0.5,0.5,-1),new Vector(0,0,1));
+        List<Point3D> intersections = pl.findIntersections(intersectRay);
+        Point3D intersectionPoint = intersections==null?null:intersections.get(0);
+        assertEquals("The basic check fail, not getting the intersection point",new Point3D(0.5,0.5,0),intersectionPoint);
+
+        //TC02: There is no intersection point with the polygon but there is an intersection point with the plane
+        Ray notInteractRay = new Ray(new Point3D(30,52,-1),new Vector(0,0,1));
+        assertNull("Not returning null when the ray is intersecting with the plane and not intersecting with the polygon", pl.findIntersections(notInteractRay));
+
+        //TC03: The ray intersecting with the edge of the polygon
+        Ray edgeIntersectRay=new Ray(new Point3D(0,0.5,-1),new Vector(0,0,1));
+        assertNull("Not returning null when the ray in intersecting with the edge of the polygon", pl.findIntersections(edgeIntersectRay));
+
     }
 }

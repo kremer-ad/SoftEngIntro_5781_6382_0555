@@ -1,5 +1,6 @@
 package geometries;
 
+import java.util.Collections;
 import java.util.List;
 import primitives.*;
 import static primitives.Util.*;
@@ -94,7 +95,7 @@ public class Polygon implements Geometry {
 		if(ret==null){//we must check if ret is null before we running on the list
 			return null;
 		}
-		ret.removeIf(pt->!this.isOn(pt));//remove all points outside of the polygon
+		ret.removeIf(pt->!this.isOn(pt,ray));//remove all points outside of the polygon
 		return ret.size()==0?null:ret;
 	}
 
@@ -103,18 +104,19 @@ public class Polygon implements Geometry {
 	 * @param pt the point to check
 	 * @return is the point on the polygon
 	 */
-	private boolean isOn(Point3D pt){
+	private boolean isOn(Point3D pt,Ray ray){
 		Vector[] normals=new Vector[this.vertices.size()];//all the normals for the formula
-		Vector[] polygonVectors = new Vector[this.vertices.size()-1];//all the vectors that we can build from the first vertex
+		Vector[] polygonVectors = new Vector[this.vertices.size()];//all the vectors that we can build from the first vertex
+		Point3D headPoint = ray.getP0();
 		for(int i=0;i<polygonVectors.length;i++){//calculate the vectors
-			polygonVectors[i]=this.vertices.get(i+1).subtract(this.vertices.get(0));
+			polygonVectors[i]=this.vertices.get(i).subtract(headPoint);
 		}
 		for(int i=0;i<normals.length-1;i++){//calculate the normals (we not normalizing because it not necessary)
 			normals[i]=polygonVectors[i].crossProduct(polygonVectors[i+1]);
 		}
 		//calculate the last normal
 		normals[normals.length-1]=polygonVectors[polygonVectors.length-1].crossProduct(polygonVectors[0]);
-		Vector pointVector=pt.subtract(this.vertices.get(0));//calculating the vector from the first vertex to the given point
+		Vector pointVector=pt.subtract(headPoint);//calculating the vector from the first vertex to the given point
 		boolean isPositive=pointVector.dotProduct(normals[0])>0;//checking the saign of the first product
 		for(Vector normal : normals){//check the product of all the normals with the point vector (calculating also the first one so we can check if it 0)
 			if((normal.dotProduct(pointVector)>0 ^ isPositive) || alignZero(normal.dotProduct(pointVector))==0){//to check if the products have different sign we can use XOR

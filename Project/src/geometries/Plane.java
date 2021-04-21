@@ -5,6 +5,7 @@ import primitives.Ray;
 import primitives.Util;
 import primitives.Vector;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Plane implements Geometry {
@@ -55,7 +56,7 @@ public class Plane implements Geometry {
 
         this.q0 = q0;
 
-        /**
+        /*
          * Calculate normal, using normal equation:
          * v1=q2-q1
          * v2=q1-q0
@@ -86,6 +87,9 @@ public class Plane implements Geometry {
         if (t<=0){
             return null;
         }
-        return List.of(ray.getPoint(t));
+        List ret = new LinkedList<Point3D>();//we dont using of so we could remove points while using polygon findIntersections
+        ret.add(ray.getPoint(t));
+        return ret;
+        //return List.of(ray.getPoint(t));
     }
 }

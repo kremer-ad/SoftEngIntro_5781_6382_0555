@@ -32,6 +32,15 @@ public class Ray {
         return dir;
     }
 
+    /**
+     * gets point on ray
+     * @param t scale
+     * @return point
+     */
+    public Point3D getPoint(double t) {
+        return p0.add(dir.scale(t));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

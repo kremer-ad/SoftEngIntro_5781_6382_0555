@@ -16,6 +16,10 @@ public class Geometries implements Intersectable {
         shapes = new LinkedList<Intersectable>();
     }
 
+    /**
+     * constructor - gets collection of geometries
+     * @param geometries
+     */
     public Geometries(Intersectable... geometries) {
         shapes = new LinkedList<Intersectable>();
         for (Intersectable geo : geometries) {

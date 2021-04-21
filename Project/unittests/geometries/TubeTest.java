@@ -5,6 +5,9 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -29,5 +32,20 @@ public class TubeTest {
         Point3D facingPnt = new Point3D(1d, 1d, 0);
         assertEquals("Bad normal to plane", new Vector(0,1d,0), tb.getNormal(new Point3D(1d, 1d, 0)));
 
+    }
+
+    @Test
+    public void findIntersection(){
+        /*
+        TODO:: finish that code
+
+        //TC01: The ray orthogonal to the tube
+        Tube tb=new Tube(new Ray(new Point3D(0,0,0),new Vector(0,1,0)),20);
+        Ray orthogonalIntersection = new Ray(new Point3D(0,5,-25),new Vector(0,0,1));
+        List<Point3D> expected = new ArrayList<Point3D>();
+        List<Point3D> results=tb.findIntersections(orthogonalIntersection);
+        //expected.addAll()
+        assertTrue(results.size() == expected.size() && results.containsAll(expected) && expected.containsAll(results));
+         */
     }
 }

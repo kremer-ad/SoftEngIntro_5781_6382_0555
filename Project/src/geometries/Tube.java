@@ -49,7 +49,8 @@ public class Tube implements Geometry {
         if (t==0){ /* point is facing the head of the tube's ray */
             return pnt.subtract(axisRay.getP0()).normalize();
         }
-        return pnt.subtract(axisRay.getP0().add(axisRay.getDir().scale(t))).normalize();
+        //return pnt.subtract(axisRay.getP0().add(axisRay.getDir().scale(t))).normalize();
+        return pnt.subtract(axisRay.getPoint(t)).normalize();
     }
 
     @Override

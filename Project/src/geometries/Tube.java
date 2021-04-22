@@ -60,45 +60,55 @@ public class Tube implements Geometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-      return null;
-    }
-/*
-TODO:: finish the intersection code
+        //for better performances -> when need to do power we saving to temp instead of calling function twice
+        double t1, t2;
 
+        //the vectors and points that we need (insted of calling many functions many times we will call them once)
+        Point3D rayOrigin = ray.getP0();
+        Point3D tubeOrigin = this.axisRay.getP0();
+        Vector rayDirection = ray.getDir();
+        Vector tubeDirection = this.axisRay.getDir();
 
-    private Point3D oneSideIntersection(Ray ray){
-        //that method was found in stackoverflow and work.
-        //we it have a deep math that we cant explain so we've just copied it
-        //https://stackoverflow.com/questions/4078401/trying-to-optimize-line-vs-cylinder-intersection
-        Vector AB = this.axisRay.getDir();
-        Vector AO = ray.getP0().subtract(this.axisRay.getP0());
-        Vector AOxAB = AO.crossProduct(AB);
-        Vector VxAB = ray.getDir().crossProduct(AB);
+        //some equation variables
+        double n = 0;
+        double m = 0;
 
-        double ab2 = AB.dotProduct(AB);
-        double a = VxAB.dotProduct(VxAB);
-        double b = 2 * VxAB.dotProduct(AOxAB);
-        double c = AOxAB.dotProduct(AOxAB) - (radius * radius * ab2);
+        //discriminant variables
+        double a = rayDirection.lengthSquared() + 2 * n * rayDirection.dotProduct(tubeDirection) + n * n * tubeDirection.lengthSquared();
+        double b = (-2) * m * tubeDirection.dotProduct(rayDirection) - 2 * m * n * tubeDirection.lengthSquared();
+        double c = m*m*tubeDirection.lengthSquared()-this.radius*this.radius;
 
-        double d = b * b * 4 * a * c;
-        double t = (-b - Math.sqrt(d) / (2 * a));
-        if (d < 0||t<0) { //if d<0 there is no intersection, and if t<0 -> the ray is always inside the cylinder
+        if (!rayOrigin.equals(Point3D.ZERO)) {
+            Vector rayOriginVec = new Vector(rayOrigin);
+            b += 2 * rayDirection.dotProduct(rayOriginVec) + 2 * n * tubeDirection.dotProduct(rayOriginVec);
+            c+=(-2)*m*tubeDirection.dotProduct(rayOriginVec);
+            c+=rayOriginVec.lengthSquared();
+        }
+        if (!tubeOrigin.equals(Point3D.ZERO)) {
+            Vector tubeOriginVec = new Vector(tubeOrigin);
+            b += (-2) * tubeOriginVec.dotProduct(rayDirection) - 2 * n * tubeDirection.dotProduct(tubeOriginVec);
+            c += 2 * m * tubeOriginVec.dotProduct(tubeDirection);
+            c+=tubeOrigin.distanceSquared(Point3D.ZERO);
+
+        }
+        if (!tubeOrigin.equals(Point3D.ZERO) && !rayOrigin.equals(Point3D.ZERO)) {
+            Vector tubeOriginVec = new Vector(tubeOrigin);
+            Vector rayOriginVec = new Vector(rayOrigin);
+
+            c+=(-2)*rayOriginVec.dotProduct(tubeOriginVec);
+        }
+
+        //calculate the discriminant
+        double discriminant=b*b-4*a*c;
+        if(discriminant<0){
             return null;
         }
-        return ray.getPoint(t);
+        LinkedList<Point3D> ret= new LinkedList<>();
+        double result1=((-b+Math.sqrt(discriminant))/(2*a));
+        double result2=((-b-Math.sqrt(discriminant))/(2*a));
+
+        ret.add(ray.getPoint(result1));
+        ret.add(ray.getPoint(result2));
+        return ret;
     }
-
-    private Ray getLocalAxisRay(Ray globalRay){
-        Vector[] oldBase = new Vector[3];
-        Vector[] newBase = {
-                new Vector(0,1,0),
-                new Vector(1,0,0),
-                new Vector(0,0,1)
-        };
-
-
-
-        return null;
-    }
-*/
 }

@@ -4,6 +4,8 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 public class Cylinder extends Tube{
 
     /**
@@ -45,5 +47,11 @@ public class Cylinder extends Tube{
     @Override
     public String toString() {
         return "Cylinder{" + super.toString() + height + '}';
+    }
+
+    @Override
+    public List<Point3D> findIntersections(Ray ray){
+        List result = super.findIntersections(ray);
+        return null;
     }
 }

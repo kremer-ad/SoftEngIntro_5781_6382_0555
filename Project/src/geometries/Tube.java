@@ -70,8 +70,8 @@ public class Tube implements Geometry {
         Vector tubeDirection = this.axisRay.getDir();
 
         //some equation variables
-        double n = 0;
-        double m = 0;
+        double m = tubeDirection.dotProduct(tubeOrigin.subtract(tubeOrigin))/tubeDirection.lengthSquared();
+        double n = rayDirection.lengthSquared()/tubeDirection.lengthSquared();
 
         //discriminant variables
         double a = rayDirection.lengthSquared() + 2 * n * rayDirection.dotProduct(tubeDirection) + n * n * tubeDirection.lengthSquared();

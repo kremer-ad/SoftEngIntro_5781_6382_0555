@@ -40,7 +40,6 @@ public class Vector {
     public Vector(double x, double y, double z) {
         Point3D head = new Point3D(x, y, z);
         if (head.equals(Point3D.ZERO)) {
-            throw new IllegalArgumentException("WRONG INPUT: cannot receive zero vector");
         }
         this.head = head;
     }

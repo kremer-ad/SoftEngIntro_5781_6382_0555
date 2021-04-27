@@ -35,7 +35,7 @@ public class TubeTest {
     }
 
     @Test
-    public void findIntersection(){
+    public void testFindIntersection(){
         /*
         TODO:: finish that code
 

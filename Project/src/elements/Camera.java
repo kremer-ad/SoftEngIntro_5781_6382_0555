@@ -6,15 +6,28 @@ import primitives.Vector;
 
 public class Camera {
 
+    /**
+     * location of camera
+     */
     private Point3D p0;
+
+    /**
+     * three directory vectors for camera
+     */
     private Vector vTo;
     private Vector vUp;
     private Vector vRight;
 
+    /**
+     * three variables to define view plane of camera
+     */
     private double width;
     private double height;
     private double distance;
 
+    /**
+     * getters
+     */
     public Point3D getP0() {
         return p0;
     }
@@ -31,17 +44,32 @@ public class Camera {
         return vRight;
     }
 
+    /**
+     * constructor: gets vTo and vUp and generate vRight if values are valid
+     *
+     * @param p0  - camera's location
+     * @param vTo
+     * @param vUp
+     */
     public Camera(Point3D p0, Vector vTo, Vector vUp) {
         this.p0 = p0;
         this.vTo = vTo.normalized();
         this.vUp = vUp.normalized();
 
+        // check if valid
         if (vTo.dotProduct(vUp) != 0) {
             throw new IllegalArgumentException("Non-vertical vectors");
         }
         vRight = vTo.crossProduct(vUp); // set vRight value
     }
 
+    /**
+     * Builder element to set viewPlans's width and height
+     *
+     * @param width
+     * @param height
+     * @return this
+     */
     public Camera setViewPlaneSize(double width, double height) {
         this.width = width;
         this.height = height;
@@ -49,6 +77,12 @@ public class Camera {
         return this;
     }
 
+    /**
+     * Builder element to set viewPlans's distance from camera
+     *
+     * @param distance
+     * @return this
+     */
     public Camera setDistance(double distance) {
         this.distance = distance;
 
@@ -56,11 +90,12 @@ public class Camera {
     }
 
     /**
-     * Generate a ray from camera toa middle of a given pixel
-     * @param nX - number of column in matrix
-     * @param nY - number of row in matrix
-     * @param j -
-     * @param i
+     * Generate a ray from camera to a middle of a given pixel
+     *
+     * @param nX - number of pixels for width
+     * @param nY - number of pixels for height
+     * @param j  - number of column in row
+     * @param i  - number of row in column
      * @return
      */
     public Ray constructRayThroughPixel(int nX, int nY, int j, int i) {

@@ -20,7 +20,7 @@ public class SphereTest {
      * Test method for {@link geometries.Sphere#getNormal(Point3D)}.
      */
     @Test
-    public void getNormal() {
+    public void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here
         Sphere sp = new Sphere(Point3D.ZERO, 1d);

@@ -106,7 +106,7 @@ public class PolygonTest {
      * Test method for {@link geometries.Polygon#findIntersections(Ray)}.
      */
     @Test
-    public void findIntersections() {
+    public void testFindIntersections() {
         // TC01: Simple check - there is an intersection point
         //basic square
         Polygon pl = new Polygon(

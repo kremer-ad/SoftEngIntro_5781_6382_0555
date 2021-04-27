@@ -74,13 +74,13 @@ public class VectorTest {
         Vector v3 = new Vector(-2, -4, -6);
         assertThrows("crossProduct() for parallel vectors does not throw an exception",
                 IllegalArgumentException.class, () -> v1.crossProduct(v3));
-    /*
+        /*
         try {
             v1.crossProduct(v3);
             fail("crossProduct() for parallel vectors does not throw an exception");
         } catch (Exception e) {
         }
-     */
+        */
     }
 
     /**

@@ -17,7 +17,7 @@ public class CylinderTest extends TubeTest {//we extends from tube so we can use
      * Test method for {@link Cylinder#getNormal(Point3D)}.
      */
     @Test
-    public void getNormal() {
+    public void testGetNormal() {
         Cylinder c=new Cylinder(new Ray(Point3D.ZERO,new Vector(0,1,0)),1,1);
         //TC01: check the Tube getNormal for דםצק extreme cases there
         super.getNormal();

@@ -9,6 +9,11 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for geometries.Geometries class
+ * @author Yosef & Aaron
+ */
+
 public class GeometriesTest {
     /**
      * Test method for {@link geometries.Geometries#findIntersections(primitives.Ray)}.
@@ -16,11 +21,10 @@ public class GeometriesTest {
     @Test
     public void testFindIntersections() {
         Geometries geos = new Geometries(
-                new Tube(new Ray(new Point3D(5d, 0, 0), new Vector(0, 1d, 0)), 1),
+                /*new Tube(new Ray(new Point3D(5d, 0, 0), new Vector(0, 1d, 0)), 1),*/
                 new Sphere(new Point3D(2d, 2d, 0), 1d),
-                new Triangle(new Point3D(-3d, 1d, 0), new Point3D(-3d, 4d, 1d), new Point3D(-3d, 4d, -1d))
-                /*,
-                new Polygon(new Point3D(5d, 4d, -1d), new Point3D(5d, 4d, 1d), new Point3D(5d, 1d, 1d),new Point3D(5d, 1d, 0))*/);
+                new Triangle(new Point3D(-3d, 1d, 0), new Point3D(-3d, 4d, 1d), new Point3D(-3d, 4d, -1d)),
+                new Polygon(new Point3D(5d, 4d, -1d), new Point3D(5d, 4d, 1d), new Point3D(5d, 1d, 1d),new Point3D(5d, 1d, 0)));
 
         //Point3D triP = new Point3D(-3d, 2d, 0);
         //Point3D sphP1 = new Point3D(1d, 2d, 0);
@@ -32,13 +36,13 @@ public class GeometriesTest {
         // TC01: Some of the shapes are intersects
         List<Point3D> result = geos.findIntersections(new Ray(new Point3D(0, 2d, 0),
                 new Vector(1d, 0, 0)));
-        assertEquals("Some of the shapes are intersects", 4, result.size());
+        assertEquals("Some of the shapes are intersects", 3, result.size());
 
         // =============== Boundary Values Tests ==================
         // TC02: All shapes are intersects
         result = geos.findIntersections(new Ray(new Point3D(-4d, 2d, 0),
                 new Vector(1d, 0, 0)));
-        assertEquals("All shapes are intersects", 5, result.size());
+        assertEquals("All shapes are intersects", 4, result.size());
 
         // TC03: One shape only intersects
         result = geos.findIntersections(new Ray(new Point3D(-1d, 2d, 0),

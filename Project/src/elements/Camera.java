@@ -90,17 +90,24 @@ public class Camera {
         return this;
     }
 
+    /**
+     * Rotate camera about vTo using "Rodriguez' rotation formula"
+     * @param angle - gets radian angle
+     * @return this
+     */
+
     public Camera rotate(double angle) {
-        if (Util.alignZero(Math.cos(angle)) == 0) {
+        if (Util.alignZero(Math.cos(angle)) == 0) { //avoiding zero vector creation when cos(angle)=0
             this.vUp = this.vRight.scale(Math.sin(angle));
         }
-        else if (Util.alignZero(Math.sin(angle)) == 0) {
+        else if (Util.alignZero(Math.sin(angle)) == 0) { //avoiding zero vector creation when sin(angle)=0
             this.vUp = this.vUp.scale(Math.cos(angle));
         }
-        else {
+        else { // Rodriguez' rotation formula
             this.vUp = this.vUp.scale(Util.alignZero(Math.cos(angle))).add(this.vRight.scale(Util.alignZero(Math.sin(angle))));
         }
-        this.vRight = this.vTo.crossProduct(this.vUp);
+        this.vRight = this.vTo.crossProduct(this.vUp); // set vRight
+
         return this;
     }
 

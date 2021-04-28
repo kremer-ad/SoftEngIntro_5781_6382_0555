@@ -30,31 +30,36 @@ public class IntegrationTest {
 
         // TC01: Only middle pixel intersect sphere
         Camera camera = new Camera(Point3D.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0))
-                .setDistance(1).setViewPlaneSize(3, 3);
+                .setDistance(1)
+                .setViewPlaneSize(3, 3);
         Sphere sp = new Sphere(new Point3D(0, 0, -3d), 1d);
         assertEquals("TC01: Only middle pixel intersect sphere", 2, intersectionsCalculate(camera, sp, 3, 3));
 
         // TC02: All pixels intersect sphere
         camera = new Camera(new Point3D(0, 0, 0.5d), new Vector(0, 0, -1), new Vector(0, 1, 0))
-                .setDistance(1).setViewPlaneSize(3, 3);
+                .setDistance(1)
+                .setViewPlaneSize(3, 3);
         sp = new Sphere(new Point3D(0, 0, -2.5d), 2.5d);
         assertEquals("TC02: All pixels intersect sphere", 18, intersectionsCalculate(camera, sp, 3, 3));
 
         // TC03: Corners are not intersect sphere
         camera = new Camera(new Point3D(0, 0, 0.5d), new Vector(0, 0, -1), new Vector(0, 1, 0))
-                .setDistance(1).setViewPlaneSize(3, 3);
+                .setDistance(1)
+                .setViewPlaneSize(3, 3);
         sp = new Sphere(new Point3D(0, 0, -2d), 2d);
         assertEquals("TC03: Corners are not intersect sphere", 10, intersectionsCalculate(camera, sp, 3, 3));
 
         // TC04: Camera is in sphere
         camera = new Camera(new Point3D(0, 0, 0.5d), new Vector(0, 0, -1), new Vector(0, 1, 0))
-                .setDistance(1).setViewPlaneSize(3, 3);
+                .setDistance(1)
+                .setViewPlaneSize(3, 3);
         sp = new Sphere(new Point3D(0, 0, -2d), 4d);
         assertEquals("TC04: Camera is in sphere", 9, intersectionsCalculate(camera, sp, 3, 3));
 
         // TC05: Camera is before sphere
         camera = new Camera(new Point3D(0, 0, 0.5d), new Vector(0, 0, -1), new Vector(0, 1, 0))
-                .setDistance(1).setViewPlaneSize(3, 3);
+                .setDistance(1)
+                .setViewPlaneSize(3, 3);
         sp = new Sphere(new Point3D(0, 0, 1d), 0.5d);
         assertEquals("TC05: Camera is before sphere", 0, intersectionsCalculate(camera, sp, 3, 3));
     }
@@ -62,7 +67,8 @@ public class IntegrationTest {
     @Test
     public void testPlaneIntegration() {
         Camera camera = new Camera(Point3D.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0))
-                .setDistance(1).setViewPlaneSize(3, 3);
+                .setDistance(1)
+                .setViewPlaneSize(3, 3);
 
         // TC01: Plane is vertical to camera
         Plane pl = new Plane(new Point3D(0, 0, -1d), new Vector(0, 0, 1d));
@@ -80,7 +86,8 @@ public class IntegrationTest {
     @Test
     public void testTriangleIntegration() {
         Camera camera = new Camera(Point3D.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0))
-                .setDistance(1).setViewPlaneSize(3, 3);
+                .setDistance(1)
+                .setViewPlaneSize(3, 3);
 
         // TC01: Small triangle
         Triangle tl = new Triangle(

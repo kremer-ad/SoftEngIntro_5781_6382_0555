@@ -10,7 +10,7 @@ public class Camera {
     /**
      * location of camera
      */
-    private Point3D p0;
+    private Point3D position;
 
     /**
      * three directory vectors for camera
@@ -29,31 +29,31 @@ public class Camera {
     /**
      * getters
      */
-    public Point3D getP0() {
-        return p0;
+    public Point3D getPosition() {
+        return position;
     }
 
-    public Vector getvTo() {
+    public Vector getVTo() {
         return vTo;
     }
 
-    public Vector getvUp() {
+    public Vector getVUp() {
         return vUp;
     }
 
-    public Vector getvRight() {
+    public Vector getVRight() {
         return vRight;
     }
 
     /**
      * constructor: gets vTo and vUp and generate vRight if values are valid
      *
-     * @param p0  - camera's location
-     * @param vTo
-     * @param vUp
+     * @param position  - camera's location
+     * @param vTo the forward direction vector
+     * @param vUp the up direction vector
      */
-    public Camera(Point3D p0, Vector vTo, Vector vUp) {
-        this.p0 = p0;
+    public Camera(Point3D position, Vector vTo, Vector vUp) {
+        this.position = position;
         this.vTo = vTo.normalized();
         this.vUp = vUp.normalized();
 
@@ -67,8 +67,8 @@ public class Camera {
     /**
      * Builder element to set viewPlans's width and height
      *
-     * @param width
-     * @param height
+     * @param width the view plane width
+     * @param height the view plane width
      * @return this
      */
     public Camera setViewPlaneSize(double width, double height) {
@@ -81,7 +81,7 @@ public class Camera {
     /**
      * Builder element to set viewPlans's distance from camera
      *
-     * @param distance
+     * @param distance the view plane distance from the camera
      * @return this
      */
     public Camera setDistance(double distance) {
@@ -111,11 +111,11 @@ public class Camera {
      * @param nY - number of pixels for height
      * @param j  - number of column in row
      * @param i  - number of row in column
-     * @return
+     * @return A ray from the camera to the given pixel
      */
     public Ray constructRayThroughPixel(int nX, int nY, int j, int i) {
         // calculate image center: pC=p0+d*vTo
-        Point3D pCenter = p0.add(vTo.scale(distance));
+        Point3D pCenter = position.add(vTo.scale(distance));
 
         // calculate ratio (pixel width and height)
         double rY = height / nY;
@@ -134,6 +134,6 @@ public class Camera {
             pIJ = pIJ.add(vUp.scale(yI));
         }
 
-        return new Ray(p0, pIJ.subtract(p0));
+        return new Ray(position, pIJ.subtract(position));
     }
 }

@@ -2,6 +2,7 @@ package elements;
 
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Util;
 import primitives.Vector;
 
 public class Camera {
@@ -60,7 +61,7 @@ public class Camera {
         if (vTo.dotProduct(vUp) != 0) {
             throw new IllegalArgumentException("Non-vertical vectors");
         }
-        vRight = vTo.crossProduct(vUp); // set vRight value
+        vRight = this.vTo.crossProduct(this.vUp); // set vRight value
     }
 
     /**
@@ -89,6 +90,20 @@ public class Camera {
         return this;
     }
 
+    public Camera rotate(double angle) {
+        if (Util.alignZero(Math.cos(angle)) == 0) {
+            this.vUp = this.vRight.scale(Math.sin(angle));
+        }
+        else if (Util.alignZero(Math.sin(angle)) == 0) {
+            this.vUp = this.vUp.scale(Math.cos(angle));
+        }
+        else {
+            this.vUp = this.vUp.scale(Util.alignZero(Math.cos(angle))).add(this.vRight.scale(Util.alignZero(Math.sin(angle))));
+        }
+        this.vRight = this.vTo.crossProduct(this.vUp);
+        return this;
+    }
+
     /**
      * Generate a ray from camera to a middle of a given pixel
      *
@@ -105,7 +120,6 @@ public class Camera {
         // calculate ratio (pixel width and height)
         double rY = height / nY;
         double rX = width / nX;
-
         // calculate pixel[i,j] center
         double yI = -(i - (nY - 1) / 2d) * rY;
         double xJ = (j - (nX - 1) / 2d) * rX;
@@ -122,5 +136,4 @@ public class Camera {
 
         return new Ray(p0, pIJ.subtract(p0));
     }
-
 }

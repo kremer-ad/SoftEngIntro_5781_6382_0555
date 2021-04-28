@@ -1,5 +1,7 @@
 package elements;
 
+import static java.lang.System.mapLibraryName;
+import static java.lang.System.out;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -52,6 +54,8 @@ public class CameraTest {
 		// TC13: 3X3 Center of Left Side (1,0)
 		assertEquals("Bad ray", new Ray(Point3D.ZERO, new Vector(-2, 0, 10)),
 				camera.setViewPlaneSize(6, 6).constructRayThroughPixel(3, 3, 0, 1));
+
+		camera = new Camera(new Point3D(0,0,1), new Vector(0, 0, 1), new Vector(0, -1, 0)).setDistance(10);
 
 	}
 

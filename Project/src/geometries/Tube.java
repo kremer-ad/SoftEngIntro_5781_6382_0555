@@ -60,9 +60,6 @@ public class Tube implements Geometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-        //for better performances -> when need to do power we saving to temp instead of calling function twice
-        double t1, t2;
-
         //the vectors and points that we need (insted of calling many functions many times we will call them once)
         Point3D rayOrigin = ray.getP0();
         Point3D tubeOrigin = this.axisRay.getP0();
@@ -70,7 +67,7 @@ public class Tube implements Geometry {
         Vector tubeDirection = this.axisRay.getDir();
 
         //some equation variables
-        double m = tubeDirection.dotProduct(tubeOrigin.subtract(tubeOrigin))/tubeDirection.lengthSquared();
+        double m = tubeDirection.dotProduct(tubeOrigin.subtract(rayOrigin))/tubeDirection.lengthSquared();
         double n = rayDirection.lengthSquared()/tubeDirection.lengthSquared();
 
         //discriminant variables

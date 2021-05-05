@@ -111,6 +111,10 @@ public class Camera {
         return this;
     }
 
+    /*public Camera transform(Point3D pnt){
+
+    }*/
+
     /**
      * Generate a ray from camera to a middle of a given pixel
      *
@@ -134,7 +138,7 @@ public class Camera {
         // in case yI or xJ are zero exception will be thrown
         // to avoid it we will handle them step by step
         Point3D pIJ = pCenter;
-        if (xJ != 0) {
+        if (!Util.isZero(xJ)) {
             pIJ = pIJ.add(vRight.scale(xJ));
         }
         if (yI != 0) {

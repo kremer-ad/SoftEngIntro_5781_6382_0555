@@ -1,14 +1,12 @@
 package geometries;
 
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Util;
-import primitives.Vector;
+import org.json.simple.JSONObject;
+import primitives.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Plane implements Geometry {
+public class Plane implements Geometry, Serializable {
 
     /**
      * point on plane
@@ -98,5 +96,21 @@ public class Plane implements Geometry {
         ret.add(ray.getPoint(t));
         return ret;
         //return List.of(ray.getPoint(t));
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject ret=new JSONObject();
+        ret.put("type","plane");
+        ret.put("q0",this.q0.toJSON());
+        ret.put("normal",normal.toJSON());
+        return ret;
+    }
+
+    @Override
+    public Plane load(JSONObject json) {
+        this.q0=(Point3D) this.q0.load((JSONObject) json.get("q0"));
+        this.normal=(Vector) this.normal.load((JSONObject) json.get("normal"));
+        return this;
     }
 }

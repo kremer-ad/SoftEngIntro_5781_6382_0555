@@ -29,6 +29,6 @@ public class BasicRayTracer extends RayTracerBase{
      * @return the color of the point
      */
     private Color calcColor(Point3D point){
-        return new Color(32,58,64);
+        return this.scene.ambientLight.intensity;
     }
 }

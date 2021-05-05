@@ -1,5 +1,6 @@
 package renderer;
 
+import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
 import elements.*;
@@ -7,6 +8,8 @@ import geometries.*;
 import primitives.*;
 import renderer.*;
 import scene.Scene;
+
+import java.io.IOException;
 
 /**
  * Test rendering a basic image
@@ -48,15 +51,14 @@ public class RenderTests {
 	}
 	
 	/**
-	 * Test for XML based scene - for bonus
+	 * Test for JSON based scene - for bonus
 	 */
 	@Test
-	public void basicRenderXml() {
-		Scene scene = new Scene("XML Test scene");
-		// enter XML file name and parse from XML file into scene object
-		// ...
+	public void basicRenderJSONTest() throws IOException, ParseException {
+		Scene scene = Scene.LoadJSON("data.json");
+
 		
-		ImageWriter imageWriter = new ImageWriter("xml render test", 1000, 1000);
+		ImageWriter imageWriter = new ImageWriter("json render test", 1000, 1000);
 		Render render = new Render() //
 				.setWriter(imageWriter) //
 				.setScene(scene) //

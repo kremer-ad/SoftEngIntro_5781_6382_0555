@@ -1,11 +1,13 @@
 package primitives;
 
+import org.json.simple.JSONObject;
+
 import java.util.Objects;
 
 import static java.lang.Math.sqrt;
 
 import static primitives.Util.*;
-public class Vector {
+public class Vector implements Serializable{
 
     static public final double ACCURACY = 0.00001;
     /**
@@ -157,5 +159,24 @@ public class Vector {
     @Override
     public String toString() {
         return "Vec{" + head + '}';
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject ret=new JSONObject();
+        ret.put("type","vector");
+        ret.put("x",head.getX());
+        ret.put("y",head.getY());
+        ret.put("z",head.getZ());
+        return ret;
+    }
+
+    @Override
+    public Vector load(JSONObject json) {
+        double x=(double)json.get("x");
+        double y=(double)json.get("y");
+        double z=(double)json.get("z");
+        this.head = new Point3D(x,y,z);
+        return this;
     }
 }

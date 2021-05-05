@@ -1,15 +1,13 @@
 package geometries;
 
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Util;
-import primitives.Vector;
+import org.json.simple.JSONObject;
+import primitives.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Sphere implements Geometry {
+public class Sphere implements Geometry, Serializable {
     /**
      * center point of sphere
      */
@@ -93,5 +91,21 @@ public class Sphere implements Geometry {
             ret.add(pnt2);
         }
         return ret;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject ret=new JSONObject();
+        ret.put("type","sphere");
+        ret.put("center",center.toJSON());
+        ret.put("radius",this.radius);
+        return ret;
+    }
+
+    @Override
+    public Serializable load(JSONObject json) {
+        this.center=(Point3D) this.center.load((JSONObject) json.get("center"));
+        this.radius = (double) json.get("radius");
+        return this;
     }
 }

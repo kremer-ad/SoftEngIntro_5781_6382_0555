@@ -11,9 +11,10 @@ public interface Serializable {
     JSONObject toJSON();
 
     /**
-     * load the json object data into that object
+     * load the json object data into that object if can,
+     * if the object have finals it wont change the object and will return new object with the loaded data
      * @param json the json object to load
+     * @return the loaded object
      */
-    void  load(JSONObject json);
-
+    Serializable  load(JSONObject json);
 }

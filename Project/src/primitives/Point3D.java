@@ -1,11 +1,13 @@
 package primitives;
 
+import org.json.simple.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.Objects;
 
 import static java.lang.Math.sqrt;
 
-public class Point3D {
+public class Point3D implements Serializable {
     /**
      * the point x axis data
      */
@@ -134,5 +136,24 @@ public class Point3D {
      */
     Point3D mult(double multiplier) {
         return new Point3D(this.x.coord * multiplier, this.y.coord * multiplier, this.z.coord * multiplier);
+    }
+
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject ret=new JSONObject();
+        ret.put("type","point3d");
+        ret.put("x",x);
+        ret.put("y",y);
+        ret.put("z",z);
+        return ret;
+    }
+
+    @Override
+    public Serializable load(JSONObject json) {
+        double x=(double)json.get("x");
+        double y=(double)json.get("y");
+        double z=(double)json.get("z");
+        return new Point3D(x,y,z);
     }
 }

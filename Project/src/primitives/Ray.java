@@ -1,9 +1,11 @@
 package primitives;
 
+import org.json.simple.JSONObject;
+
 import java.util.List;
 import java.util.Objects;
 
-public class Ray {
+public class Ray implements  Serializable {
     /**
      * beginning point of ray
      */
@@ -73,5 +75,21 @@ public class Ray {
     @Override
     public String toString() {
         return "Ray{" + p0 + dir + '}';
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject ret=new JSONObject();
+        ret.put("type","ray");
+        ret.put("p0",this.p0.toJSON());
+        ret.put("dir",this.dir.toJSON());
+        return ret;
+    }
+
+    @Override
+    public Serializable load(JSONObject json) {
+        this.p0=(Point3D) p0.load((JSONObject) json.get("p0"));
+        dir.load((JSONObject) json.get("dir"));
+        return this;
     }
 }

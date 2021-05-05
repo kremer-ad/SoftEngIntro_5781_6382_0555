@@ -2,6 +2,7 @@ package elements;
 
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Util;
 import primitives.Vector;
 
 public class Camera {
@@ -68,7 +69,7 @@ public class Camera {
         if (vTo.dotProduct(vUp) != 0) {
             throw new IllegalArgumentException("Non-vertical vectors");
         }
-        vRight = vTo.crossProduct(vUp); // set vRight value
+        vRight = this.vTo.crossProduct(this.vUp); // set vRight value
     }
 
     /**
@@ -98,6 +99,27 @@ public class Camera {
     }
 
     /**
+     * Rotate camera about vTo using "Rodriguez' rotation formula"
+     * @param angle - gets radian angle
+     * @return this
+     */
+
+    public Camera rotate(double angle) {
+        if (Util.alignZero(Math.cos(angle)) == 0) { //avoiding zero vector creation when cos(angle)=0
+            this.vUp = this.vRight.scale(Math.sin(angle));
+        }
+        else if (Util.alignZero(Math.sin(angle)) == 0) { //avoiding zero vector creation when sin(angle)=0
+            this.vUp = this.vUp.scale(Math.cos(angle));
+        }
+        else { // Rodriguez' rotation formula
+            this.vUp = this.vUp.scale(Util.alignZero(Math.cos(angle))).add(this.vRight.scale(Util.alignZero(Math.sin(angle))));
+        }
+        this.vRight = this.vTo.crossProduct(this.vUp); // set vRight
+
+        return this;
+    }
+
+    /**
      * Generate a ray from camera to a middle of a given pixel
      *
      * @param nX - number of pixels for width
@@ -113,7 +135,6 @@ public class Camera {
         // calculate ratio (pixel width and height)
         double rY = height / nY;
         double rX = width / nX;
-
         // calculate pixel[i,j] center
         double yI = -(i - (nY - 1) / 2d) * rY;
         double xJ = (j - (nX - 1) / 2d) * rX;
@@ -130,5 +151,4 @@ public class Camera {
 
         return new Ray(position, pIJ.subtract(position));
     }
-
 }

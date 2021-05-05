@@ -1,12 +1,14 @@
 package geometries;
 
+import org.json.simple.JSONObject;
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Serializable;
 import primitives.Vector;
 
 import java.util.List;
 
-public class Cylinder extends Tube{
+public class Cylinder extends Tube {
 
     /**
      * Cylinder heights
@@ -51,7 +53,27 @@ public class Cylinder extends Tube{
 
     @Override
     public List<Point3D> findIntersections(Ray ray){
-        List result = super.findIntersections(ray);
+        List<Point3D> result = super.findIntersections(ray);
+        result.removeIf(point->onCylinder(point));
         return null;
+    }
+
+    private boolean onCylinder(Point3D pt){
+        return false;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject ret=super.toJSON();
+        ret.put("type","cylinder");
+        ret.put("height",this.height);
+        return  ret;
+    }
+
+    @Override
+    public Serializable load(JSONObject json) {
+        super.load(json);
+        this.height=(int)json.get("height");
+        return this;
     }
 }

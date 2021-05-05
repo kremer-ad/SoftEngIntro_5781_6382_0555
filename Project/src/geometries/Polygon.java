@@ -2,6 +2,9 @@ package geometries;
 
 import java.util.Collections;
 import java.util.List;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import primitives.*;
 import static primitives.Util.*;
 
@@ -11,7 +14,7 @@ import static primitives.Util.*;
  *
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon implements Geometry,Serializable {
 	/**
 	 * List of polygon's vertices
 	 */
@@ -127,6 +130,29 @@ public class Polygon implements Geometry {
 	}
 
 
+	@Override
+	public JSONObject toJSON() {
+		JSONObject ret=new JSONObject();
+		ret.put("type","polygon");
+		ret.put("plane",this.plane.toJSON());
+		JSONArray vertices = new JSONArray();
+		for(Point3D pt:this.vertices){
+			vertices.add(pt.toJSON());
+		}
+		ret.put("vertices",vertices);
+		return ret;
+	}
 
-
+	@Override
+	public Serializable load(JSONObject json) {
+		this.plane.load((JSONObject) json.get("plane"));
+		JSONArray jsonVertices= (JSONArray) json.get("vertices");
+		Point3D[] vertices=new Point3D[jsonVertices.size()];
+		for(int i=0;i<vertices.length;i++){
+			JSONObject currentJson = (JSONObject) jsonVertices.get(i);
+			vertices[i]=(Point3D) Point3D.ZERO.load(currentJson);
+		}
+		this.vertices=List.of(vertices);
+		return this;
+	}
 }

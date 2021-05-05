@@ -45,12 +45,20 @@ public class Camera {
         return vRight;
     }
 
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
     /**
      * constructor: gets vTo and vUp and generate vRight if values are valid
      *
-     * @param position  - camera's location
-     * @param vTo the forward direction vector
-     * @param vUp the up direction vector
+     * @param position - camera's location
+     * @param vTo      the forward direction vector
+     * @param vUp      the up direction vector
      */
     public Camera(Point3D position, Vector vTo, Vector vUp) {
         this.position = position;
@@ -67,7 +75,7 @@ public class Camera {
     /**
      * Builder element to set viewPlans's width and height
      *
-     * @param width the view plane width
+     * @param width  the view plane width
      * @param height the view plane width
      * @return this
      */

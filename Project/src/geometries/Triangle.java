@@ -1,6 +1,8 @@
 package geometries;
 
+import org.json.simple.JSONObject;
 import primitives.Point3D;
+import primitives.Serializable;
 import primitives.Vector;
 
 public class Triangle extends Polygon{
@@ -17,6 +19,13 @@ public class Triangle extends Polygon{
     @Override
     public String toString() {
         return "Triangle{" + super.toString()+ '}';
+    }
+
+    @Override
+    public JSONObject  toJSON(){
+        JSONObject ret=super.toJSON();
+        ret.put("type","triangle");
+        return ret;
     }
 
 }

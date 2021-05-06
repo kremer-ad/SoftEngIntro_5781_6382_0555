@@ -92,7 +92,6 @@
                         List<Point3D> ret = new LinkedList<Point3D>();//we using linked list so we could remove points if using cylinder
                         //add only the positive results to the list
                         boolean listEmpty = true;
-
                         double t =(Bminus  - Math.sqrt(discriminant))/ aTwo;
                         if (t > 0) {
             listEmpty = false;

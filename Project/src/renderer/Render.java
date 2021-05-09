@@ -76,10 +76,10 @@ public class Render {
         if (this.rayTracer == null) {
             throw new MissingResourceException("The rayTracer value cant be null", "RayTracerBase", "rayTracer");
         }
-
+        /*
         //some parameters for scaling the image when the given image is not at the same size like the view plane of the camera
         int imageXScale = (int) (writer.getNx() / camera.getWidth());//the scale size at the x axis
-        int imageYScale = (int) (writer.getNy() / camera.getHeight());//the sscale size at the y axis
+        int imageYScale = (int) (writer.getNy() / camera.getHeight());//the scale size at the y axis
         int writerX = 0;//the actual pointer for the image x coordinate
         int writerY = 0;//the actual pointer for the image y coordinate
         //run through all the rays in the view plane of the camera or until reach the boundary of the writer
@@ -96,6 +96,15 @@ public class Render {
                 writerY += imageYScale;
             }
             writerX += imageXScale;
+        }
+        */
+
+        for (int i = 0; i < writer.getNx(); i++) {
+            for (int j = 0; j < writer.getNy(); j++) {
+                Ray ray = camera.constructRayThroughPixel(writer.getNx(), writer.getNy(), j, i);
+                Color colorToWrite = rayTracer.traceRay(ray);
+                writer.writePixel(i, j, colorToWrite);
+            }
         }
 
     }

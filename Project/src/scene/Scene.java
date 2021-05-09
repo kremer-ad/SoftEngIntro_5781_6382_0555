@@ -44,7 +44,7 @@ public class Scene implements Serializable {
     }
 
     /**
-     * load a scene from josn file
+     * load a scene from json file
      *
      * @param fileName the json file name
      * @return scene with the scene data from the json file

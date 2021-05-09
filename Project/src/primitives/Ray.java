@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import java.util.List;
 import java.util.Objects;
 
-public class Ray implements  Serializable {
+public class Ray implements Serializable {
     /**
      * beginning point of ray
      */
@@ -18,7 +18,8 @@ public class Ray implements  Serializable {
 
     /**
      * ray constructor
-     * @param p0 beginning point of ray
+     *
+     * @param p0  beginning point of ray
      * @param dir gets direction vector of ray and normalize it
      */
     public Ray(Point3D p0, Vector dir) {
@@ -37,6 +38,7 @@ public class Ray implements  Serializable {
 
     /**
      * Gets point on ray
+     *
      * @param t scale
      * @return point
      */
@@ -46,21 +48,22 @@ public class Ray implements  Serializable {
 
     /**
      * get the closest point to the head of the ray from a given points list
+     *
      * @param points the list to compare
      * @return the closest point to the origin of the ray
      */
-    public Point3D findClosestPoint(List<Point3D> points){
-        if(points.size()==0){
+    public Point3D findClosestPoint(List<Point3D> points) {
+        if (points.size() == 0) {
             return null;
         }
-        Point3D ret=points.get(0);
-        for(Point3D point : points){
-            //we using distanceSquared inserted of distance because it faster then distance and for that check it will give the same results according to algebra
-            if(this.p0.distanceSquared(ret)>this.p0.distanceSquared(point)){
-                ret=point;
+        Point3D ret = points.get(0);
+        for (Point3D point : points) {
+            //we using distanceSquared instead of distance because it faster then distance and for that check it will give the same results according to algebra
+            if (this.p0.distanceSquared(ret) > this.p0.distanceSquared(point)) {
+                ret = point;
             }
         }
-        return  ret;
+        return ret;
     }
 
     @Override
@@ -79,16 +82,16 @@ public class Ray implements  Serializable {
 
     @Override
     public JSONObject toJSON() {
-        JSONObject ret=new JSONObject();
-        ret.put("type","ray");
-        ret.put("p0",this.p0.toJSON());
-        ret.put("dir",this.dir.toJSON());
+        JSONObject ret = new JSONObject();
+        ret.put("type", "ray");
+        ret.put("p0", this.p0.toJSON());
+        ret.put("dir", this.dir.toJSON());
         return ret;
     }
 
     @Override
     public Serializable load(JSONObject json) {
-        this.p0=(Point3D) p0.load((JSONObject) json.get("p0"));
+        this.p0 = (Point3D) p0.load((JSONObject) json.get("p0"));
         dir.load((JSONObject) json.get("dir"));
         return this;
     }

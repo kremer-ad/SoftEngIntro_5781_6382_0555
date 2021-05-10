@@ -3,8 +3,6 @@ package geometries;
 import org.json.simple.JSONObject;
 import primitives.Color;
 import primitives.Point3D;
-import primitives.Serializable;
-import primitives.Vector;
 
 public class Triangle extends Polygon{
     /**
@@ -15,6 +13,13 @@ public class Triangle extends Polygon{
      */
     public Triangle(Point3D q0, Point3D q1, Point3D q2) {
         super(q0,q1,q2);
+    }
+
+
+
+    public Geometry setEmission(Color color) {
+        super.setEmmission(color);
+        return this;
     }
 
     @Override

@@ -3,7 +3,6 @@ package primitives;
 import org.json.simple.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.Objects;
 
 import static java.lang.Math.sqrt;
 

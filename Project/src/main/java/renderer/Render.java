@@ -1,14 +1,10 @@
 package renderer;
 
 import elements.Camera;
-import geometries.Intersectable;
 import primitives.Color;
-import primitives.Point3D;
 import primitives.Ray;
 import scene.Scene;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.MissingResourceException;
 
 public class Render {

@@ -1,13 +1,14 @@
 package geometries;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import primitives.*;
 
-import static primitives.Util.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
@@ -113,7 +114,7 @@ public class Polygon extends Geometry {
             return null;
         }
         ret.removeIf(gPt -> !this.isOn(gPt.point, ray));//remove all points outside of the polygon
-        return ret.size() == 0 ? null : ret;
+        return ret.size() == 0 ? null : ret.stream().map(geoPoint -> new GeoPoint(this,geoPoint.point)).collect(Collectors.toList());
         //  return ret.size() == 0 ? null : List.of(new GeoPoint(this, ret.get(0).point));
     }
 
@@ -173,7 +174,7 @@ public class Polygon extends Geometry {
     }
 
     public Geometry setEmission(Color color) {
-        this.setEmmission(color);
+        super.setEmmission(color);
         return this;
     }
 }

@@ -9,7 +9,7 @@ import primitives.Vector;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Cylinder extends Tube {
+public class Cylinder extends Tube{
 
     /**
      * Cylinder heights

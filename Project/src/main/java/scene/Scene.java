@@ -2,16 +2,16 @@ package scene;
 
 import elements.AmbientLight;
 import geometries.Geometries;
-import primitives.Color;
-
-import java.io.*;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.*;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import primitives.Color;
 import primitives.Serializable;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import static primitives.Util.BASE_FILES_PATH;
 
 public class Scene implements Serializable {
@@ -21,7 +21,7 @@ public class Scene implements Serializable {
     public Geometries geometries = new Geometries();
 
     //for saving files
-    private static final String FOLDER_PATH =BASE_FILES_PATH + "/json";
+    private static final String FOLDER_PATH =BASE_FILES_PATH + "/src/json";
 
     public Scene(String name) {
         this.name = name;

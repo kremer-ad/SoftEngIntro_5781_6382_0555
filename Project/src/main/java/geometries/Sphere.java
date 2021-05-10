@@ -3,7 +3,6 @@ package geometries;
 import org.json.simple.JSONObject;
 import primitives.*;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -143,7 +142,7 @@ public class Sphere extends Geometry {
     }
 
     public Geometry setEmission(Color color) {
-        this.setEmmission(color);
+        super.setEmmission(color);
         return this;
     }
 

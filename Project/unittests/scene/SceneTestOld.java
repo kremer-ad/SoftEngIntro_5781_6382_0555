@@ -7,20 +7,16 @@ import org.junit.Test;
 import primitives.Color;
 import primitives.Point3D;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import static org.junit.Assert.*;
-
 
 import static org.junit.Assert.assertEquals;
 import static primitives.Util.BASE_FILES_PATH;
 
 
-public class SceneTest {
-    private static final String FOLDER_PATH = BASE_FILES_PATH + "/json";
+public class SceneTestOld {
+    private static final String FOLDER_PATH = BASE_FILES_PATH + "/src/json";
 
     @Test
     public void saveJSON() throws IOException {

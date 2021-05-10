@@ -1,12 +1,10 @@
 package primitives;
 
+import geometries.Intersectable.GeoPoint;
 import org.json.simple.JSONObject;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-
-import geometries.Intersectable.GeoPoint;
 
 public class Ray implements Serializable {
     /**

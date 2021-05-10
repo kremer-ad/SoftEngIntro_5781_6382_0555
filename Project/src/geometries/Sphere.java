@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Sphere implements Geometry, Serializable {
+public class Sphere extends Geometry {
     /**
      * center point of sphere
      */
@@ -20,6 +20,7 @@ public class Sphere implements Geometry, Serializable {
 
     /**
      * sphere constructor
+     *
      * @param center center point of sphere
      * @param radius radius of sphere
      */
@@ -47,6 +48,40 @@ public class Sphere implements Geometry, Serializable {
         return "Sphere{" + center + radius + '}';
     }
 
+    /*@Override
+    public List<Point3D> findIntersections(Ray ray) {
+
+        if (center.equals(ray.getP0())) { // Ray head is the center of the sphere
+            return List.of(center.add(ray.getDir().scale(radius)));
+        }
+
+        Vector u = center.subtract(ray.getP0());
+        double tm = Util.alignZero(ray.getDir().dotProduct(u));
+        double d = Util.alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
+
+        if (d >= radius) { // no points to return
+            return null;
+        }
+
+        double th1 = Util.alignZero(Math.sqrt(radius * radius - d * d));
+        double th2 = Util.alignZero(-1 * Math.sqrt(radius * radius - d * d));
+
+        if (tm - th1 <= 0 && tm - th2 <= 0) // no points to return
+        {
+            return null;
+        }
+
+        List<Point3D> ret = new LinkedList<>();
+        if (tm - th1 > 0) {
+            Point3D pnt1 = ray.getPoint(tm - th1);
+            ret.add(pnt1);
+        }
+        if (tm - th2 > 0) {
+            Point3D pnt2 = ray.getPoint(tm - th2);
+            ret.add(pnt2);
+        }
+        return ret;
+    }*/
 
     /**
      * Calculate intersection points for a sphere and a ray, using equation:
@@ -56,56 +91,63 @@ public class Sphere implements Geometry, Serializable {
      * th=sqrt(r^2-d^2)
      * t1,2=tm+-th
      * Pi=P0+ti*v
-     *
      */
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
-
-        if(center.equals(ray.getP0())){ // Ray head is the center of the sphere
-            return List.of(center.add(ray.getDir().scale(radius)));
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        if (center.equals(ray.getP0())) { // Ray head is the center of the sphere
+            return List.of(new GeoPoint(this, center.add(ray.getDir().scale(radius))));
         }
 
         Vector u = center.subtract(ray.getP0());
         double tm = Util.alignZero(ray.getDir().dotProduct(u));
-        double d=Util.alignZero(Math.sqrt(u.lengthSquared()-tm*tm));
+        double d = Util.alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
 
-        if (d>=radius) { // no points to return
+        if (d >= radius) { // no points to return
             return null;
         }
 
-        double th1 = Util.alignZero(Math.sqrt(radius*radius-d*d));
-        double th2 = Util.alignZero(-1*Math.sqrt(radius*radius-d*d));
+        double th1 = Util.alignZero(Math.sqrt(radius * radius - d * d));
+        double th2 = Util.alignZero(-1 * Math.sqrt(radius * radius - d * d));
 
-        if(tm-th1<=0&&tm-th2<=0) // no points to return
+        if (tm - th1 <= 0 && tm - th2 <= 0) // no points to return
         {
             return null;
         }
 
-        List<Point3D> ret = new LinkedList<>();
-        if (tm-th1>0){
-            Point3D pnt1 = ray.getPoint(tm-th1);
-            ret.add(pnt1);
+        List<GeoPoint> ret = new LinkedList<>();
+        if (tm - th1 > 0) {
+            GeoPoint gPnt1 = new GeoPoint(this, ray.getPoint(tm - th1));
+            ret.add(gPnt1);
         }
-        if (tm-th2>0){
-            Point3D pnt2 = ray.getPoint(tm-th2);
-            ret.add(pnt2);
+        if (tm - th2 > 0) {
+            GeoPoint gPnt2 = new GeoPoint(this, ray.getPoint(tm - th2));
+            ret.add(gPnt2);
         }
         return ret;
     }
 
     @Override
     public JSONObject toJSON() {
-        JSONObject ret=new JSONObject();
-        ret.put("type","sphere");
-        ret.put("center",center.toJSON());
-        ret.put("radius",this.radius);
+        JSONObject ret = new JSONObject();
+        ret.put("type", "sphere");
+        ret.put("center", center.toJSON());
+        ret.put("radius", this.radius);
         return ret;
     }
 
     @Override
     public Serializable load(JSONObject json) {
-        this.center=(Point3D) this.center.load((JSONObject) json.get("center"));
+        this.center = (Point3D) this.center.load((JSONObject) json.get("center"));
         this.radius = (double) json.get("radius");
         return this;
+    }
+
+    public Geometry setEmission(Color color) {
+        this.setEmmission(color);
+        return this;
+    }
+
+    public Geometry getEmission(Color color) {
+        return this.setEmmission(color);
     }
 }

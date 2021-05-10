@@ -1,6 +1,7 @@
 package geometries;
 
 import org.json.simple.JSONObject;
+import primitives.Color;
 import primitives.Point3D;
 import primitives.Serializable;
 import primitives.Vector;
@@ -27,5 +28,6 @@ public class Triangle extends Polygon{
         ret.put("type","triangle");
         return ret;
     }
+
 
 }

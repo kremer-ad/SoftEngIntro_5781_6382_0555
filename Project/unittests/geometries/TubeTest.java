@@ -40,8 +40,8 @@ public class TubeTest {
         Tube tb = new Tube(new Ray(new Point3D(5d, 0, 0), new Vector(0, 1d, 0)), 1);
         Ray ray = new Ray(new Point3D(0, 2d, 0), new Vector(1d, 0, 0));
 
-        assertEquals("basic intersectio  test",ray.getPoint(4),tb.findIntersections(ray).get(0));
-        assertEquals("basic intersectio  test",ray.getPoint(6),tb.findIntersections(ray).get(1));
+        assertEquals("basic intersection test",ray.getPoint(4),tb.findIntersections(ray).get(0));
+        assertEquals("basic intersection test",ray.getPoint(6),tb.findIntersections(ray).get(1));
         //TC02: The ray parallel to the tube and outside of him
         tb=new Tube(new Ray(new Point3D(3,0,0),new Vector(0,1,0)),20);
         ray = new Ray(new Point3D(0,5,-25),new Vector(0,1,0));

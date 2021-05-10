@@ -67,9 +67,9 @@ public class Render {
         if (this.camera == null) {
             throw new MissingResourceException("The camera value cant be null", "Camera", "camera");
         }
-        if (this.scene == null) {
-            throw new MissingResourceException("The scene value cant be null", "Scene", "scene");
-        }
+        //if (this.scene == null) {
+        //    throw new MissingResourceException("The scene value cant be null", "Scene", "scene");
+        //}
         if (this.writer == null) {
             throw new MissingResourceException("The writer value cant be null", "ImageWriter", "writer");
         }
@@ -145,5 +145,10 @@ public class Render {
             throw new MissingResourceException("The writer value cant be null", "ImageWriter", "writer");
         }
         writer.writeToImage();
+    }
+
+    public Render setImageWriter(ImageWriter imageWriter) {
+        writer = imageWriter;
+        return this;
     }
 }

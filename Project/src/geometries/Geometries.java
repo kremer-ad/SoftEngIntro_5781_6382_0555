@@ -43,13 +43,7 @@ public class Geometries implements Intersectable, Serializable {
         }
     }
 
-    /**
-     * Implement interface function
-     *
-     * @param ray the interacting ray
-     * @return all intersections points
-     */
-    @Override
+    /*@Override
     public List<Point3D> findIntersections(Ray ray) {
         List<Point3D> ret = new LinkedList<Point3D>();
         for (Intersectable shape : shapes) {
@@ -59,6 +53,28 @@ public class Geometries implements Intersectable, Serializable {
             } // if there is no intersections points - continue
             for (Point3D pnt : shape.findIntersections(ray)) {
                 ret.add(pnt);
+            }
+        }
+        return ret.isEmpty() ? null : ret;
+    }*/
+
+    /**
+     * Implement interface function
+     *
+     * @param ray the interacting ray
+     * @return all intersections points
+     */
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        List<GeoPoint> ret = new LinkedList<GeoPoint>();
+        for (Intersectable shape : shapes) {
+            var geoIntersection = shape.findGeoIntersections(ray);
+            if (geoIntersection == null) {
+                continue;
+            } // if there is no intersections points - continue
+
+            for (var gPnt : geoIntersection) {
+                ret.add(gPnt);
             }
         }
         return ret.isEmpty() ? null : ret;

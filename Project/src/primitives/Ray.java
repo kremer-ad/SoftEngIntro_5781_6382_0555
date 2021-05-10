@@ -4,6 +4,9 @@ import org.json.simple.JSONObject;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
+import geometries.Intersectable.GeoPoint;
 
 public class Ray implements Serializable {
     /**
@@ -53,14 +56,31 @@ public class Ray implements Serializable {
      * @return the closest point to the origin of the ray
      */
     public Point3D findClosestPoint(List<Point3D> points) {
+
         if (points.size() == 0) {
             return null;
         }
-        Point3D ret = points.get(0);
-        for (Point3D point : points) {
+
+        List<GeoPoint> geoList =
+                         points.stream()
+                        .map(pnt -> new GeoPoint(null, pnt))
+                        .collect(Collectors.toList());
+
+        return findClosestGeoPoint(geoList).point;
+    }
+
+
+    public GeoPoint findClosestGeoPoint(List<GeoPoint> geoPoints) {
+
+        if (geoPoints.size() == 0) {
+            return null;
+        }
+
+        GeoPoint ret = geoPoints.get(0);
+        for (var gPnt : geoPoints) {
             //we using distanceSquared instead of distance because it faster then distance and for that check it will give the same results according to algebra
-            if (this.p0.distanceSquared(ret) > this.p0.distanceSquared(point)) {
-                ret = point;
+            if (this.p0.distanceSquared(ret.point) > this.p0.distanceSquared(gPnt.point)) {
+                ret = gPnt;
             }
         }
         return ret;
@@ -95,4 +115,6 @@ public class Ray implements Serializable {
         dir.load((JSONObject) json.get("dir"));
         return this;
     }
+
+
 }

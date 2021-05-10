@@ -113,8 +113,8 @@ public class Polygon extends Geometry {
             return null;
         }
         ret.removeIf(gPt -> !this.isOn(gPt.point, ray));//remove all points outside of the polygon
-        return ret.size() == 0 ? null : ret;
-        //  return ret.size() == 0 ? null : List.of(new GeoPoint(this, ret.get(0).point));
+        //return ret.size() == 0 ? null : ret;
+        return ret.size() == 0 ? null : List.of(new GeoPoint(this, ret.get(0).point));
     }
 
     /**

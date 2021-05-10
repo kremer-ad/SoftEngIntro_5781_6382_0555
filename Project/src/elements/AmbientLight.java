@@ -17,8 +17,7 @@ public class AmbientLight implements Serializable {
     }
 
     public AmbientLight(Color color, double k) {
-        this.intensity = new Color(color);
-        this.intensity.scale(k);
+        this.intensity = color.scale(k);
     }
 
     public AmbientLight() {

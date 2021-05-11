@@ -16,12 +16,13 @@ public class AmbientLight implements Serializable {
         return intensity;
     }
 
+    // note that color.scale return a new object
     public AmbientLight(Color color, double k) {
         this.intensity = color.scale(k);
     }
 
     public AmbientLight() {
-        this.intensity = Color.BLACK;
+        this.intensity = new Color(Color.BLACK);
     }
 
     @Override

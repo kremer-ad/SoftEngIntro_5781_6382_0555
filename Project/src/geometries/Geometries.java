@@ -43,21 +43,6 @@ public class Geometries implements Intersectable, Serializable {
         }
     }
 
-    /*@Override
-    public List<Point3D> findIntersections(Ray ray) {
-        List<Point3D> ret = new LinkedList<Point3D>();
-        for (Intersectable shape : shapes) {
-            List intersection = shape.findIntersections(ray);
-            if (intersection == null) {
-                continue;
-            } // if there is no intersections points - continue
-            for (Point3D pnt : shape.findIntersections(ray)) {
-                ret.add(pnt);
-            }
-        }
-        return ret.isEmpty() ? null : ret;
-    }*/
-
     /**
      * Implement interface function
      *

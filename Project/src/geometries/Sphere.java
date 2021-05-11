@@ -48,41 +48,6 @@ public class Sphere extends Geometry {
         return "Sphere{" + center + radius + '}';
     }
 
-    /*@Override
-    public List<Point3D> findIntersections(Ray ray) {
-
-        if (center.equals(ray.getP0())) { // Ray head is the center of the sphere
-            return List.of(center.add(ray.getDir().scale(radius)));
-        }
-
-        Vector u = center.subtract(ray.getP0());
-        double tm = Util.alignZero(ray.getDir().dotProduct(u));
-        double d = Util.alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
-
-        if (d >= radius) { // no points to return
-            return null;
-        }
-
-        double th1 = Util.alignZero(Math.sqrt(radius * radius - d * d));
-        double th2 = Util.alignZero(-1 * Math.sqrt(radius * radius - d * d));
-
-        if (tm - th1 <= 0 && tm - th2 <= 0) // no points to return
-        {
-            return null;
-        }
-
-        List<Point3D> ret = new LinkedList<>();
-        if (tm - th1 > 0) {
-            Point3D pnt1 = ray.getPoint(tm - th1);
-            ret.add(pnt1);
-        }
-        if (tm - th2 > 0) {
-            Point3D pnt2 = ray.getPoint(tm - th2);
-            ret.add(pnt2);
-        }
-        return ret;
-    }*/
-
     /**
      * Calculate intersection points for a sphere and a ray, using equation:
      * u=O-P0

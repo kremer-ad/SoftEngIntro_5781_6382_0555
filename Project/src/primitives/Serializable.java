@@ -16,5 +16,5 @@ public interface Serializable {
      * @param json the json object to load
      * @return the loaded object
      */
-    Serializable  load(JSONObject json);
+    Serializable load(JSONObject json);
 }

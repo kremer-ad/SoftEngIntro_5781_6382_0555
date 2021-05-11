@@ -16,8 +16,7 @@ import static primitives.Util.BASE_FILES_PATH;
 
 public class Scene implements Serializable {
     public String name = "Untitled";
-    public Color background = Color.BLACK;
-    //public AmbientLight ambientLight = new AmbientLight(Color.BLACK, 1);
+    public Color background = new Color(Color.BLACK);
     public AmbientLight ambientLight = new AmbientLight();
     public Geometries geometries = new Geometries();
 

@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 
 public interface Intersectable {
 
-    /**
+    /** default function for old code to support tests
      * @param ray
-     * @return
+     * @return intersection points list
      */
     default List<Point3D> findIntersections(Ray ray) {
         List<GeoPoint> geoList = findGeoIntersections(ray);
@@ -21,12 +21,26 @@ public interface Intersectable {
                                             .collect(Collectors.toList());
     }
 
+    /**
+     * search for all intersections between ray and geometries
+     * @param ray
+     * @return intersection GeoPoints list
+     */
     List<GeoPoint> findGeoIntersections(Ray ray);
 
+    /**
+     * PDS class that contain data about a point and its geometry
+     * created to gain efficient
+     */
     public static class GeoPoint {
         public Geometry geometry;
         public Point3D point;
 
+        /**
+         * gain two parameters for initialization
+         * @param geometry
+         * @param point
+         */
         public GeoPoint(Geometry geometry, Point3D point) {
             this.geometry = geometry;
             this.point = point;

@@ -14,12 +14,10 @@ public class ImageWriterTest {
         fillImage(writer,new Color(0,0,0));
         writeStokes(writer,50,new Color(255,255,255));
         writer.writeToImage();
-
     }
 
     @Test
     public void writePixel() {
-
     }
 
     private void writeStokes(ImageWriter writer,int distance,Color color){

@@ -91,18 +91,6 @@ public class Polygon extends Geometry {
         return plane.getNormal();
     }
 
-	/*@Override
-	public List<Point3D> findIntersections(Ray ray) {
-		//there is two option, 1: the ray have intersection point with the plane, 2 the ray is on the plane
-		//check option 1
-		List<Point3D> ret= plane.findIntersections(ray);
-		if(ret==null){//we must check if ret is null before we running on the list
-			return null;
-		}
-		ret.removeIf(pt->!this.isOn(pt,ray));//remove all points outside of the polygon
-		return ret.size()==0?null:ret;
-	}*/
-
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray) {
 
@@ -113,7 +101,6 @@ public class Polygon extends Geometry {
             return null;
         }
         ret.removeIf(gPt -> !this.isOn(gPt.point, ray));//remove all points outside of the polygon
-        //return ret.size() == 0 ? null : ret;
         return ret.size() == 0 ? null : List.of(new GeoPoint(this, ret.get(0).point));
     }
 

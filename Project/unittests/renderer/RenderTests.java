@@ -26,7 +26,7 @@ public class RenderTests {
 	 * grid
 	 */
 	@Test
-	public void basicRenderTwoColorTest() {
+	public void basicRenderTwoColorTest() throws IOException {
 		Scene scene = new Scene("Test scene")//
 				.setAmbientLight(new AmbientLight(new Color(255, 191, 191), 1)) //
 				.setBackground(new Color(75, 127, 90));
@@ -40,7 +40,6 @@ public class RenderTests {
 																														// left
 				new Triangle(new Point3D(100, 0, -100), new Point3D(0, -100, -100), new Point3D(100, -100, -100))); // down
 																													// right
-
 		ImageWriter imageWriter = new ImageWriter("base render test", 1000, 1000);
 		Render render = new Render() //
 				.setImageWriter(imageWriter) //

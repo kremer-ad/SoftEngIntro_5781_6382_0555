@@ -92,7 +92,7 @@ public class Cylinder extends Tube {
     @Override
     public JSONObject toJSON() {
         JSONObject ret = super.toJSON();
-        ret.put("type", "cylinder");
+        ret.put("type", "Cylinder");
         ret.put("height", this.height);
         return ret;
     }

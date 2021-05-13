@@ -2,11 +2,8 @@ package renderer;
 
 import geometries.Intersectable.*;
 import primitives.Color;
-import primitives.Point3D;
 import primitives.Ray;
 import scene.Scene;
-
-import java.util.List;
 
 public class RayTracerBasic extends RayTracerBase{
 
@@ -31,6 +28,6 @@ public class RayTracerBasic extends RayTracerBase{
      */
     private Color calcColor(GeoPoint intersection){
         return scene.ambientLight.getIntensity()
-                .add(intersection.geometry.getEmmission());
+                .add(intersection.geometry.getEmission());
     }
 }

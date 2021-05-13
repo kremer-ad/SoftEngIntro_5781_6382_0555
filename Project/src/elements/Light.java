@@ -1,11 +1,13 @@
 package elements;
 
+import org.json.simple.JSONObject;
 import primitives.Color;
+import primitives.Serializable;
 
 /**
  * light abstract class
  */
-abstract class Light {
+abstract class Light implements Serializable {
 
     /**
      * Refill lighting intensity
@@ -22,6 +24,20 @@ abstract class Light {
 
     public Light setIntensity(Color intensity) {
         this.intensity = intensity;
+        return this;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject ret=new JSONObject();
+        ret.put("type","Light");
+        ret.put("intensity",this.intensity.toJSON());
+        return ret;
+    }
+
+    @Override
+    public Serializable load(JSONObject json) {
+        this.intensity.load((JSONObject) json.get("intensity"));
         return this;
     }
 }

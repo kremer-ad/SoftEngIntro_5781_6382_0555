@@ -1,12 +1,6 @@
 package primitives;
 
 import org.json.simple.JSONObject;
-
-import java.util.Objects;
-
-import static java.lang.Math.sqrt;
-
-import static primitives.Util.*;
 public class Vector implements Serializable{
 
     static public final double ACCURACY = 0.00001;
@@ -164,7 +158,7 @@ public class Vector implements Serializable{
     @Override
     public JSONObject toJSON() {
         JSONObject ret=new JSONObject();
-        ret.put("type","vector");
+        ret.put("type","Vector");
         ret.put("x",head.getX());
         ret.put("y",head.getY());
         ret.put("z",head.getZ());

@@ -1,13 +1,13 @@
 package geometries;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import primitives.*;
 
-import static primitives.Util.*;
+import java.util.List;
+
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
@@ -135,8 +135,8 @@ public class Polygon extends Geometry {
 
     @Override
     public JSONObject toJSON() {
-        JSONObject ret = new JSONObject();
-        ret.put("type", "polygon");
+        JSONObject ret = super.toJSON();
+        ret.put("type", "Polygon");
         ret.put("plane", this.plane.toJSON());
         JSONArray vertices = new JSONArray();
         for (Point3D pt : this.vertices) {
@@ -148,6 +148,7 @@ public class Polygon extends Geometry {
 
     @Override
     public Serializable load(JSONObject json) {
+        super.load(json);
         this.plane.load((JSONObject) json.get("plane"));
         JSONArray jsonVertices = (JSONArray) json.get("vertices");
         Point3D[] vertices = new Point3D[jsonVertices.size()];
@@ -160,7 +161,7 @@ public class Polygon extends Geometry {
     }
 
     public Geometry setEmission(Color color) {
-        this.setEmmission(color);
+        this.setEmission(color);
         return this;
     }
 }

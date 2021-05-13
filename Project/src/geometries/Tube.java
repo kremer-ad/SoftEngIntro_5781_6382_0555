@@ -114,8 +114,8 @@ public class Tube extends Geometry {
 
     @Override
     public JSONObject toJSON() {
-        JSONObject ret = new JSONObject();
-        ret.put("type", "tube");
+        JSONObject ret = super.toJSON();
+        ret.put("type", "Tube");
         ret.put("radius", this.radius);
         ret.put("axisRay", this.axisRay.toJSON());
         return ret;
@@ -123,6 +123,7 @@ public class Tube extends Geometry {
 
     @Override
     public Serializable load(JSONObject json) {
+        super.load(json);
         this.radius = (int) json.get("radius");
         this.axisRay.load((JSONObject) json.get("axisRay"));
         return this;

@@ -1,17 +1,22 @@
 package scene;
 
-import elements.AmbientLight;
+import elements.*;
 import geometries.Geometries;
-import primitives.Color;
-
-import java.io.*;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.*;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import primitives.Color;
+import primitives.Point3D;
 import primitives.Serializable;
+import primitives.Vector;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 import static primitives.Util.BASE_FILES_PATH;
 
 public class Scene implements Serializable {
@@ -19,12 +24,18 @@ public class Scene implements Serializable {
     public Color background = new Color(Color.BLACK);
     public AmbientLight ambientLight = new AmbientLight();
     public Geometries geometries = new Geometries();
+    public List<LightSource> lights = new LinkedList<LightSource>();
 
     //for saving files
-    private static final String FOLDER_PATH =BASE_FILES_PATH + "/json";
+    private static final String FOLDER_PATH = BASE_FILES_PATH + "/json";
 
     public Scene(String name) {
         this.name = name;
+    }
+
+    public Scene setLights(List<LightSource> lights) {
+        this.lights = lights;
+        return this;
     }
 
     /* setters*/
@@ -52,7 +63,7 @@ public class Scene implements Serializable {
      * @throws IOException    using JSONParser
      */
     public static Scene LoadJSON(String fileName) throws ParseException, IOException {
-        Object obj = new JSONParser().parse(new FileReader(FOLDER_PATH+"/"+fileName));
+        Object obj = new JSONParser().parse(new FileReader(FOLDER_PATH + "/" + fileName));
         JSONObject json = (JSONObject) obj;
         Scene ret = new Scene("untitled");
         ret.load(json);
@@ -75,11 +86,16 @@ public class Scene implements Serializable {
     @Override
     public JSONObject toJSON() {
         JSONObject ret = new JSONObject();
-        ret.put("type", "scene");
+        ret.put("type", "Scene");
         ret.put("name", this.name);
         ret.put("geometries", geometries.toJSON());
         ret.put("ambient-light", ambientLight.toJSON());
         ret.put("background", background.toJSON());
+        JSONArray lights = new JSONArray();
+        for (var light : lights) {
+            lights.add(((Serializable) light).toJSON());
+        }
+        ret.put("lights", lights);
         return ret;
     }
 
@@ -89,6 +105,35 @@ public class Scene implements Serializable {
         this.geometries.load((JSONObject) json.get("geometries"));
         this.ambientLight.load((JSONObject) json.get("ambient-light"));
         this.name = (String) json.get("name");
+        this.loadAllLights((JSONArray) json.get("lights"));
         return this;
+    }
+
+    /**
+     * load the lights data from the given json array
+     *
+     * @param json array that contains all the lights data
+     */
+    private void loadAllLights(JSONArray json) {
+        for (int i = 0; i < json.size(); i++) {
+            String type = ((JSONObject) json.get(i)).get("type").toString();
+            switch (type) {
+                case "DirectionalLight":
+                    DirectionalLight toAddDirectional = new DirectionalLight(Color.BLACK, new Vector(1D, 1D, 1D));
+                    toAddDirectional.load((JSONObject) json.get(i));
+                    lights.add(toAddDirectional);
+                    break;
+                case "SpotLight":
+                    SpotLight toAddSpot = new SpotLight(Color.BLACK, Point3D.ZERO, new Vector(1D, 1D, 1D));
+                    toAddSpot.load((JSONObject) json.get(i));
+                    lights.add(toAddSpot);
+                    break;
+                case "PointLight":
+                    PointLight toAddPoint = new PointLight(Color.BLACK, Point3D.ZERO);
+                    toAddPoint.load((JSONObject) json.get(i));
+                    lights.add(toAddPoint);
+                    break;
+            }
+        }
     }
 }

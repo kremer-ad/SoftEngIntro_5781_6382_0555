@@ -74,7 +74,7 @@ public class Geometries implements Intersectable, Serializable {
             JSONObject shapeJson = shape.toJSON();
             data.add(shapeJson);
         }
-        ret.put("type", "geometries");
+        ret.put("type", "Geometries");
         ret.put("data", data);
         return ret;
     }
@@ -84,37 +84,42 @@ public class Geometries implements Intersectable, Serializable {
         this.shapes = new LinkedList<Intersectable>();
         JSONArray data = (JSONArray) json.get("data");
         for (Object obj : data) {
-            this.add(handleSerialization((JSONObject) obj));
+            this.add(loadGeometry((JSONObject) obj));
         }
         return this;
     }
 
-    private Intersectable handleSerialization(JSONObject json) {
+    /**
+     * load all the given geometry from json object
+     * @param json json object that present geometry
+     * @return the geometry
+     */
+    private Intersectable loadGeometry(JSONObject json) {
         String type = (String) json.get("type");
         Intersectable ret = null;
         //for each geometry that we have -> create an instance and then load the data from the json object
         switch (type) {
-            case "cylinder":
+            case "Cylinder":
                 Cylinder cylinder = new Cylinder(new Ray(Point3D.ZERO, new Vector(1, 0, 0)), 1, 1);
                 ret = (Intersectable) cylinder.load(json);
                 break;
-            case "tube":
+            case "Tube":
                 Tube tube = new Tube(new Ray(Point3D.ZERO, new Vector(1, 0, 0)), 1);
                 ret = (Intersectable) tube.load(json);
                 break;
-            case "plane":
+            case "Plane":
                 Plane plane = new Plane(Point3D.ZERO, new Vector(1, 0, 0));
                 ret = (Intersectable) plane.load(json);
                 break;
-            case "triangle":
+            case "Triangle":
                 Triangle triangle = new Triangle(Point3D.ZERO, new Point3D(0, 0, 1), new Point3D(0, 1, 0));
                 ret = (Intersectable) triangle.load(json);
                 break;
-            case "polygon":
+            case "Polygon":
                 Polygon polygon = new Polygon(Point3D.ZERO, new Point3D(0, 0, 1), new Point3D(0, 1, 0), new Point3D(0, 1, 1));
                 ret=(Intersectable) polygon.load(json);
                 break;
-            case "sphere":
+            case "Sphere":
                 Sphere sphere = new Sphere(Point3D.ZERO, 1);
                 ret = (Intersectable) sphere.load(json);
                 break;

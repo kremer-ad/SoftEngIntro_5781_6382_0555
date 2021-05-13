@@ -179,7 +179,7 @@ public class Color implements Serializable {
     @Override
     public JSONObject toJSON() {
         JSONObject ret = new JSONObject();
-        ret.put("type", "color");
+        ret.put("type", "Color");
         ret.put("r", this.r);
         ret.put("g", this.g);
         ret.put("b", this.b);

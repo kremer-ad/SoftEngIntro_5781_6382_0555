@@ -3,7 +3,6 @@ package primitives;
 import org.json.simple.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.Objects;
 
 import static java.lang.Math.sqrt;
 
@@ -142,7 +141,7 @@ public class Point3D implements Serializable {
     @Override
     public JSONObject toJSON() {
         JSONObject ret=new JSONObject();
-        ret.put("type","point3d");
+        ret.put("type","Point3d");
         ret.put("x",x);
         ret.put("y",y);
         ret.put("z",z);

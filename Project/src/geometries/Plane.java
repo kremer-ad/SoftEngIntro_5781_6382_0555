@@ -99,8 +99,8 @@ public class Plane extends Geometry {
 
     @Override
     public JSONObject toJSON() {
-        JSONObject ret = new JSONObject();
-        ret.put("type", "plane");
+        JSONObject ret = super.toJSON();
+        ret.put("type", "Plane");
         ret.put("q0", this.q0.toJSON());
         ret.put("normal", normal.toJSON());
         return ret;
@@ -108,6 +108,7 @@ public class Plane extends Geometry {
 
     @Override
     public Plane load(JSONObject json) {
+        super.load(json);
         this.q0 = (Point3D) this.q0.load((JSONObject) json.get("q0"));
         this.normal = (Vector) this.normal.load((JSONObject) json.get("normal"));
         return this;

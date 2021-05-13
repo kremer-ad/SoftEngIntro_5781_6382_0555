@@ -3,7 +3,6 @@ package geometries;
 import org.json.simple.JSONObject;
 import primitives.*;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -93,8 +92,8 @@ public class Sphere extends Geometry {
 
     @Override
     public JSONObject toJSON() {
-        JSONObject ret = new JSONObject();
-        ret.put("type", "sphere");
+        JSONObject ret = super.toJSON();
+        ret.put("type", "Sphere");
         ret.put("center", center.toJSON());
         ret.put("radius", this.radius);
         return ret;
@@ -102,17 +101,18 @@ public class Sphere extends Geometry {
 
     @Override
     public Serializable load(JSONObject json) {
+        super.load(json);
         this.center = (Point3D) this.center.load((JSONObject) json.get("center"));
         this.radius = (double) json.get("radius");
         return this;
     }
 
     public Geometry setEmission(Color color) {
-        this.setEmmission(color);
+        this.setEmission(color);
         return this;
     }
 
     public Geometry getEmission(Color color) {
-        return this.setEmmission(color);
+        return this.setEmission(color);
     }
 }

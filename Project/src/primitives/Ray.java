@@ -1,12 +1,10 @@
 package primitives;
 
+import geometries.Intersectable.GeoPoint;
 import org.json.simple.JSONObject;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-
-import geometries.Intersectable.GeoPoint;
 
 public class Ray implements Serializable {
     /**
@@ -103,7 +101,7 @@ public class Ray implements Serializable {
     @Override
     public JSONObject toJSON() {
         JSONObject ret = new JSONObject();
-        ret.put("type", "ray");
+        ret.put("type", "Ray");
         ret.put("p0", this.p0.toJSON());
         ret.put("dir", this.dir.toJSON());
         return ret;

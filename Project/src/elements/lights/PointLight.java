@@ -1,5 +1,6 @@
-package elements;
+package elements.lights;
 
+import elements.LightSource;
 import org.json.simple.JSONObject;
 import primitives.Color;
 import primitives.Point3D;
@@ -42,17 +43,17 @@ public class PointLight extends Light implements LightSource {
     /**
      * Builder setters
      */
-    public PointLight setkC(double kC) {
+    public PointLight setKC(double kC) {
         this.kC = kC;
         return this;
     }
 
-    public PointLight setkL(double kL) {
+    public PointLight setKL(double kL) {
         this.kL = kL;
         return this;
     }
 
-    public PointLight setkQ(double kQ) {
+    public PointLight setKQ(double kQ) {
         this.kQ = kQ;
         return this;
     }

@@ -106,12 +106,6 @@ public class Sphere extends Geometry {
         this.radius = (double) json.get("radius");
         return this;
     }
-
-    public Geometry setEmission(Color color) {
-        this.setEmission(color);
-        return this;
-    }
-
     public Geometry getEmission(Color color) {
         return this.setEmission(color);
     }

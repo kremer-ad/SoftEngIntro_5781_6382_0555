@@ -1,5 +1,6 @@
-package elements;
+package elements.lights;
 
+import elements.LightSource;
 import org.json.simple.JSONObject;
 import primitives.Color;
 import primitives.Point3D;
@@ -24,7 +25,7 @@ public class SpotLight extends PointLight implements LightSource {
 
     @Override
     public Color getIntensity(Point3D p) {
-        return super.getIntensity(p).scale(getL(p).dotProduct(this.direction));
+        return super.getIntensity(p).scale(Math.max(0, getL(p).dotProduct(this.direction)));
     }
 
     @Override

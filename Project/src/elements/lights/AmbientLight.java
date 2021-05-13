@@ -1,4 +1,4 @@
-package elements;
+package elements.lights;
 
 import org.json.simple.JSONObject;
 import primitives.Color;

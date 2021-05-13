@@ -1,6 +1,10 @@
 package scene;
 
 import elements.*;
+import elements.lights.AmbientLight;
+import elements.lights.DirectionalLight;
+import elements.lights.PointLight;
+import elements.lights.SpotLight;
 import geometries.Geometries;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

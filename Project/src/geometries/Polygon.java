@@ -159,9 +159,4 @@ public class Polygon extends Geometry {
         this.vertices = List.of(vertices);
         return this;
     }
-
-    public Geometry setEmission(Color color) {
-        this.setEmission(color);
-        return this;
-    }
 }

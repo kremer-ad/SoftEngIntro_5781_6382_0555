@@ -17,6 +17,15 @@ public abstract class Geometry implements Intersectable, Serializable {
         return this;
     }
 
+    public Geometry setMaterial(Material material) {
+        this.material = material;
+        return this;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
     /**
      * gets geometries normal
      * @param pnt

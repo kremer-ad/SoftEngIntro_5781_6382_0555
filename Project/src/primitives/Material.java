@@ -14,17 +14,17 @@ public class Material implements Serializable {
 
     }
 
-    public Material setkS(double kS) {
+    public Material setKS(double kS) {
         this.kS = kS;
         return this;
     }
 
-    public Material setkD(double kD) {
+    public Material setKD(double kD) {
         this.kD = kD;
         return this;
     }
 
-    public Material setnShininess(double nShininess) {
+    public Material setNShininess(double nShininess) {
         this.nShininess = nShininess;
         return this;
     }

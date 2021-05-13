@@ -1,12 +1,12 @@
 package renderer;
 
+import elements.lights.AmbientLight;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
 import elements.*;
 import geometries.*;
 import primitives.*;
-import renderer.*;
 import scene.Scene;
 
 import java.io.IOException;

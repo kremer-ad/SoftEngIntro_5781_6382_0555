@@ -1,12 +1,13 @@
-package elements;
+package elements.lights;
 
+import elements.LightSource;
 import org.json.simple.JSONObject;
 import primitives.Color;
 import primitives.Point3D;
 import primitives.Serializable;
 import primitives.Vector;
 
-public class DirectionalLight extends Light implements LightSource{
+public class DirectionalLight extends Light implements LightSource {
 
     private Vector direction;
 

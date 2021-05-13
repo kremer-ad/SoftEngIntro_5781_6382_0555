@@ -159,8 +159,9 @@ public class Color implements Serializable {
      * @return new Color object which is the result of the operation
      */
     public Color scale(double k) {
-        if (k < 0)
+        if (k < 0) {
             throw new IllegalArgumentException("Can't scale a color by a negative number");
+        }
         return new Color(r * k, g * k, b * k);
     }
 

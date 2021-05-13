@@ -34,13 +34,14 @@ public class RayTracerBasic extends RayTracerBase {
         result = result.add(scene.ambientLight.getIntensity());
         result = result.add(intersection.geometry.getEmission().scale(300));
         for (LightSource lightSource : scene.lights) {
-            double angleCos = Math.abs(intersection.geometry.getNormal(intersection.point).dotProduct(lightSource.getL(intersection.point)));
-            result = result.add(lightSource.getIntensity(intersection.point).scale(angleCos));
-            //some variables for simplify the pong formula calculation
-            Vector r = lightSource.getL(intersection.point);
-            double pongMax = Math.max(0, -1 * visionDirection.dotProduct(r));
-            result = result.add(lightSource.getIntensity(intersection.point))
-                    .scale(intersection.geometry.getMaterial().kS * Math.pow(pongMax, intersection.geometry.getMaterial().nShininess));
+            double lCosN = Math.abs(intersection.geometry.getNormal(intersection.point).dotProduct(lightSource.getL(intersection.point)));
+            //r= l-2(l*n)*n
+            Vector r = lightSource.getL(intersection.point).subtract(intersection.geometry.getNormal(intersection.point))
+                    .scale(lightSource.getL(intersection.point)
+                            .dotProduct(intersection.geometry.getNormal(intersection.point)) * 2);
+            double vCosR = visionDirection.normalized().dotProduct(r);
+            Color pongResult = lightSource.getIntensity(intersection.point).scale(intersection.geometry.getMaterial().kD * lCosN + Math.max(0D, intersection.geometry.getMaterial().kS * vCosR * (-1)));
+            result = result.add(pongResult);
         }
         return result;
     }

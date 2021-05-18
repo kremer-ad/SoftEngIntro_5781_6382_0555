@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 public class Material implements Serializable {
     public double kS;
     public double kD;
-    public double nShininess;
+    public int nShininess;
 
     public Material() {
 
@@ -24,7 +24,7 @@ public class Material implements Serializable {
         return this;
     }
 
-    public Material setNShininess(double nShininess) {
+    public Material setNShininess(int nShininess) {
         this.nShininess = nShininess;
         return this;
     }

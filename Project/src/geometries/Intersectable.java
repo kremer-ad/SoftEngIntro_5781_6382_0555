@@ -14,7 +14,7 @@ public interface Intersectable {
      * @return intersection points list
      */
     default List<Point3D> findIntersections(Ray ray) {
-        List<GeoPoint> geoList = findGeoIntersections(ray);
+        var geoList = findGeoIntersections(ray);
         return geoList == null ? null
                                 : geoList   .stream()
                                             .map(gp -> gp.point)

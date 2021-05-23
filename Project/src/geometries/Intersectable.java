@@ -2,6 +2,7 @@ package geometries;
 
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Vector;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +28,12 @@ public interface Intersectable {
      * @return intersection GeoPoints list
      */
     List<GeoPoint> findGeoIntersections(Ray ray);
+
+    /**
+     * moving the shape in the given translation vector
+     * @param x the translation vector
+     */
+    void move(Vector x);
 
     /**
      * PDS class that contain data about a point and its geometry

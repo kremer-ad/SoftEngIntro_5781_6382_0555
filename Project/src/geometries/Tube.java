@@ -107,6 +107,11 @@ public class Tube extends Geometry {
         return listEmpty ? null : ret;
     }
 
+    public  void move(Vector x){
+        //move the base of the ray and all the tube will move
+        this.axisRay = new Ray(this.axisRay.getP0().add(x),this.axisRay.getDir());
+    }
+
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray) {
         return null;

@@ -97,6 +97,11 @@ public class Plane extends Geometry {
         return ret;
     }
 
+    public void move(Vector x){
+        //move the point on the plane and all the points will move
+        this.q0=this.q0.add(x);
+    }
+
     @Override
     public JSONObject toJSON() {
         JSONObject ret = super.toJSON();

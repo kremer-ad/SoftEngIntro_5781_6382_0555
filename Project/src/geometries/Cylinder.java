@@ -33,6 +33,14 @@ public class Cylinder extends Tube {
         return height;
     }
 
+    /**
+     *
+     * @return the center of the bottum base of the cylinder
+     */
+    public Point3D getBasePoint(){
+        return  this.axisRay.getP0();
+    }
+
     @Override
     public Vector getNormal(Point3D pnt) {
         Point3D topBaseCenter = this.axisRay.getPoint(this.height);//the center of the top base of the cylinder

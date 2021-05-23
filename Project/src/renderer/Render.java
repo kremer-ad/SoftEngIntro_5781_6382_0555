@@ -1,14 +1,11 @@
 package renderer;
 
 import elements.Camera;
-import geometries.Intersectable;
 import primitives.Color;
-import primitives.Point3D;
 import primitives.Ray;
 import scene.Scene;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.awt.image.BufferedImage;
 import java.util.MissingResourceException;
 
 public class Render {
@@ -123,6 +120,14 @@ public class Render {
             throw new MissingResourceException("The writer value cant be null", "ImageWriter", "writer");
         }
         writer.writeToImage();
+    }
+
+    public BufferedImage getBufferedImage() {
+        //check that the writer exists
+        if (this.writer == null) {
+            throw new MissingResourceException("The writer value cant be null", "ImageWriter", "writer");
+        }
+        return writer.getImage();
     }
 
     public Render setImageWriter(ImageWriter imageWriter) {

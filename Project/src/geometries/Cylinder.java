@@ -8,6 +8,7 @@ import primitives.Vector;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Cylinder extends Tube {
 
@@ -34,11 +35,10 @@ public class Cylinder extends Tube {
     }
 
     /**
-     *
      * @return the center of the bottum base of the cylinder
      */
-    public Point3D getBasePoint(){
-        return  this.axisRay.getP0();
+    public Point3D getBasePoint() {
+        return this.axisRay.getP0();
     }
 
     @Override
@@ -60,25 +60,11 @@ public class Cylinder extends Tube {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-        List<Point3D> ret = super.findIntersections(ray);
+        List<GeoPoint> ret = this.findGeoIntersections(ray);
         if (ret == null) {
-            ret = new LinkedList<Point3D>();
-        }
-        Plane bottomPlane = new Plane(this.axisRay.getP0(), this.axisRay.getDir());
-        Plane topPlane = new Plane(this.axisRay.getPoint(this.height), this.axisRay.getDir());
-        ret.removeIf(point -> !onCylinder(point));//remove all the points that out of the cylinder boundary
-        Point3D intersectingPoint = planesIntersection(topPlane, ray);
-        if (intersectingPoint != null) {
-            ret.add(intersectingPoint);
-        }
-        intersectingPoint = planesIntersection(bottomPlane, ray);
-        if (intersectingPoint != null) {
-            ret.add(intersectingPoint);
-        }
-        if (ret.size() == 0) {
             return null;
         }
-        return ret;
+        return ret.stream().map(pt -> pt.point).collect(Collectors.toList());
     }
 
     private Point3D planesIntersection(Plane cylinderPlane, Ray ray) {
@@ -98,6 +84,28 @@ public class Cylinder extends Tube {
     }
 
     @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        List<GeoPoint> ret = super.findGeoIntersections(ray);
+        if (ret == null) {
+            ret = new LinkedList<GeoPoint>();
+        }
+        else{
+            System.out.print("");
+        }
+        Plane bottomPlane = new Plane(this.axisRay.getP0(), this.axisRay.getDir());
+        Plane topPlane = new Plane(this.axisRay.getPoint(this.height), this.axisRay.getDir());
+        ret.removeIf(point -> !onCylinder(point.point));//remove all the points that out of the cylinder boundary
+        Point3D intersectingPoint = planesIntersection(topPlane, ray);
+        addIfNotNull(ret, intersectingPoint);
+        intersectingPoint = planesIntersection(bottomPlane, ray);
+        addIfNotNull(ret, intersectingPoint);
+        if (ret.size() == 0) {
+            return null;
+        }
+        return ret;
+    }
+
+    @Override
     public JSONObject toJSON() {
         JSONObject ret = super.toJSON();
         ret.put("type", "Cylinder");
@@ -111,4 +119,17 @@ public class Cylinder extends Tube {
         this.height = (int) json.get("height");
         return this;
     }
+
+    /**
+     * add geoPoint to list only if it not null
+     *
+     * @param lst the list
+     * @param pt  the point to add (converted to geoPoint
+     */
+    private void addIfNotNull(List<GeoPoint> lst, Point3D pt) {
+        if (pt != null) {
+            lst.add(new GeoPoint(this, pt));
+        }
+    }
+
 }

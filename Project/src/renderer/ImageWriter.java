@@ -1,13 +1,13 @@
 package renderer;
 
 import primitives.Color;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.imageio.*;
 
 /**
  * Image writer class combines accumulation of pixel color matrix and finally
@@ -75,6 +75,10 @@ public class ImageWriter {
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "I/O error", e);
 		}
+	}
+
+	public BufferedImage getImage(){
+		return this.image;
 	}
 
 	/**

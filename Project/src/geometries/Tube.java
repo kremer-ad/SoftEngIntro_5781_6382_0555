@@ -8,6 +8,7 @@ import primitives.*;
 import primitives.Vector;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Infinity Tube
@@ -64,6 +65,20 @@ public class Tube extends Geometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
+        List<GeoPoint> ret=this.findGeoIntersections(ray);
+        if(ret==null){
+            return null;
+        }
+        return ret.stream().map(pt->pt.point).collect(Collectors.toList());
+    }
+
+    public  void move(Vector x){
+        //move the base of the ray and all the tube will move
+        this.axisRay = new Ray(this.axisRay.getP0().add(x),this.axisRay.getDir());
+    }
+
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
         //for using less functions we storing all teh parameters in other variables
         double rayOriginX = ray.getP0().getX();
         double rayOriginY = ray.getP0().getY();
@@ -90,26 +105,21 @@ public class Tube extends Geometry {
         }
 
         //there must be 2 intersection points
-        List<Point3D> ret = new LinkedList<Point3D>();//we using linked list so we could remove points if using cylinder
+        List<GeoPoint> ret = new LinkedList<GeoPoint>();//we using linked list so we could remove points if using cylinder
         //add only the positive results to the list
         boolean listEmpty = true;
         double t = (Bminus - Math.sqrt(discriminant)) / aTwo;
         if (t > 0) {
             listEmpty = false;
-            ret.add(ray.getPoint(t));
+            ret.add(new GeoPoint(this,ray.getPoint(t)));
         }
         t = (Bminus + Math.sqrt(discriminant)) / aTwo;
         //(-b - Math.sqrt(discriminant)) / (2 * a);
         if (t > 0) {
             listEmpty = false;
-            ret.add(ray.getPoint(t));
+            ret.add(new GeoPoint(this,ray.getPoint(t)));
         }
         return listEmpty ? null : ret;
-    }
-
-    @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
-        return null;
     }
 
     @Override

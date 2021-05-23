@@ -66,6 +66,14 @@ public class Geometries implements Intersectable, Serializable {
     }
 
     @Override
+    public void move(Vector x) {
+        //move all the shapes in the collections
+        for (var shape : shapes){
+            shape.move(x);
+        }
+    }
+
+    @Override
     public JSONObject toJSON() {
         JSONObject ret = new JSONObject();
         JSONArray data = new JSONArray();

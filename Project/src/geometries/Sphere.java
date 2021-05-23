@@ -41,6 +41,11 @@ public class Sphere extends Geometry {
         return radius;
     }
 
+    public void move(Vector x){
+        //move the center and all the sphere will move
+        this.center=this.center.add(x);
+    }
+
     @Override
     public String toString() {
         return "Sphere{" + center + radius + '}';

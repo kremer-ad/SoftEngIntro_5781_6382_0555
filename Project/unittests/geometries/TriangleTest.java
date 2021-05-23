@@ -66,4 +66,15 @@ public class TriangleTest {
         result = tl.findIntersections(new Ray(pnt, new Vector(3d, 4d, -3d)));
         assertNull("On edge's continuation", result);
     }
+
+    @Test
+    public void someTest(){
+        Triangle t=new Triangle(
+          new Point3D(4,-4,4),
+          new Point3D(-3,3,5),
+          new Point3D(5,2,5)
+        );
+        Ray r=new Ray(new Point3D(0,0,0),new Vector(0.9,1.9,4.9));
+        System.out.println(t.findIntersections(r).size());
+    }
 }

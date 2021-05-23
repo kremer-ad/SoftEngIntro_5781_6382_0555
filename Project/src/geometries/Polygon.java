@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import primitives.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
@@ -132,6 +133,12 @@ public class Polygon extends Geometry {
         return true;
     }
 
+    public void move(Vector x){
+        //move all the vertices of the polygon
+        this.vertices = this.vertices.stream().map(v->v.add(x)).collect(Collectors.toList());
+        //next, we want to move the plane
+        this.plane.move(x);
+    }
 
     @Override
     public JSONObject toJSON() {

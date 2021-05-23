@@ -105,6 +105,7 @@ public class Camera {
      */
 
     public Camera rotate(double angle) {
+        angle=Math.toRadians(angle);
         if (Util.alignZero(Math.cos(angle)) == 0) { //avoiding zero vector creation when cos(angle)=0
             this.vUp = this.vRight.scale(Math.sin(angle));
         }

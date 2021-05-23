@@ -14,6 +14,11 @@ abstract class Light implements Serializable {
      */
     private Color intensity;
 
+
+    protected Light(double intesity){
+        this.intensity=(new Color(1,1,1)).scale(intesity);
+    }
+
     protected Light(Color intensity){
         this.intensity=intensity;
     }

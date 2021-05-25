@@ -227,7 +227,7 @@ public class LightsTests {
         ), new Point3D(0, -200, 0))
                 .setEmission(new Color(java.awt.Color.RED)) //
                 .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
-        scene.geometries.add(pyramid1, pyramid2);
+        scene.geometries.add(pyramid1/*, pyramid2*/);
         scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
         scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
                 .setKL(0.00001).setKQ(0.000001));
@@ -241,5 +241,6 @@ public class LightsTests {
         render.renderImage();
         render.writeToImage();
     }
+
 
 }

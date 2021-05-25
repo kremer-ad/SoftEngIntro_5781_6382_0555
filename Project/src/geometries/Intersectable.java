@@ -32,8 +32,16 @@ public interface Intersectable {
     /**
      * moving the shape in the given translation vector
      * @param x the translation vector
+     * @return this
      */
-    void move(Vector x);
+    Intersectable move(Vector x);
+
+    /**
+     * rotate the shape with the given euler angle vector (degrees)
+     * @param euler the rotation vector
+     * @return this
+     */
+    Intersectable rotate(Vector euler);
 
     /**
      * PDS class that contain data about a point and its geometry

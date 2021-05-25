@@ -66,11 +66,12 @@ public class Geometries implements Intersectable, Serializable {
     }
 
     @Override
-    public void move(Vector x) {
+    public Intersectable move(Vector x) {
         //move all the shapes in the collections
         for (var shape : shapes){
             shape.move(x);
         }
+        return this;
     }
 
     @Override
@@ -85,6 +86,13 @@ public class Geometries implements Intersectable, Serializable {
         ret.put("type", "Geometries");
         ret.put("data", data);
         return ret;
+    }
+
+    public Intersectable rotate(Vector euler){
+        for(var geometry : this.shapes){
+            geometry.rotate(euler);
+        }
+        return this;
     }
 
     @Override

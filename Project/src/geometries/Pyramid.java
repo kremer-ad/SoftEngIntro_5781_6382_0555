@@ -32,7 +32,7 @@ public class Pyramid extends Geometry {
 
     @Override
     public Vector getNormal(Point3D pnt) {
-        if(getPlane(pnt)==null){
+        if (getPlane(pnt) == null) {
             return this.base.plane.getNormal();
         }
         return getPlane(pnt).getNormal();
@@ -63,11 +63,21 @@ public class Pyramid extends Geometry {
     }
 
     @Override
-    public void move(Vector x) {
+    public Intersectable rotate(Vector euler) {
+        this.base.rotate(euler);
+        for (var edge : this.edges) {
+            edge.rotate(euler);
+        }
+        return this;
+    }
+
+    @Override
+    public Intersectable move(Vector x) {
         base.move(x);
         for (var edge : edges) {
             edge.move(x);
         }
+        return this;
     }
 
     private void appendIfNotNull(List<GeoPoint> lst, List<GeoPoint> toAdd) {
@@ -83,7 +93,7 @@ public class Pyramid extends Geometry {
      * @return the plain on the pyramid that the point lay on
      */
     private Plane getPlane(Point3D pt) {
-        if (isOn(pt,this.base.plane)) {
+        if (isOn(pt, this.base.plane)) {
             return this.base.plane;
         }
         for (var edge : this.edges) {
@@ -94,24 +104,25 @@ public class Pyramid extends Geometry {
         return null;
     }
 
-    private boolean isOn(Point3D pt,Plane plane){
+    private boolean isOn(Point3D pt, Plane plane) {
         //we need to check the point from 3angles so we can be sure that the ray is not on the plane
-        return isIntersecting(new Ray(pt.add(new Vector(-1,-1,0)),new Vector(1,1,0)),pt,plane)
-                ||  isIntersecting(new Ray(pt.add(new Vector(-1,0,0)),new Vector(1,0,0)),pt,plane)
-                || isIntersecting(new Ray(pt.add(new Vector(-1,-1,-1)),new Vector(1,1,1)),pt,plane);
+        return isIntersecting(new Ray(pt.add(new Vector(-1, -1, 0)), new Vector(1, 1, 0)), pt, plane)
+                || isIntersecting(new Ray(pt.add(new Vector(-1, 0, 0)), new Vector(1, 0, 0)), pt, plane)
+                || isIntersecting(new Ray(pt.add(new Vector(-1, -1, -1)), new Vector(1, 1, 1)), pt, plane);
 
     }
 
     /**
      * check if ray intersecting plane in spesific point
-     * @param ray the ray
-     * @param pt the point
+     *
+     * @param ray   the ray
+     * @param pt    the point
      * @param plane the plane
      * @return is the p[lane intersecting the rat at the specific given point
      */
-    private boolean isIntersecting(Ray ray,Point3D pt,Plane plane){
+    private boolean isIntersecting(Ray ray, Point3D pt, Plane plane) {
         var intersections = plane.findIntersections(ray);
-        if(intersections!=null&&intersections.get(0).equals(pt)){
+        if (intersections != null && intersections.get(0).equals(pt)) {
             return true;
         }
         return false;

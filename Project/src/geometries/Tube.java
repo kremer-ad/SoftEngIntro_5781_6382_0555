@@ -72,9 +72,10 @@ public class Tube extends Geometry {
         return ret.stream().map(pt->pt.point).collect(Collectors.toList());
     }
 
-    public  void move(Vector x){
+    public  Intersectable move(Vector x){
         //move the base of the ray and all the tube will move
         this.axisRay = new Ray(this.axisRay.getP0().add(x),this.axisRay.getDir());
+        return this;
     }
 
     @Override
@@ -136,6 +137,13 @@ public class Tube extends Geometry {
         super.load(json);
         this.radius = (int) json.get("radius");
         this.axisRay.load((JSONObject) json.get("axisRay"));
+        return this;
+    }
+
+    @Override
+    public Intersectable rotate(Vector euler) {
+        this.axisRay.rotate(euler);
+        this.axisRay.getDir().normalize();
         return this;
     }
 }

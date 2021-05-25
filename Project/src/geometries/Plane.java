@@ -97,9 +97,17 @@ public class Plane extends Geometry {
         return ret;
     }
 
-    public void move(Vector x){
+    @Override
+    public Intersectable rotate(Vector euler) {
+        this.normal.rotate(euler);
+        this.q0=this.q0.rotate(euler);
+        return this;
+    }
+
+    public Intersectable move(Vector x){
         //move the point on the plane and all the points will move
         this.q0=this.q0.add(x);
+        return this;
     }
 
     @Override

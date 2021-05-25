@@ -90,8 +90,17 @@ public class Ring extends Geometry {
         return ret.stream().map(pt -> new GeoPoint(this, pt)).collect(Collectors.toList());
     }
 
-    public void move(Vector x) {
+    public Intersectable move(Vector x) {
         this.outerCylinder.move(x);
         this.holeCylinder.move(x);
+
+        return this;
+    }
+
+    @Override
+    public Intersectable rotate(Vector euler) {
+        this.outerCylinder.rotate(euler);
+        this.holeCylinder.rotate(euler);
+        return this;
     }
 }

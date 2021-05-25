@@ -1,7 +1,8 @@
 package primitives;
 
 import org.json.simple.JSONObject;
-public class Vector implements Serializable{
+
+public class Vector implements Serializable {
 
     static public final double ACCURACY = 0.00001;
     /**
@@ -15,6 +16,7 @@ public class Vector implements Serializable{
 
     /**
      * vector constructor
+     *
      * @param x the head x axis
      * @param y the head x axis
      * @param z the head x axis
@@ -29,6 +31,7 @@ public class Vector implements Serializable{
 
     /**
      * vector constructor
+     *
      * @param x the head x value
      * @param y the head y value
      * @param z the head z value
@@ -43,6 +46,7 @@ public class Vector implements Serializable{
 
     /**
      * vector constructor
+     *
      * @param head the head of vector
      */
     public Vector(Point3D head) {
@@ -54,6 +58,7 @@ public class Vector implements Serializable{
 
     /**
      * vectors addition
+     *
      * @param vec
      * @return sum of vectors
      */
@@ -63,6 +68,7 @@ public class Vector implements Serializable{
 
     /**
      * vectors subtraction
+     *
      * @param vec
      * @return subtract of vectors
      */
@@ -72,6 +78,7 @@ public class Vector implements Serializable{
 
     /**
      * vector multiplication by scalar
+     *
      * @param d
      * @return multiplied vector
      */
@@ -81,6 +88,7 @@ public class Vector implements Serializable{
 
     /**
      * scalar multiplication between two vectors
+     *
      * @param vec
      * @return scalar
      */
@@ -92,15 +100,16 @@ public class Vector implements Serializable{
 
     /**
      * vector multiplication between two vectors
+     *
      * @param vec
      * @return vector
      */
     public Vector crossProduct(Vector vec) {
         // check if vectors are parallel
         /**if (Math.abs(this.normalized().dotProduct(vec.normalized())) > 1d - ACCURACY)
-        {
-            throw new IllegalArgumentException("cannot implement crossProduct() for parallel vectors");
-        }**/
+         {
+         throw new IllegalArgumentException("cannot implement crossProduct() for parallel vectors");
+         }**/
 
         return new Vector(this.head.y.coord * vec.head.z.coord - this.head.z.coord * vec.head.y.coord,
                 this.head.z.coord * vec.head.x.coord - this.head.x.coord * vec.head.z.coord,
@@ -109,6 +118,7 @@ public class Vector implements Serializable{
 
     /**
      * squared length of vector
+     *
      * @return squared length
      */
     public double lengthSquared() {
@@ -117,6 +127,7 @@ public class Vector implements Serializable{
 
     /**
      * length of vector
+     *
      * @return length
      */
     public double length() {
@@ -125,15 +136,17 @@ public class Vector implements Serializable{
 
     /**
      * normalize vector
+     *
      * @return normalize the vector himself and return it
      */
     public Vector normalize() { // BEWARE! SHALLOW ASSIGNING!!!
-        this.head = this.head.mult(1D/this.length());
+        this.head = this.head.mult(1D / this.length());
         return this;
     }
 
     /**
      * normalize vector
+     *
      * @return a new vector is return
      */
     public Vector normalized() {
@@ -157,20 +170,32 @@ public class Vector implements Serializable{
 
     @Override
     public JSONObject toJSON() {
-        JSONObject ret=new JSONObject();
-        ret.put("type","Vector");
-        ret.put("x",head.getX());
-        ret.put("y",head.getY());
-        ret.put("z",head.getZ());
+        JSONObject ret = new JSONObject();
+        ret.put("type", "Vector");
+        ret.put("x", head.getX());
+        ret.put("y", head.getY());
+        ret.put("z", head.getZ());
         return ret;
     }
 
     @Override
     public Vector load(JSONObject json) {
-        double x=(double)json.get("x");
-        double y=(double)json.get("y");
-        double z=(double)json.get("z");
-        this.head = new Point3D(x,y,z);
+        double x = (double) json.get("x");
+        double y = (double) json.get("y");
+        double z = (double) json.get("z");
+        this.head = new Point3D(x, y, z);
         return this;
     }
+
+    /**
+     * rotate the vector with the given euler angle vector (degrees)
+     *
+     * @param euler the rotation vector
+     * @return this
+     */
+    public Vector rotate(Vector euler) {
+      this.head = this.head.rotate(euler);
+      return this;
+    }
+
 }

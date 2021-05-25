@@ -114,5 +114,10 @@ public class Ray implements Serializable {
         return this;
     }
 
+    public Ray rotate(Vector euler){
+        this.dir.rotate(euler);
+        return this;
+    }
+
 
 }

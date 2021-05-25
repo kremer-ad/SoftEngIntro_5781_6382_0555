@@ -133,11 +133,12 @@ public class Polygon extends Geometry {
         return true;
     }
 
-    public void move(Vector x){
+    public Intersectable move(Vector x){
         //move all the vertices of the polygon
         this.vertices = this.vertices.stream().map(v->v.add(x)).collect(Collectors.toList());
         //next, we want to move the plane
         this.plane.move(x);
+        return this;
     }
 
     @Override
@@ -164,6 +165,13 @@ public class Polygon extends Geometry {
             vertices[i] = (Point3D) Point3D.ZERO.load(currentJson);
         }
         this.vertices = List.of(vertices);
+        return this;
+    }
+
+    @Override
+    public Intersectable rotate(Vector euler) {
+        this.vertices = this.vertices.stream().map(v->v.rotate(euler)).collect(Collectors.toList());
+        this.plane = new Plane(this.vertices.get(0),this.vertices.get(1),this.vertices.get(2));
         return this;
     }
 }

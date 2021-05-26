@@ -81,23 +81,6 @@ public class Plane extends Geometry {
      * N*(Q0-P0)-t*N*v=0
      * t=N*(Q0-P0)/(N*v)
      */
-    @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
-        if (q0.equals(ray.getP0())) {
-            return null;
-        }
-        if (Util.isZero(normal.dotProduct(ray.getDir()))) { //ray and normal are parallel
-            return null;
-        }
-        double t = alignZero(normal.dotProduct(q0.subtract(ray.getP0())) / normal.dotProduct(ray.getDir()));
-        if (t <= 0) { //there is no intersection points
-            return null;
-        }
-
-        List ret = new LinkedList<GeoPoint>(); //we dont using List.of so we could remove points while using polygon findIntersections
-        ret.add(new GeoPoint(this, ray.getPoint(t)));
-        return ret;
-    }
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {

@@ -86,16 +86,6 @@ public class Ray implements Serializable {
         return ret;
     }
 
-    /**
-     * if point in range return true
-     * @param pnt
-     * @param range
-     * @return
-     */
-    public boolean isPointInRange(Point3D pnt, double range){
-        return (alignZero(p0.distance(pnt)) - range <= 0);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

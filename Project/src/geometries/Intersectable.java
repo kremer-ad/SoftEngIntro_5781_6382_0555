@@ -27,7 +27,18 @@ public interface Intersectable {
      * @param ray
      * @return intersection GeoPoints list
      */
-    List<GeoPoint> findGeoIntersections(Ray ray);
+    default List<GeoPoint> findGeoIntersections(Ray ray) {
+        return findGeoIntersections(ray, Double.POSITIVE_INFINITY);
+    }
+
+    /**
+     * search for all intersections in distance's range
+     * @param ray
+     * @param maxDistance
+     * @return
+     */
+    List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance);
+
 
     /**
      * moving the shape in the given translation vector

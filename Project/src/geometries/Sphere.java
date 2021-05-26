@@ -6,6 +6,8 @@ import primitives.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import static primitives.Util.alignZero;
+
 public class Sphere extends Geometry {
     /**
      * center point of sphere
@@ -92,6 +94,46 @@ public class Sphere extends Geometry {
         if (tm - th2 > 0) {
             GeoPoint gPnt2 = new GeoPoint(this, ray.getPoint(tm - th2));
             ret.add(gPnt2);
+        }
+        return ret;
+    }
+
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        if (center.equals(ray.getP0())) { // Ray head is the center of the sphere
+            return List.of(new GeoPoint(this, center.add(ray.getDir().scale(radius))));
+        }
+
+        Vector u = center.subtract(ray.getP0());
+        double tm = Util.alignZero(ray.getDir().dotProduct(u));
+        double d = Util.alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
+
+        if (d >= radius) { // no points to return
+            return null;
+        }
+
+        double th1 = Util.alignZero(Math.sqrt(radius * radius - d * d));
+        double th2 = Util.alignZero(-1 * Math.sqrt(radius * radius - d * d));
+
+        if (tm - th1 <= 0 && tm - th2 <= 0) // no points to return
+        {
+            return null;
+        }
+
+        List<GeoPoint> ret = new LinkedList<>();
+        if (tm - th1 > 0) {
+            Point3D intersection =  ray.getPoint(tm - th1);
+            if(ray.isPointInRange(intersection,maxDistance)) {
+                GeoPoint gPnt1 = new GeoPoint(this, intersection);
+                ret.add(gPnt1);
+            }
+        }
+        if (tm - th2 > 0) {
+            Point3D intersection =  ray.getPoint(tm - th2);
+            if(ray.isPointInRange(intersection,maxDistance)) {
+                GeoPoint gPnt2 = new GeoPoint(this, intersection);
+                ret.add(gPnt2);
+            }
         }
         return ret;
     }

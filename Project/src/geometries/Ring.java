@@ -90,6 +90,11 @@ public class Ring extends Geometry {
         return ret.stream().map(pt -> new GeoPoint(this, pt)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        return null;
+    }
+
     public Intersectable move(Vector x) {
         this.outerCylinder.move(x);
         this.holeCylinder.move(x);

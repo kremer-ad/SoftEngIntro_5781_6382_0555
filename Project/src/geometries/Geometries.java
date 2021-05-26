@@ -66,6 +66,21 @@ public class Geometries implements Intersectable, Serializable {
     }
 
     @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        List<GeoPoint> ret = new LinkedList<GeoPoint>();
+        for (Intersectable shape : shapes) {
+            var geoIntersection = shape.findGeoIntersections(ray,maxDistance);
+            if (geoIntersection == null) {
+                continue;
+            } // if there is no intersections points - continue
+
+            for (var gPnt : geoIntersection) {
+                ret.add(gPnt);
+            }
+        }
+        return ret.isEmpty() ? null : ret;    }
+
+    @Override
     public Intersectable move(Vector x) {
         //move all the shapes in the collections
         for (var shape : shapes){

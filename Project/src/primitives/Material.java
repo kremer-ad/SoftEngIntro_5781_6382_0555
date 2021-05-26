@@ -11,6 +11,9 @@ public class Material implements Serializable {
     public int nShininess;
 
     public Material() {
+        kS = 0;
+        kD = 0;
+        nShininess = 1;
 
     }
 

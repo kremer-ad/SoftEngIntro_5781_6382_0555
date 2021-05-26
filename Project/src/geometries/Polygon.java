@@ -105,6 +105,18 @@ public class Polygon extends Geometry {
         return ret.size() == 0 ? null : List.of(new GeoPoint(this, ret.get(0).point));
     }
 
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        //there is two option, 1: the ray have intersection point with the plane, 2 the ray is on the plane
+        //check option 1
+        List<GeoPoint> ret = plane.findGeoIntersections(ray, maxDistance);
+        if (ret == null) {//we must check if ret is null before we running on the list
+            return null;
+        }
+        ret.removeIf(gPt -> !this.isOn(gPt.point, ray));//remove all points outside of the polygon
+        return ret.size() == 0 ? null : List.of(new GeoPoint(this, ret.get(0).point));
+    }
+
     /**
      * check if a point is on the polygon
      *

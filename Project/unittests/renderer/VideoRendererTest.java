@@ -7,6 +7,7 @@ import elements.lights.PointLight;
 import geometries.*;
 import org.junit.Test;
 import primitives.*;
+import renderer.rayTracers.RayTracerBasic;
 import renderer.videoRenderer.VideoWriter;
 import scene.Scene;
 
@@ -171,22 +172,27 @@ public class VideoRendererTest {
     public void rotatingWheelTest() throws IOException {
         Scene scene = new Scene("Test scene") //
                 .setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
-        Color woodColor = new Color(153,101,21);
+        Color woodColor = new Color(153, 101, 21);
         Material material = new Material().setKD(.5D).setKS(.5D).setNShininess(100);
         double wheelHole = 80;
         Geometry outerRing = new Ring(new Ray(Point3D.ZERO, new Vector(0, 0, 1)), 100D, wheelHole, 50D);
         outerRing.setEmission(woodColor) //
                 .setMaterial(material);
         Geometry[] sticks = new Cylinder[12];
-        for(int i=1;i<=sticks.length;i++){
-            Ray axisStick = new Ray(Point3D.ZERO,new Vector(1,0,0));
-            axisStick.rotate(new Vector(0D,0D,i*(360D/12D)));
-            sticks[i-1]=new Cylinder(axisStick,2,wheelHole).setEmission(woodColor).setMaterial(material);
+        for (int i = 1; i <= sticks.length; i++) {
+            Ray axisStick = new Ray(Point3D.ZERO, new Vector(1, 0, 0));
+            axisStick.rotate(new Vector(0D, 0D, i * (360D / 12D)));
+            sticks[i - 1] = new Cylinder(axisStick, 2, wheelHole).setEmission(woodColor).setMaterial(material);
         }
-        Geometry innerBall = new Sphere(Point3D.ZERO,20D).setEmission(woodColor).setMaterial(material);
+        Geometry innerBall = new Sphere(Point3D.ZERO, 20D).setEmission(woodColor).setMaterial(material);
 
-        scene.geometries.add(outerRing,innerBall);
-        scene.geometries.add(sticks);
+        Geometry floor = new Plane(new Point3D(1, -30, 0), Point3D.ZERO, new Point3D(300, -30, 1)).setEmission(new Color(java.awt.Color.WHITE)).setMaterial(material);
+
+        Geometries wheel = new Geometries();
+        wheel.add(outerRing, innerBall);
+        wheel.add(sticks);
+
+        scene.geometries.add(wheel, floor);
         scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
         scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
                 .setKL(0.00001).setKQ(0.000001));
@@ -195,6 +201,8 @@ public class VideoRendererTest {
                 .setViewPlaneSize(1000, 1000) //
                 .setDistance(6000);
 
+        wheel.move(new Vector(0,0,200));
+        floor.move(new Vector(0,0,-1200));
 
         ImageWriter imageWriter = new ImageWriter("rotating wheel", 500, 500);
         Render render = new Render()//
@@ -204,6 +212,26 @@ public class VideoRendererTest {
         render.renderImage();
         render.writeToImage();
 
+        wheel.rotate(new Vector(180, 0, 0));
+        imageWriter = new ImageWriter("rotating wheel 2", 500, 500);
+        render = new Render()//
+                .setImageWriter(imageWriter) //
+                .setCamera(camera) //
+                .setRayTracer(new RayTracerBasic(scene));
+        render.renderImage();
+        render.writeToImage();
+
+        wheel.rotate(new Vector(-180, 180, 0));
+        imageWriter = new ImageWriter("rotating wheel 3", 500, 500);
+        render = new Render()//
+                .setImageWriter(imageWriter) //
+                .setCamera(camera) //
+                .setRayTracer(new RayTracerBasic(scene));
+        render.renderImage();
+        render.writeToImage();
+
+
+        wheel.rotate(new Vector(0, -180, 0));
 
         Vector angleSpeed = new Vector(0D, 0D, 14.4D);
         BufferedImage[] images = new BufferedImage[100];

@@ -111,6 +111,11 @@ public class Geometries implements Intersectable, Serializable {
     }
 
     @Override
+    public GeoPoint findClosestIntersection(Ray ray) {
+        return null;
+    }
+
+    @Override
     public Serializable load(JSONObject json) {
         this.shapes = new LinkedList<Intersectable>();
         JSONArray data = (JSONArray) json.get("data");

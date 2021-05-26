@@ -8,7 +8,7 @@ import geometries.*;
 import org.junit.Test;
 import primitives.*;
 import renderer.ImageWriter;
-import renderer.RayTracerBasic;
+import renderer.rayTracers.RayTracerBasic;
 import renderer.Render;
 import scene.Scene;
 

@@ -6,15 +6,38 @@ import org.json.simple.JSONObject;
  * represent material of the object for reflection calculation
  */
 public class Material implements Serializable {
+    /**
+     * pong formula variables
+     */
     public double kS;
     public double kD;
     public int nShininess;
+    /**
+     * transparency
+     */
+    public double kT;
+    /**
+     * reflection
+     */
+    public double kR;
 
     public Material() {
-        kS = 0;
-        kD = 0;
+        kS = 0D;
+        kD = 0D;
+        kT = 0D;
+        kR = 0D;
         nShininess = 1;
 
+    }
+
+    public Material setkT(double kT) {
+        this.kT = kT;
+        return this;
+    }
+
+    public Material setkR(double kR) {
+        this.kR = kR;
+        return this;
     }
 
     public Material setKS(double kS) {

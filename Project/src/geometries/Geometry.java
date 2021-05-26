@@ -3,7 +3,8 @@ package geometries;
 import org.json.simple.JSONObject;
 import primitives.*;
 
-import static primitives.Util.alignZero;
+import java.util.Comparator;
+import java.util.List;
 
 public abstract class Geometry implements Intersectable, Serializable {
 
@@ -23,6 +24,7 @@ public abstract class Geometry implements Intersectable, Serializable {
         this.material = material;
         return this;
     }
+
 
 
     public Material getMaterial() {

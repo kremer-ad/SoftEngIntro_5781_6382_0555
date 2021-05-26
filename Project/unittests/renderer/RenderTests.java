@@ -7,6 +7,7 @@ import org.junit.Test;
 import elements.*;
 import geometries.*;
 import primitives.*;
+import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
 
 import java.io.IOException;

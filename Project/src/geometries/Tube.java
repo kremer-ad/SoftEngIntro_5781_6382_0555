@@ -124,6 +124,11 @@ public class Tube extends Geometry {
     }
 
     @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        return null;
+    }
+
+    @Override
     public JSONObject toJSON() {
         JSONObject ret = super.toJSON();
         ret.put("type", "Tube");

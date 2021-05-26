@@ -6,6 +6,8 @@ import org.json.simple.JSONObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static primitives.Util.alignZero;
+
 public class Ray implements Serializable {
     /**
      * beginning point of ray
@@ -82,6 +84,16 @@ public class Ray implements Serializable {
             }
         }
         return ret;
+    }
+
+    /**
+     * if point in range return true
+     * @param pnt
+     * @param range
+     * @return
+     */
+    public boolean isPointInRange(Point3D pnt, double range){
+        return (alignZero(p0.distance(pnt)) - range <= 0);
     }
 
     @Override

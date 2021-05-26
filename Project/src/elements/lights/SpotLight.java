@@ -7,6 +7,8 @@ import primitives.Point3D;
 import primitives.Serializable;
 import primitives.Vector;
 
+import static primitives.Util.alignZero;
+
 public class SpotLight extends PointLight implements LightSource {
 
     private Vector direction;
@@ -25,7 +27,13 @@ public class SpotLight extends PointLight implements LightSource {
 
     @Override
     public Color getIntensity(Point3D p) {
+        /*if (alignZero(Math.max(0, getL(p).dotProduct(this.direction)))<=0){
+            return Color.BLACK;
+        }
+        return super.getIntensity(p).scale(getL(p).dotProduct(this.direction));*/
+
         return super.getIntensity(p).scale(Math.max(0, getL(p).dotProduct(this.direction)));
+
     }
 
     @Override

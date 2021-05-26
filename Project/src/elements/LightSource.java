@@ -17,6 +17,13 @@ public interface LightSource extends Serializable {
     Color getIntensity(Point3D p);
 
     /**
+     * calculate distance between point and light recourse
+     * @param point
+     * @return
+     */
+    double getDistance(Point3D point);
+
+    /**
      * get the direction of the ray that will intersect with the given point
      * @param p the point of intersection
      * @return the direction of the given ray relative to the light source

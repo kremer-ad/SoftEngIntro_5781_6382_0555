@@ -26,6 +26,16 @@ public class DirectionalLight extends Light implements LightSource {
         return this.getIntensity();
     }
 
+    /**
+     * calculate distance between point and light recourse
+     * @param point
+     * @return
+     */
+    @Override
+    public double getDistance(Point3D point) {
+        return Double.POSITIVE_INFINITY;
+    }
+
     @Override
     public JSONObject toJSON() {
         JSONObject ret=super.toJSON();

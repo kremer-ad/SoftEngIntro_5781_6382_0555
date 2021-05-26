@@ -6,6 +6,8 @@ import primitives.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import static primitives.Util.alignZero;
+
 public class Plane extends Geometry {
 
     /**
@@ -87,26 +89,50 @@ public class Plane extends Geometry {
         if (Util.isZero(normal.dotProduct(ray.getDir()))) { //ray and normal are parallel
             return null;
         }
-        double t = Util.alignZero(normal.dotProduct(q0.subtract(ray.getP0())) / normal.dotProduct(ray.getDir()));
+        double t = alignZero(normal.dotProduct(q0.subtract(ray.getP0())) / normal.dotProduct(ray.getDir()));
         if (t <= 0) { //there is no intersection points
             return null;
         }
 
         List ret = new LinkedList<GeoPoint>(); //we dont using List.of so we could remove points while using polygon findIntersections
-        ret.add( new GeoPoint(this, ray.getPoint(t)));
+        ret.add(new GeoPoint(this, ray.getPoint(t)));
+        return ret;
+    }
+
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        if (q0.equals(ray.getP0())) {
+            return null;
+        }
+        if (Util.isZero(normal.dotProduct(ray.getDir()))) { //ray and normal are parallel
+            return null;
+        }
+        double t = alignZero(normal.dotProduct(q0.subtract(ray.getP0())) / normal.dotProduct(ray.getDir()));
+        if (t <= 0) { //there is no intersection points
+            return null;
+        }
+
+        Point3D intersection = ray.getPoint(t);
+        //if(!ray.isPointInRange(intersection,maxDistance)){
+        if(t>maxDistance){
+            return null;
+        }
+
+        List ret = new LinkedList<GeoPoint>(); //we dont using List.of so we could remove points while using polygon findIntersections
+        ret.add(new GeoPoint(this, intersection));
         return ret;
     }
 
     @Override
     public Intersectable rotate(Vector euler) {
         this.normal.rotate(euler);
-        this.q0=this.q0.rotate(euler);
+        this.q0 = this.q0.rotate(euler);
         return this;
     }
 
-    public Intersectable move(Vector x){
+    public Intersectable move(Vector x) {
         //move the point on the plane and all the points will move
-        this.q0=this.q0.add(x);
+        this.q0 = this.q0.add(x);
         return this;
     }
 

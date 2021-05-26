@@ -10,6 +10,8 @@ import primitives.Vector;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static primitives.Util.*;
+
 /**
  * Infinity Tube
  */
@@ -79,7 +81,7 @@ public class Tube extends Geometry {
     }
 
     @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
         //for using less functions we storing all teh parameters in other variables
         double rayOriginX = ray.getP0().getX();
         double rayOriginY = ray.getP0().getY();
@@ -110,22 +112,17 @@ public class Tube extends Geometry {
         //add only the positive results to the list
         boolean listEmpty = true;
         double t = (Bminus - Math.sqrt(discriminant)) / aTwo;
-        if (t > 0) {
+        if (t > 0 && alignZero(t-maxDistance)<=0) {
             listEmpty = false;
             ret.add(new GeoPoint(this,ray.getPoint(t)));
         }
         t = (Bminus + Math.sqrt(discriminant)) / aTwo;
         //(-b - Math.sqrt(discriminant)) / (2 * a);
-        if (t > 0) {
+        if (t > 0 && alignZero(t-maxDistance)<=0) {
             listEmpty = false;
             ret.add(new GeoPoint(this,ray.getPoint(t)));
         }
         return listEmpty ? null : ret;
-    }
-
-    @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
-        return null;
     }
 
     @Override

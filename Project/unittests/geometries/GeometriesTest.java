@@ -4,8 +4,8 @@ import org.junit.Test;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
-
 import java.util.List;
+import geometries.Intersectable.*;
 
 import static org.junit.Assert.*;
 
@@ -57,6 +57,39 @@ public class GeometriesTest {
         // TC05: Collection is empty
         geos = new Geometries();
         result = geos.findIntersections(new Ray(new Point3D(-1d, 2d, 0),
+                new Vector(-1d, 0, 0)));
+        assertNull("Collection is empty", result);
+    }
+
+    /**
+     * Test method for {@link geometries.Geometries#findGeoIntersections(primitives.Ray)}.
+     */
+    @Test
+    public void testFindGeoIntersections() {
+        Geometries geos = new Geometries(
+                new Sphere(new Point3D(2d, 2d, 0), 1d),
+                new Triangle(new Point3D(-3d, 1d, 0), new Point3D(-3d, 4d, 1d), new Point3D(-3d, 4d, -1d)),
+                new Polygon(new Point3D(5d, 4d, -1d), new Point3D(5d, 4d, 1d), new Point3D(5d, 1d, 1d),new Point3D(5d, 1d, 0)));
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Some of the points within distance
+        List<GeoPoint> result = geos.findGeoIntersections(new Ray(new Point3D(0, 2d, 0),
+                new Vector(1d, 0, 0)),2);
+        assertEquals("Some of the points within distance", 2, result.size());
+
+        // TC02: All points within distance
+        result = geos.findGeoIntersections(new Ray(new Point3D(-4d, 2d, 0),
+                new Vector(1d, 0, 0)),10);
+        assertEquals("All points within distance", 4, result.size());
+
+        // TC03: No points within distance
+        result = geos.findGeoIntersections(new Ray(new Point3D(-1d, 2d, 0),
+                new Vector(-1d, 0, 0)),1);
+        assertNull("No points within distance", result);
+
+        // TC05: Collection is empty
+        geos = new Geometries();
+        result = geos.findGeoIntersections(new Ray(new Point3D(-1d, 2d, 0),
                 new Vector(-1d, 0, 0)));
         assertNull("Collection is empty", result);
     }

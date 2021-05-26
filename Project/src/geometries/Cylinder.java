@@ -75,11 +75,17 @@ public class Cylinder extends Tube {
         return null;
     }
 
+    /**
+     * check if point is on the cylinder
+     * assumption: the point is on the father tube
+     * @param pt the point to check
+     * @return is the point on the cylinder
+     */
     private boolean onCylinder(Point3D pt) {
         //the middle of the cylinder
         Point3D cylinderMid = this.axisRay.getPoint(this.height * 0.5);
-        //according to Pythagoras formula a^2+b^2=c^2-> the distance of the point from the middle of the cylinder is sqrt((r/2)^2+(h/2)^2)
-        double maxDistance = Math.sqrt((radius / 2) * (radius / 2) + (height / 2) * (height / 2));
+        //according to Pythagoras formula a^2+b^2=c^2-> the distance of the point from the middle of the cylinder is sqrt(r^2+(h/2)^2)
+        double maxDistance = Math.sqrt(radius*radius + (height / 2) * (height / 2));
         return pt.distance(cylinderMid) < maxDistance;
     }
 

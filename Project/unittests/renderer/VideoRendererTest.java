@@ -7,6 +7,7 @@ import elements.lights.PointLight;
 import geometries.*;
 import org.junit.Test;
 import primitives.*;
+import renderer.videoRenderer.VideoWriter;
 import scene.Scene;
 
 import java.awt.image.BufferedImage;
@@ -70,10 +71,10 @@ public class VideoRendererTest {
     public void rotatingCylinderTest() throws IOException {
         Scene scene = new Scene("Test scene") //
                 .setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
-        Geometry ring = new Cylinder(new Ray(Point3D.ZERO, new Vector(1, 0, 1)), 100D, 50D);
-        ring.setEmission(new Color(java.awt.Color.RED)) //
+        Geometry cylinder = new Cylinder(new Ray(Point3D.ZERO, new Vector(1, 0, 1)), 100D, 50D);
+        cylinder.setEmission(new Color(java.awt.Color.RED)) //
                 .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
-        scene.geometries.add(ring);
+        scene.geometries.add(cylinder);
         scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
         scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
                 .setKL(0.00001).setKQ(0.000001));
@@ -146,7 +147,7 @@ public class VideoRendererTest {
                 .setViewPlaneSize(1000, 1000) //
                 .setDistance(6000);
 
-        Vector angleSpeed = new Vector(0D, 10.8D, 0D);
+        Vector angleSpeed = new Vector(0D, 3, 0D);
 
         ImageWriter imageWriter = new ImageWriter("rotating pyramid", 500, 500);
         Render render = new Render()//
@@ -164,6 +165,55 @@ public class VideoRendererTest {
         }
         VideoWriter.generateVideo("rotate triangle video test", images, 25);
 
+    }
+
+    @Test
+    public void rotatingWheelTest() throws IOException {
+        Scene scene = new Scene("Test scene") //
+                .setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+        Color woodColor = new Color(153,101,21);
+        Material material = new Material().setKD(.5D).setKS(.5D).setNShininess(100);
+        double wheelHole = 80;
+        Geometry outerRing = new Ring(new Ray(Point3D.ZERO, new Vector(0, 0, 1)), 100D, wheelHole, 50D);
+        outerRing.setEmission(woodColor) //
+                .setMaterial(material);
+        Geometry[] sticks = new Cylinder[12];
+        for(int i=1;i<=sticks.length;i++){
+            Ray axisStick = new Ray(Point3D.ZERO,new Vector(1,0,0));
+            axisStick.rotate(new Vector(0D,0D,i*(360D/12D)));
+            sticks[i-1]=new Cylinder(axisStick,2,wheelHole).setEmission(woodColor).setMaterial(material);
+        }
+        Geometry innerBall = new Sphere(Point3D.ZERO,20D).setEmission(woodColor).setMaterial(material);
+
+        scene.geometries.add(outerRing,innerBall);
+        scene.geometries.add(sticks);
+        scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
+        scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
+                .setKL(0.00001).setKQ(0.000001));
+
+        Camera camera = new Camera(new Point3D(0, 0, 3000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+                .setViewPlaneSize(1000, 1000) //
+                .setDistance(6000);
+
+
+        ImageWriter imageWriter = new ImageWriter("rotating wheel", 500, 500);
+        Render render = new Render()//
+                .setImageWriter(imageWriter) //
+                .setCamera(camera) //
+                .setRayTracer(new RayTracerBasic(scene));
+        render.renderImage();
+        render.writeToImage();
+
+
+        Vector angleSpeed = new Vector(0D, 0D, 14.4D);
+        BufferedImage[] images = new BufferedImage[100];
+        for (int i = 0; i < images.length; i++) {
+            scene.geometries.rotate(angleSpeed);
+            render.renderImage();
+            images[i] = deepCopy(render.getBufferedImage());
+            System.out.println("finish " + (i + 1) + "/" + images.length);
+        }
+        VideoWriter.generateVideo("rotate wheel video test", images, 25);
     }
 
     private Scene setScenePyramid() {
@@ -200,4 +250,5 @@ public class VideoRendererTest {
         WritableRaster raster = bi.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
+
 }

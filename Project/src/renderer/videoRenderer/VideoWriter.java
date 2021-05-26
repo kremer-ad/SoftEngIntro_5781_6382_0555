@@ -1,4 +1,4 @@
-package renderer;
+package renderer.videoRenderer;
 
 import org.jcodec.api.awt.AWTSequenceEncoder;
 

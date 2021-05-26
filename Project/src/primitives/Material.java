@@ -30,12 +30,12 @@ public class Material implements Serializable {
 
     }
 
-    public Material setkT(double kT) {
+    public Material setKT(double kT) {
         this.kT = kT;
         return this;
     }
 
-    public Material setkR(double kR) {
+    public Material setKR(double kR) {
         this.kR = kR;
         return this;
     }

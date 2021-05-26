@@ -6,8 +6,6 @@ import org.json.simple.JSONObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static primitives.Util.alignZero;
-
 public class Ray implements Serializable {
     /**
      * beginning point of ray
@@ -19,6 +17,13 @@ public class Ray implements Serializable {
      */
     private Vector dir;
 
+
+    /**
+     * delta to ensure that point won't shade itself
+     */
+    protected static final double DELTA = 0.1;
+
+
     /**
      * ray constructor
      *
@@ -28,6 +33,12 @@ public class Ray implements Serializable {
     public Ray(Point3D p0, Vector dir) {
         this.p0 = p0;
         this.dir = dir.normalized();
+    }
+
+    public Ray(Point3D head, Vector direction, Vector normal) {
+        int sign = direction.dotProduct(normal) >= 0 ? -1 : 1;
+        this.p0 = head.add(normal.scale(DELTA * sign));
+        this.dir = direction;
     }
 
     // Getters
@@ -62,7 +73,7 @@ public class Ray implements Serializable {
         }
 
         List<GeoPoint> geoList =
-                         points.stream()
+                points.stream()
                         .map(pnt -> new GeoPoint(null, pnt))
                         .collect(Collectors.toList());
 
@@ -116,7 +127,7 @@ public class Ray implements Serializable {
         return this;
     }
 
-    public Ray rotate(Vector euler){
+    public Ray rotate(Vector euler) {
         this.dir.rotate(euler);
         return this;
     }

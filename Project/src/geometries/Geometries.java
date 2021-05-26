@@ -94,10 +94,6 @@ public class Geometries implements Intersectable, Serializable {
         return this;
     }
 
-    @Override
-    public GeoPoint findClosestIntersection(Ray ray) {
-        return null;
-    }
 
     @Override
     public Serializable load(JSONObject json) {

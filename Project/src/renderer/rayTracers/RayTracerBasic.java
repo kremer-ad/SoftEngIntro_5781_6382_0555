@@ -14,17 +14,7 @@ public class RayTracerBasic extends RayTracerBase {
     /**
      * delta to ensure that point won't shade itself
      */
-    private static final double DELTA = 0.1;
-
-    /**
-     * the maximum reflections to calculate (to avoid infinity recursion)
-     */
-    private static final int MAX_CALC_COLOR_LEVEL = 10;
-    /**
-     * distance to trace from to avoid self reflections
-     */
-    private static final double MIN_CALC_COLOR_K = 0.001;
-
+    protected static final double DELTA = 0.1;
 
     /**
      * checks if point unshaded other geometries
@@ -48,7 +38,7 @@ public class RayTracerBasic extends RayTracerBase {
             if (alignZero(pnt.point.distance(gp.point)-d)<=0) return false;
         }
         return true;*/
-        return intersections == null;
+        return intersections == null || intersections.stream().allMatch(p -> p.geometry.getMaterial().kT != 0);
     }
 
     public RayTracerBasic(Scene scene) {
@@ -57,12 +47,8 @@ public class RayTracerBasic extends RayTracerBase {
 
     @Override
     public Color traceRay(Ray ray) {
-        var intersections = scene.geometries.findGeoIntersections(ray);
-        if (intersections == null) {
-            return scene.background;
-        }
         GeoPoint closestGeoPoint = scene.geometries.findClosestIntersection(ray);
-        return scene.ambientLight.getIntensity()
+        return closestGeoPoint == null ? scene.background : scene.ambientLight.getIntensity()
                 .add(calcColor(closestGeoPoint, ray))
                 .add(closestGeoPoint.geometry.getEmission());
     }

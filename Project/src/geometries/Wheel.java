@@ -37,6 +37,10 @@ public class Wheel implements Intersectable, Serializable {
         return this;
     }
 
+    public Point3D getPosition(){
+        return this.position;
+    }
+
     @Override
     public Intersectable rotate(Vector euler) {
         if (!position.equals(Point3D.ZERO)) {

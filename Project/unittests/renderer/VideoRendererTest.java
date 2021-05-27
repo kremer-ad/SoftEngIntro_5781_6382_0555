@@ -211,8 +211,6 @@ public class VideoRendererTest {
         render.writeToImage();
 
 
-
-
         wheel.rotate(new Vector(0, -180, 0));
 
         Vector angleSpeed = new Vector(0D, 0D, 14.4D);
@@ -224,6 +222,84 @@ public class VideoRendererTest {
             System.out.println("finish " + (i + 1) + "/" + images.length);
         }
         VideoWriter.generateVideo("rotate wheel video test", images, 25);
+    }
+
+    @Test
+    public void presentEx7Test() {
+        Scene scene = new Scene("Test scene") //
+                .setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+
+        Camera camera = new Camera(new Point3D(0, 0, 5000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+                .setViewPlaneSize(1300, 1300)
+                .setDistance(5000); //
+        Material reflectionMat = new Material()
+                .setKD(.5D)
+                .setKS(.5D)
+                .setNShininess(100)
+                .setKR(.6D);
+        Material refractionMat = new Material()
+                .setKD(.5D)
+                .setKS(.5D)
+                .setNShininess(100)
+                .setKT(.6D);
+        Material regularMat = new Material()
+                .setKD(.5D)
+                .setKS(.5D)
+                .setNShininess(100);
+        Color woodColor = new Color(153, 101, 21);
+
+
+        Intersectable floor = (Plane) new Plane(Point3D.ZERO, new Vector(0, 1, 0))
+                .setEmission(new Color(java.awt.Color.BLACK))
+                .setMaterial(reflectionMat)
+                .move(new Vector(0, -50, 0))
+                .rotate(new Vector(15, 0, 0));
+        Intersectable wheel = new Wheel(100D, 30D, 80D, 12)
+                .setMaterial(regularMat)
+                .setEmission(woodColor)
+                .getShapes()
+                .move(new Vector(200, 0, 0));
+        Intersectable pyramid = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, 200, 0))
+                .setMaterial(regularMat)
+                .setEmission(new Color(java.awt.Color.BLUE))
+                .move(new Vector(0, -50, 0));
+        Intersectable sphere = new Sphere(Point3D.ZERO, 100)
+                .setEmission(new Color(java.awt.Color.GREEN))
+                .setMaterial(refractionMat)
+                .move(new Vector(-100,0,0));
+        Intersectable hat = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, 200, 0)).setMaterial(refractionMat)
+                .setEmission(new Color(java.awt.Color.orange))
+                .move(new Vector(-100, 100, 0));
+
+
+        wheel.move(new Vector(0,300,-300));
+        sphere.move(new Vector(-100,50,50));
+        hat.move(new Vector(-100,0,50));
+
+
+
+
+        scene.geometries.add(floor, wheel, hat, sphere, pyramid);
+//        scene.lights.add(new SpotLight(new Color(400, 1020, 400), new Point3D(-750, -750, -150), new Vector(-1, -1, -4)) //
+//                .setKL(0.00001).setKQ(0.000005));
+        scene.lights.add(new DirectionalLight(new Color(255, 255, 255), new Vector(1, -1, -1)));
+        ImageWriter imageWriter = new ImageWriter("test", 1000, 1000);
+        Render render = new Render()//
+                .setImageWriter(imageWriter) //
+                .setCamera(camera) //
+                .setRayTracer(new RayTracerBasic(scene));
+        render.renderImage();
+        render.writeToImage();
     }
 
     private Scene setScenePyramid() {
@@ -253,6 +329,7 @@ public class VideoRendererTest {
         // pyramid2.move(new Vector(0, -30, 0));
         return scene;
     }
+
 
     private BufferedImage deepCopy(BufferedImage bi) {
         ColorModel cm = bi.getColorModel();

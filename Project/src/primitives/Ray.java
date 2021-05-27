@@ -57,6 +57,9 @@ public class Ray implements Serializable {
      * @return point
      */
     public Point3D getPoint(double t) {
+        if (dir.getHead().mult(t).equals(Point3D.ZERO)) {
+            return p0;
+        }
         return p0.add(dir.scale(t));
     }
 

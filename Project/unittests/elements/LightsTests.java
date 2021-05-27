@@ -5,6 +5,7 @@ import elements.lights.DirectionalLight;
 import elements.lights.PointLight;
 import elements.lights.SpotLight;
 import geometries.*;
+import geometries.Pyramid;
 import org.junit.Test;
 import primitives.*;
 import renderer.ImageWriter;

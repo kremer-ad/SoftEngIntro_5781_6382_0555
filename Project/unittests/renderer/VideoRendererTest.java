@@ -285,7 +285,7 @@ public class VideoRendererTest {
         sphere.move(new Vector(-100, 50, 50));
         hat.move(new Vector(-100, 0, 50));
 
-
+        //Vector wheelDist = new Vector(new Point3D(0, 4000, -4000)).scale(-1);
         camera.lookAtTransform(new Point3D(0, 4000, -4000), wheel.getPosition());
 
 
@@ -293,7 +293,7 @@ public class VideoRendererTest {
 //        scene.lights.add(new SpotLight(new Color(400, 1020, 400), new Point3D(-750, -750, -150), new Vector(-1, -1, -4)) //
 //                .setKL(0.00001).setKQ(0.000005));
         scene.lights.add(new DirectionalLight(new Color(500, 500, 500), new Vector(1, -1, -1)));
-       // scene.lights.add(new PointLight(new Color(255, 255, 255), wheel.getPosition()).setKL(0.00001).setKQ(0.00001));
+        // scene.lights.add(new PointLight(new Color(255, 255, 255), wheel.getPosition()).setKL(0.00001).setKQ(0.00001));
         ImageWriter imageWriter = new ImageWriter("test", 1000, 1000);
         Render render = new Render()//
                 .setImageWriter(imageWriter) //
@@ -303,12 +303,11 @@ public class VideoRendererTest {
         render.writeToImage();
 
         Vector angleSpeed = new Vector(0D, 0D, 14.4D);
-        Vector movementSpeed = new Vector(10D,0,0);
+        Vector movementSpeed = new Vector(10D, 0, 0);
         BufferedImage[] images = new BufferedImage[125];
         for (int i = 0; i < images.length; i++) {
             wheel.rotate(angleSpeed);
             wheel.move(movementSpeed);
-            camera.lookAtTransform(camera.getPosition(),wheel.getPosition());
             render.renderImage();
             images[i] = deepCopy(render.getBufferedImage());
             System.out.println("finish " + (i + 1) + "/" + images.length);

@@ -192,7 +192,7 @@ public class VideoRendererTest {
         wheel.add(outerRing, innerBall);
         wheel.add(sticks);
 
-        scene.geometries.add(wheel, floor);
+        scene.geometries.add(wheel/*, floor*/);
         scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
         scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
                 .setKL(0.00001).setKQ(0.000001));
@@ -201,10 +201,8 @@ public class VideoRendererTest {
                 .setViewPlaneSize(1000, 1000) //
                 .setDistance(6000);
 
-        wheel.move(new Vector(0,0,200));
-        floor.move(new Vector(0,0,-1200));
 
-        ImageWriter imageWriter = new ImageWriter("rotating wheel", 500, 500);
+        ImageWriter imageWriter = new ImageWriter("rotating wheel", 1000, 1000);
         Render render = new Render()//
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //
@@ -212,23 +210,7 @@ public class VideoRendererTest {
         render.renderImage();
         render.writeToImage();
 
-        wheel.rotate(new Vector(180, 0, 0));
-        imageWriter = new ImageWriter("rotating wheel 2", 500, 500);
-        render = new Render()//
-                .setImageWriter(imageWriter) //
-                .setCamera(camera) //
-                .setRayTracer(new RayTracerBasic(scene));
-        render.renderImage();
-        render.writeToImage();
 
-        wheel.rotate(new Vector(-180, 180, 0));
-        imageWriter = new ImageWriter("rotating wheel 3", 500, 500);
-        render = new Render()//
-                .setImageWriter(imageWriter) //
-                .setCamera(camera) //
-                .setRayTracer(new RayTracerBasic(scene));
-        render.renderImage();
-        render.writeToImage();
 
 
         wheel.rotate(new Vector(0, -180, 0));

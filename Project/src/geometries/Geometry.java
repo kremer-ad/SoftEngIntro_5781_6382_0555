@@ -3,13 +3,10 @@ package geometries;
 import org.json.simple.JSONObject;
 import primitives.*;
 
-import java.util.Comparator;
-import java.util.List;
-
 public abstract class Geometry implements Intersectable, Serializable {
 
     protected Color emission = Color.BLACK;
-    protected Material material;
+    protected Material material = new Material();
 
     public Color getEmission() {
         return emission;

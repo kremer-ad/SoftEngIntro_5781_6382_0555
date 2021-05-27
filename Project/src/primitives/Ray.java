@@ -36,9 +36,9 @@ public class Ray implements Serializable {
     }
 
     public Ray(Point3D head, Vector direction, Vector normal) {
-        int sign = direction.dotProduct(normal) >= 0 ? -1 : 1;
-        this.p0 = head.add(normal.scale(DELTA * sign));
-        this.dir = direction;
+        Vector delta = normal.scale(normal.dotProduct(direction) >= 0 ? DELTA : -DELTA);
+        this.p0 = head.add(delta);
+        this.dir = direction.normalized();
     }
 
     // Getters

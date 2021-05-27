@@ -13,7 +13,7 @@ import primitives.Color;
 import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
-import renderer.rayTracers.ReflectionRefractionRayTracer;
+import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
 
 /**
@@ -47,7 +47,7 @@ public class ReflectionRefractionTests {
         Render render = new Render() //
                 .setImageWriter(new ImageWriter("refractionTwoSpheres", 500, 500)) //
                 .setCamera(camera) //
-                .setRayTracer(new ReflectionRefractionRayTracer(scene));
+                .setRayTracer(new RayTracerBasic(scene));
         render.renderImage();
         render.writeToImage();
     }
@@ -85,7 +85,7 @@ public class ReflectionRefractionTests {
         Render render = new Render() //
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //
-                .setRayTracer(new ReflectionRefractionRayTracer(scene));
+                .setRayTracer(new RayTracerBasic(scene));
 
         render.renderImage();
         render.writeToImage();
@@ -118,7 +118,7 @@ public class ReflectionRefractionTests {
         Render render = new Render() //
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //
-                .setRayTracer(new ReflectionRefractionRayTracer(scene));
+                .setRayTracer(new RayTracerBasic(scene));
 
         render.renderImage();
         render.writeToImage();

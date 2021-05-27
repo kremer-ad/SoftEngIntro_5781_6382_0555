@@ -4,6 +4,7 @@ import elements.Camera;
 import elements.lights.AmbientLight;
 import elements.lights.DirectionalLight;
 import elements.lights.PointLight;
+import elements.lights.SpotLight;
 import geometries.*;
 import org.junit.Test;
 import primitives.*;
@@ -13,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
+import static primitives.Util.*;
 
 public class VideoRendererTest {
     @Test
@@ -199,5 +201,51 @@ public class VideoRendererTest {
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = bi.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
+
+    @Test
+    public void TestTransformSphereRoute() throws IOException {
+        Scene scene = new Scene("Test scene"); //
+        scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+
+        scene.geometries.add( //
+                new Triangle(new Point3D(150, 0, 150), new Point3D(-150, 0, 150), new Point3D(75, 0, 75)) //
+                        .setMaterial(new Material().setKS(0.8).setNShininess(60)), //
+                new Triangle(new Point3D(150, 0, 150), new Point3D(-70, 0, 70), new Point3D(75, 0, 75)) //
+                        .setMaterial(new Material().setKS(0.8).setNShininess(60)), //
+                new Sphere(new Point3D(0, 60, 0), 30) //
+                        .setEmission(new Color(java.awt.Color.BLUE)) //
+                        .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(30)) //
+        );
+        scene.lights.add( //
+                new SpotLight(new Color(700, 400, 400), new Point3D(40, 40, 115), new Vector(-1, -1, -4)) //
+                        .setKL(4E-4).setKQ(2E-5));
+
+        Camera camera = new Camera(new Point3D(0, 0, 3000), new Vector(1, 0, 0), new Vector(0, 1, 0)) //
+                .setViewPlaneSize(1000, 1000) //
+                .setDistance(6000);
+
+
+        ImageWriter imageWriter = new ImageWriter("transform scene", 500, 500);
+        Render render = new Render()//
+                .setImageWriter(imageWriter) //
+                .setCamera(camera) //
+                .setRayTracer(new RayTracerBasic(scene));
+
+        BufferedImage[] images = new BufferedImage[250];
+
+        double angleSpeed = 1.8D;
+
+        for (int i = 0; i < images.length; i++) {
+
+            Point3D pnt = camera.calcPointOnSphere(75,i*2,Point3D.ZERO);
+            camera.lookAtTransform(pnt,Point3D.ZERO);
+            //camera.rotate(i);
+            render.renderImage();
+            images[i] = deepCopy(render.getBufferedImage());
+            System.out.println("finish " + (i + 1) + "/" + images.length);
+        }
+        VideoWriter.generateVideo("transform video test", images, 25);
+
     }
 }

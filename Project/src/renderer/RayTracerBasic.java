@@ -7,7 +7,7 @@ import scene.Scene;
 
 import java.util.List;
 
-import static primitives.Util.alignZero;
+import static primitives.Util.*;
 
 public class RayTracerBasic extends RayTracerBase {
 
@@ -31,12 +31,6 @@ public class RayTracerBasic extends RayTracerBase {
         Ray lightRay = new Ray(point, lightDirection);
 
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay,light.getDistance(gp.point));
-        /*if (intersections==null) return true;
-        double d=light.getDistance(gp.point);
-        for(GeoPoint pnt: intersections){
-            if (alignZero(pnt.point.distance(gp.point)-d)<=0) return false;
-        }
-        return true;*/
         return intersections == null;
     }
 

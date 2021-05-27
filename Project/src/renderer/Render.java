@@ -3,6 +3,7 @@ package renderer;
 import elements.Camera;
 import primitives.Color;
 import primitives.Ray;
+import renderer.rayTracers.RayTracerBase;
 import scene.Scene;
 
 import java.awt.image.BufferedImage;

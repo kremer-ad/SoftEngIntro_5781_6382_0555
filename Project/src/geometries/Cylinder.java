@@ -75,30 +75,36 @@ public class Cylinder extends Tube {
         return null;
     }
 
+    /**
+     * check if point is on the cylinder
+     * assumption: the point is on the father tube
+     *
+     * @param pt the point to check
+     * @return is the point on the cylinder
+     */
     private boolean onCylinder(Point3D pt) {
         //the middle of the cylinder
         Point3D cylinderMid = this.axisRay.getPoint(this.height * 0.5);
-        //according to Pythagoras formula a^2+b^2=c^2-> the distance of the point from the middle of the cylinder is sqrt((r/2)^2+(h/2)^2)
-        double maxDistance = Math.sqrt((radius / 2) * (radius / 2) + (height / 2) * (height / 2));
+        //according to Pythagoras formula a^2+b^2=c^2-> the distance of the point from the middle of the cylinder is sqrt(r^2+(h/2)^2)
+        double maxDistance = Math.sqrt(radius * radius + (height / 2) * (height / 2));
         return pt.distance(cylinderMid) < maxDistance;
     }
 
     @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
-        List<GeoPoint> ret = super.findGeoIntersections(ray);
+    public List<GeoPoint> findGeoIntersections(Ray ray, double distance) {
+        List<GeoPoint> ret = super.findGeoIntersections(ray,distance);
         if (ret == null) {
             ret = new LinkedList<GeoPoint>();
-        }
-        else{
+        } else {
             System.out.print("");
         }
         Plane bottomPlane = new Plane(this.axisRay.getP0(), this.axisRay.getDir());
         Plane topPlane = new Plane(this.axisRay.getPoint(this.height), this.axisRay.getDir());
         ret.removeIf(point -> !onCylinder(point.point));//remove all the points that out of the cylinder boundary
         Point3D intersectingPoint = planesIntersection(topPlane, ray);
-        addIfNotNull(ret, intersectingPoint);
+        addIfNotNullOrFar(ret, intersectingPoint, ray.getP0(), distance);
         intersectingPoint = planesIntersection(bottomPlane, ray);
-        addIfNotNull(ret, intersectingPoint);
+        addIfNotNullOrFar(ret, intersectingPoint, ray.getP0(), distance);
         if (ret.size() == 0) {
             return null;
         }
@@ -124,11 +130,13 @@ public class Cylinder extends Tube {
     /**
      * add geoPoint to list only if it not null
      *
-     * @param lst the list
-     * @param pt  the point to add (converted to geoPoint
+     * @param lst      the list
+     * @param pt       the point to add (converted to geoPoint
+     * @param dest     the destination to compare the distance from
+     * @param distance teh max distance
      */
-    private void addIfNotNull(List<GeoPoint> lst, Point3D pt) {
-        if (pt != null) {
+    private void addIfNotNullOrFar(List<GeoPoint> lst, Point3D pt, Point3D dest, double distance) {
+        if (pt != null && pt.distance(dest) <= distance) {
             lst.add(new GeoPoint(this, pt));
         }
     }

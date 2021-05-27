@@ -4,26 +4,30 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public interface Intersectable {
 
-    /** default function for old code to support tests
+    /**
+     * default function for old code to support tests
+     *
      * @param ray
      * @return intersection points list
      */
     default List<Point3D> findIntersections(Ray ray) {
         var geoList = findGeoIntersections(ray);
         return geoList == null ? null
-                                : geoList   .stream()
-                                            .map(gp -> gp.point)
-                                            .collect(Collectors.toList());
+                : geoList.stream()
+                .map(gp -> gp.point)
+                .collect(Collectors.toList());
     }
 
     /**
      * search for all intersections between ray and geometries
+     *
      * @param ray
      * @return intersection GeoPoints list
      */
@@ -33,6 +37,7 @@ public interface Intersectable {
 
     /**
      * search for all intersections in distance's range
+     *
      * @param ray
      * @param maxDistance
      * @return
@@ -42,6 +47,7 @@ public interface Intersectable {
 
     /**
      * moving the shape in the given translation vector
+     *
      * @param x the translation vector
      * @return this
      */
@@ -49,10 +55,25 @@ public interface Intersectable {
 
     /**
      * rotate the shape with the given euler angle vector (degrees)
+     *
      * @param euler the rotation vector
      * @return this
      */
     Intersectable rotate(Vector euler);
+
+    /**
+     * get the closest intersection of the given ray with the Intersectable
+     *
+     * @param ray the ray to trace
+     * @return the closest intersection point
+     */
+    default GeoPoint findClosestIntersection(Ray ray) {
+        List<GeoPoint> intersections = this.findGeoIntersections(ray);
+        if (intersections == null) {
+            return null;
+        }
+        return intersections.stream().min(Comparator.comparingDouble(pt1 -> ray.getP0().distanceSquared(pt1.point))).orElse(null);
+    }
 
     /**
      * PDS class that contain data about a point and its geometry
@@ -64,6 +85,7 @@ public interface Intersectable {
 
         /**
          * gain two parameters for initialization
+         *
          * @param geometry
          * @param point
          */

@@ -168,6 +168,7 @@ public class Point3D implements Serializable {
 
         double[] result = {this.x.coord, this.y.coord, this.z.coord};
         double angle;
+        double firstParam, secondParam;//we need to save data from result before we change it
         //rotate around z axis
         /*
          |cos θ −sin θ   0| |x|   |x cos θ − y sin θ|   |x'|
@@ -175,9 +176,11 @@ public class Point3D implements Serializable {
          | 0      0      1| |z|   |        z        |   |z'|
          */
         if (!isZero(euler.getHead().getZ())) {
-            angle = Math.toRadians(euler.getHead().getX());
-            result[0] = Math.cos(angle) * result[0] - Math.sin(angle) * result[1];
-            result[1] = Math.sin(angle) * result[0] + Math.cos(angle) * result[1];
+            angle = degreeToSimpleRadians(euler.getHead().getZ());
+            firstParam = result[0];
+            secondParam = result[1];
+            result[0] = alignZero(Math.cos(angle)) * firstParam - alignZero(Math.sin(angle)) * secondParam;
+            result[1] = alignZero(Math.sin(angle)) * firstParam + alignZero(Math.cos(angle)) * secondParam;
         }
         //rotate around y axis
         /*
@@ -186,9 +189,11 @@ public class Point3D implements Serializable {
         |−sin θ    0   cos θ| |z|   |−x sin θ + z cos θ|   |z'|
          */
         if (!isZero(euler.getHead().getY())) {
-            angle = Math.toRadians(euler.getHead().getY());
-            result[0] = Math.cos(angle) * result[0] + Math.sin(angle) * result[2];
-            result[2] = Math.cos(angle) * result[2] - Math.cos(angle) * result[0];
+            firstParam = result[0];
+            secondParam = result[2];
+            angle = degreeToSimpleRadians(euler.getHead().getY());
+            result[0] = alignZero(Math.cos(angle)) * firstParam + alignZero(Math.sin(angle)) * secondParam;
+            result[2] = alignZero(Math.cos(angle)) * secondParam - alignZero(Math.cos(angle)) * firstParam;
         }
         //rotate around x axis
         /*
@@ -197,19 +202,35 @@ public class Point3D implements Serializable {
         |0   sin θ     cos θ| |z|   |y sin θ + z cos θ|   |z'|
          */
         if (!isZero(euler.getHead().getX())) {
-            angle = Math.toRadians(euler.getHead().getX());
-            result[1] = Math.cos(angle) * result[1] - Math.sin(angle) * result[2];
-            result[2] = Math.sin(angle) * result[1] + Math.cos(angle) * result[2];
+            firstParam = result[1];
+            secondParam = result[2];
+            angle = degreeToSimpleRadians(euler.getHead().getX());
+            result[1] = alignZero(Math.cos(angle)) * firstParam - alignZero(Math.sin(angle)) * secondParam;
+            result[2] = alignZero(Math.sin(angle)) * firstParam + alignZero(Math.cos(angle)) * secondParam;
         }
         //the calculation change the position pof the point -> fix it
         double distanceFromZero = this.distance(Point3D.ZERO);//first get the actual distance
         //now set the distance of the point
-        Point3D resultPt=new Point3D(result[0], result[1], result[2]);
-        if(resultPt.equals(Point3D.ZERO)){
+        Point3D resultPt = new Point3D(result[0], result[1], result[2]);
+        if (resultPt.equals(Point3D.ZERO)) {
             return resultPt;
         }
-        Vector vecPt=new Vector(resultPt).normalize().scale(distanceFromZero);// distVec= norm(v)*dist
+        Vector vecPt = new Vector(resultPt).normalize().scale(distanceFromZero);// distVec= norm(v)*dist
 
-        return new Point3D(vecPt.getHead().x,vecPt.getHead().y,vecPt.getHead().z);
+        return new Point3D(vecPt.getHead().x, vecPt.getHead().y, vecPt.getHead().z);
+    }
+
+    /**
+     * transform the degrees to radians (also set the degree between -180 and 180
+     *
+     * @param angle the degree
+     * @return the radians
+     */
+    private double degreeToSimpleRadians(double angle) {
+        angle %= 360;
+        if (angle > 180) {
+            angle -= 360;
+        }
+        return Math.toRadians(angle);
     }
 }

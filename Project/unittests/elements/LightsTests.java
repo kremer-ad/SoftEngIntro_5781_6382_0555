@@ -8,7 +8,7 @@ import geometries.*;
 import org.junit.Test;
 import primitives.*;
 import renderer.ImageWriter;
-import renderer.RayTracerBasic;
+import renderer.rayTracers.RayTracerBasic;
 import renderer.Render;
 import scene.Scene;
 
@@ -242,5 +242,33 @@ public class LightsTests {
         render.writeToImage();
     }
 
+    @Test
+    public void cylinderDirectionalTest(){
+        Scene scene = new Scene("Test scene") //
+                .setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+        Geometry cylinder = new Cylinder(new Ray(Point3D.ZERO, new Vector(1, 0, 1)), 100D, 50D);
+        cylinder.setEmission(new Color(java.awt.Color.RED)) //
+                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
+        scene.geometries.add(cylinder);
+        scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
+        scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
+                .setKL(0.00001).setKQ(0.000001));
+
+        Camera camera = new Camera(new Point3D(0, 0, 3000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+                .setViewPlaneSize(1000, 1000) //
+                .setDistance(6000);
+
+        cylinder.rotate(new Vector(0,60,0));
+
+
+        ImageWriter imageWriter = new ImageWriter("cylinder", 500, 500);
+        Render render = new Render()//
+                .setImageWriter(imageWriter) //
+                .setCamera(camera) //
+                .setRayTracer(new RayTracerBasic(scene));
+        render.renderImage();
+        render.writeToImage();;
+
+    }
 
 }

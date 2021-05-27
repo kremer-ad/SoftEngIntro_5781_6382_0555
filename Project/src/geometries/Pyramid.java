@@ -39,11 +39,11 @@ public class Pyramid extends Geometry {
     }
 
     @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersections(Ray ray,double maxDistance) {
         List<GeoPoint> ret = new LinkedList<GeoPoint>();
-        appendIfNotNull(ret, base.findGeoIntersections(ray));
+        appendIfNotNull(ret, base.findGeoIntersections(ray,maxDistance));
         for (var edge : edges) {
-            appendIfNotNull(ret, edge.findGeoIntersections(ray));
+            appendIfNotNull(ret, edge.findGeoIntersections(ray,maxDistance));
         }
         if (ret.size() == 0) {
             return null;
@@ -53,10 +53,6 @@ public class Pyramid extends Geometry {
         return ret.stream().map(gp -> new GeoPoint(this, gp.point)).collect(Collectors.toList());
     }
 
-    @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
-        return null;
-    }
 
 
     @Override

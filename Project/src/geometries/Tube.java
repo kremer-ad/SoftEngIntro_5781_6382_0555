@@ -112,13 +112,13 @@ public class Tube extends Geometry {
         //add only the positive results to the list
         boolean listEmpty = true;
         double t = (Bminus - Math.sqrt(discriminant)) / aTwo;
-        if (t > 0 && alignZero(t-maxDistance)<=0) {
+        if (t > 0 && alignZero(t-maxDistance)<=0&&!isZero(t)) {
             listEmpty = false;
             ret.add(new GeoPoint(this,ray.getPoint(t)));
         }
         t = (Bminus + Math.sqrt(discriminant)) / aTwo;
         //(-b - Math.sqrt(discriminant)) / (2 * a);
-        if (t > 0 && alignZero(t-maxDistance)<=0) {
+        if (t > 0 && alignZero(t-maxDistance)<=0&&!isZero(t)) {
             listEmpty = false;
             ret.add(new GeoPoint(this,ray.getPoint(t)));
         }

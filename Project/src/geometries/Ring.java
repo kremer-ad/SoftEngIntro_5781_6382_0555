@@ -63,37 +63,33 @@ public class Ring extends Geometry {
     }
 
     @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
-        List<Point3D> outerIntersections = outerCylinder.findIntersections(ray);
-        List<Point3D> innerIntersections = holeCylinder.findIntersections(ray);
+    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        List<GeoPoint> outerIntersections = outerCylinder.findGeoIntersections(ray, maxDistance);
+        List<GeoPoint> innerIntersections = holeCylinder.findGeoIntersections(ray, maxDistance);
         //the intersection formula is: (CvH)-(C^H)
-        List<Point3D> ret = new LinkedList<Point3D>();
+        List<GeoPoint> ret = new LinkedList<GeoPoint>();
         //there is no intersections -> return null
-        if(innerIntersections==null&& outerIntersections==null){
+        if (innerIntersections == null && outerIntersections == null) {
             return null;
         }
         //C == null -> C^H == null -> (CvH)-(C^H) == H
         if (outerIntersections == null) {
-            return innerIntersections.stream().map(pt->new GeoPoint(this,pt)).collect(Collectors.toList());
+            return innerIntersections.stream().map(pt -> new GeoPoint(this, pt.point)).collect(Collectors.toList());
         }
         //H == null -> C^H == null -> (CvH)-(C^H) == C
         if (innerIntersections == null) {
-            return outerIntersections.stream().map(pt->new GeoPoint(this,pt)).collect(Collectors.toList());
+            return outerIntersections.stream().map(pt -> new GeoPoint(this, pt.point)).collect(Collectors.toList());
         }
 
         ret.addAll(outerIntersections);
         ret.addAll(innerIntersections);
-        ret.removeIf(pt -> outerIntersections.contains(pt) && innerIntersections.contains(pt));
+        ret.removeIf(pt -> outerIntersections.stream().anyMatch(p -> pt.point.equals(p.point)) && innerIntersections.stream().anyMatch(p -> pt.point.equals(p.point)));
         if (ret.size() == 0) {
             return null;
         }
-        return ret.stream().map(pt -> new GeoPoint(this, pt)).collect(Collectors.toList());
+        return ret.stream().map(pt -> new GeoPoint(this, pt.point)).collect(Collectors.toList());
     }
 
-    @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
-        return null;
-    }
 
     public Intersectable move(Vector x) {
         this.outerCylinder.move(x);

@@ -94,6 +94,7 @@ public class Geometries implements Intersectable, Serializable {
         return this;
     }
 
+
     @Override
     public Serializable load(JSONObject json) {
         this.shapes = new LinkedList<Intersectable>();

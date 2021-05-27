@@ -281,12 +281,13 @@ public class VideoRendererTest {
                 .move(new Vector(-100, 80, 0));
 
 
-        wheel.move(new Vector(0, 50, -300));
+        //Vector wheelDist = new Vector(new Point3D(0, 4000, -4000)).scale(-1);
+        camera.lookAtTransform(new Point3D(0, 4000, -4000), wheel.getPosition());
+
+        wheel.move(new Vector(550, 50, -300));
         sphere.move(new Vector(-100, 50, 50));
         hat.move(new Vector(-100, 0, 50));
 
-        //Vector wheelDist = new Vector(new Point3D(0, 4000, -4000)).scale(-1);
-        camera.lookAtTransform(new Point3D(0, 4000, -4000), wheel.getPosition());
 
 
         scene.geometries.add(floor, wheel.getShapes(), hat, sphere, pyramid);
@@ -302,12 +303,13 @@ public class VideoRendererTest {
         render.renderImage();
         render.writeToImage();
 
-        Vector angleSpeed = new Vector(0D, 0D, 14.4D);
-        Vector movementSpeed = new Vector(10D, 0, 0);
-        BufferedImage[] images = new BufferedImage[125];
+        Vector angleSpeed = new Vector(0D, 0D, -1250D/(25*4));
+        Vector movementSpeed = new Vector(-10D, 0, 0);
+        BufferedImage[] images = new BufferedImage[100];
         for (int i = 0; i < images.length; i++) {
             wheel.rotate(angleSpeed);
             wheel.move(movementSpeed);
+            camera.lookAtTransform(camera.getPosition(),wheel.getPosition());
             render.renderImage();
             images[i] = deepCopy(render.getBufferedImage());
             System.out.println("finish " + (i + 1) + "/" + images.length);

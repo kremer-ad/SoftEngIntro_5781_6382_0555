@@ -147,6 +147,7 @@ public class ShadowTests {
 		render.writeToImage();
 	}
 
+
 	/**
 	 * Produce a picture of a two triangles lighted by a spot light with a Sphere
 	 * producing a shading
@@ -175,4 +176,95 @@ public class ShadowTests {
 		render.renderImage();
 		render.writeToImage();
 	}
+	/**
+	 * Produce a picture of a two triangles lighted by a spot light with a Sphere
+	 * producing a shading
+	 */
+	@Test
+	public void trianglesSphere1() {
+		scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+
+		scene.geometries.add( //
+				new Triangle(new Point3D(-150, -150, -115), new Point3D(150, -150, -135), new Point3D(75, 75, -150)) //
+						.setMaterial(new Material().setKS(0.8).setNShininess(60)), //
+				new Triangle(new Point3D(-150, -150, -115), new Point3D(-70, 70, -140), new Point3D(75, 75, -150)) //
+						.setMaterial(new Material().setKS(0.8).setNShininess(60)), //
+				new Sphere(new Point3D(0, 0, -115), 30) //
+						.setEmission(new Color(java.awt.Color.BLUE)) //
+						.setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(30)) //
+		);
+		scene.lights.add( //
+				new SpotLight(new Color(700, 400, 400), new Point3D(40, 40, 115), new Vector(-1, -1, -4)) //
+						.setKL(4E-4).setKQ(2E-5));
+
+		Render render = new Render() //
+				.setImageWriter(new ImageWriter("shadowTrianglesSphere1", 600, 600)) //
+				.setCamera(camera.lookAtTransform(new Point3D(0, 0, 1050),new Point3D( 0, 0, -115))) //
+				.setRayTracer(new RayTracerBasic(scene));
+		render.renderImage();
+		render.writeToImage();
+	}
+	/**
+	 * Produce a picture of a two triangles lighted by a spot light with a Sphere
+	 * producing a shading
+	 */
+	@Test
+	public void trianglesSphere2() {
+		scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+
+		scene.geometries.add( //
+				new Triangle(new Point3D(-150, -150, -115), new Point3D(150, -150, -135), new Point3D(75, 75, -150)) //
+						.setMaterial(new Material().setKS(0.8).setNShininess(60)), //
+				new Triangle(new Point3D(-150, -150, -115), new Point3D(-70, 70, -140), new Point3D(75, 75, -150)) //
+						.setMaterial(new Material().setKS(0.8).setNShininess(60)), //
+				new Sphere(new Point3D(0, 0, -115), 30) //
+						.setEmission(new Color(java.awt.Color.BLUE)) //
+						.setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(30)) //
+		);
+		scene.lights.add( //
+				new SpotLight(new Color(700, 400, 400), new Point3D(40, 40, 115), new Vector(-1, -1, -4)) //
+						.setKL(4E-4).setKQ(2E-5));
+
+		Render render = new Render() //
+				.setImageWriter(new ImageWriter("shadowTrianglesSphere2", 600, 600)) //
+				.setCamera(camera.lookAtTransform(new Point3D(0, 0, 1100),new Point3D( 0, 0, -115))) //
+				.setRayTracer(new RayTracerBasic(scene));
+		render.renderImage();
+		render.writeToImage();
+	}
+	/**
+	 * Produce a picture of a two triangles lighted by a spot light with a Sphere
+	 * producing a shading
+	 */
+	@Test
+	public void trianglesSphere3() {
+		scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+
+		scene.geometries.add( //
+				new Triangle(new Point3D(-150, -150, -115), new Point3D(150, -150, -135), new Point3D(75, 75, -150)) //
+						.setMaterial(new Material().setKS(0.8).setNShininess(60)), //
+				new Triangle(new Point3D(-150, -150, -115), new Point3D(-70, 70, -140), new Point3D(75, 75, -150)) //
+						.setMaterial(new Material().setKS(0.8).setNShininess(60)), //
+				new Sphere(new Point3D(0, 0, -115), 30) //
+						.setEmission(new Color(java.awt.Color.BLUE)) //
+						.setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(30)) //
+		);
+		scene.lights.add( //
+				new SpotLight(new Color(700, 400, 400), new Point3D(40, 40, 115), new Vector(-1, -1, -4)) //
+						.setKL(4E-4).setKQ(2E-5));
+
+		Render render = new Render() //
+				.setImageWriter(new ImageWriter("shadowTrianglesSphere3", 600, 600)) //
+				.setCamera(camera.lookAtTransform(new Point3D(0, 0, 1150),new Point3D( 0, 0, -115))) //
+				.setRayTracer(new RayTracerBasic(scene));
+		render.renderImage();
+		render.writeToImage();
+	}
 }
+
+
+
+
+
+
+//0, 0, 1000,   0, 0, -115

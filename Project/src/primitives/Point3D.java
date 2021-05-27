@@ -97,9 +97,9 @@ public class Point3D implements Serializable {
      * @return squared distance
      */
     public double distanceSquared(Point3D pnt) {
-        return (this.x.coord - pnt.x.coord) * (this.x.coord - pnt.x.coord) +
+        return alignZero((this.x.coord - pnt.x.coord) * (this.x.coord - pnt.x.coord) +
                 (this.y.coord - pnt.y.coord) * (this.y.coord - pnt.y.coord) +
-                (this.z.coord - pnt.z.coord) * (this.z.coord - pnt.z.coord);
+                (this.z.coord - pnt.z.coord) * (this.z.coord - pnt.z.coord));
     }
 
     /**

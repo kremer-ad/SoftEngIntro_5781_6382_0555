@@ -358,19 +358,22 @@ public class VideoRendererTest {
         scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
 
         scene.geometries.add( //
-                new Triangle(new Point3D(150, 0, 150), new Point3D(-150, 0, 150), new Point3D(75, 0, 75)) //
+                new Triangle(new Point3D(150, 0, 150), new Point3D(-150, 0, 150), new Point3D(-150, 0, -150)) //
                         .setMaterial(new Material().setKS(0.8).setNShininess(60)), //
-                new Triangle(new Point3D(150, 0, 150), new Point3D(-70, 0, 70), new Point3D(75, 0, 75)) //
+                new Triangle(new Point3D(150, 0, 150), new Point3D(150, 0, -150), new Point3D(-150, 0, -150)) //
                         .setMaterial(new Material().setKS(0.8).setNShininess(60)), //
-                new Sphere(new Point3D(0, 60, 0), 30) //
+                new Sphere(new Point3D(0, 30, 0), 30) //
                         .setEmission(new Color(java.awt.Color.BLUE)) //
-                        .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(30)) //
+                        .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(30)), //
+                new Cylinder(new Ray(new Point3D(70,0,0),new Vector(0,1,0)),20,50)
+                        .setEmission(new Color(java.awt.Color.RED)) //
+                        .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(30))
         );
         scene.lights.add( //
                 new SpotLight(new Color(700, 400, 400), new Point3D(40, 40, 115), new Vector(-1, -1, -4)) //
                         .setKL(4E-4).setKQ(2E-5));
 
-        Camera camera = new Camera(new Point3D(0, 0, 3000), new Vector(1, 0, 0), new Vector(0, 1, 0)) //
+        Camera camera = new Camera(new Point3D(0, 0, 2000), new Vector(1, 0, 0), new Vector(0, 1, 0)) //
                 .setViewPlaneSize(1000, 1000) //
                 .setDistance(6000);
 
@@ -381,19 +384,45 @@ public class VideoRendererTest {
                 .setCamera(camera) //
                 .setRayTracer(new RayTracerBasic(scene));
 
-        BufferedImage[] images = new BufferedImage[250];
+        BufferedImage[] images = new BufferedImage[150];
 
-        double angleSpeed = 1.8D;
+        double angleSpeed = 5D;
+        Vector vec= camera.getVUp();
+        double radius = camera.getPosition().distance(Point3D.ZERO);
+        for (int i = 0; i < 50; i++) {
 
-        for (int i = 0; i < images.length; i++) {
+            Point3D pnt = camera.calcPointOnSphere(i*angleSpeed,90-i*0.5, Point3D.ZERO);
 
-            Point3D pnt = camera.calcPointOnSphere(75, i * 2, Point3D.ZERO);
-            camera.lookAtTransform(pnt, Point3D.ZERO);
-            //camera.rotate(i);
+            //camera.rotate(i*0.05);
+            camera.lookAtTransform(pnt,Point3D.ZERO);
+
             render.renderImage();
             images[i] = deepCopy(render.getBufferedImage());
             System.out.println("finish " + (i + 1) + "/" + images.length);
         }
+        for (int i = 0; i < 50; i++) {
+
+            Point3D pnt = camera.calcPointOnVector(Point3D.ZERO.subtract(camera.getPosition()),i);
+
+            //camera.rotate(i*0.05);
+            camera.lookAtTransform(pnt,Point3D.ZERO);
+
+            render.renderImage();
+            images[i+50] = deepCopy(render.getBufferedImage());
+            System.out.println("finish " + (i + 51) + "/" + images.length);
+        }
+        for (int i = 0; i < 50; i++) {
+
+            Point3D pnt = camera.calcPointOnVector(new Vector(0,1,0),i*2);
+
+            //camera.rotate(i*0.05);
+            camera.lookAtTransform(pnt,Point3D.ZERO);
+
+            render.renderImage();
+            images[i+100] = deepCopy(render.getBufferedImage());
+            System.out.println("finish " + (i + 101) + "/" + images.length);
+        }
+
         VideoWriter.generateVideo("transform video test", images, 25);
 
     }

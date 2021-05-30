@@ -1,10 +1,13 @@
 package elements;
 
+import geometries.Intersectable;
 import geometries.Plane;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Util;
 import primitives.Vector;
+
+import java.util.List;
 
 import static primitives.Util.alignZero;
 
@@ -134,37 +137,68 @@ public class Camera {
      * @return
      */
     public Camera lookAtTransform(Point3D lookFrom, Point3D lookAt) {
-            // if old vUp and new vTo already orthogonal, set only vTo and vRight
-            if (vUp.dotProduct(lookFrom.subtract(lookAt)) == 0) {
-                this.vTo = lookAt.subtract(lookFrom).normalized();
-                this.vRight = this.vTo.crossProduct(this.vUp);
-                position = lookFrom;
-                return this;
-            }
+        return lookAtTransform(lookFrom, lookAt, new Vector(0, 1, 0));
+    }
 
-            Ray ray = new Ray(lookFrom, vUp.scale(-1d));
-            // if camera is under plane - set ray direction again
-            if (new Plane(position, vUp).findGeoIntersections(ray) == null) {
-                ray = new Ray(lookFrom, vUp);
-            }
+    /**
+     * receive two points: lookAt point for the point we want to look at
+     * and lookFrom for the point we want to look from it,
+     * than a transformation is done,
+     * all direction vector are redefined according to last position of camera.
+     *
+     * @param lookFrom
+     * @param lookAt
+     * @return
+     */
 
-            Point3D intersectionWithPlane = new Plane(position, vUp).findGeoIntersections(ray).get(0).point;
-            // if intersection point is equal to lookAt point - set only vUp and vTo
-            if (intersectionWithPlane.equals(lookAt)) {
-                this.vTo = lookAt.subtract(lookFrom).normalized();
-                this.vUp = vRight.crossProduct(vTo);
-                return this;
-            }
+    public Camera lookAtTransform(Point3D lookFrom, Point3D lookAt, Vector normal) {
+
+        // if old vUp and new vTo already orthogonal, set only vTo and vRight
+        if (vUp.dotProduct(lookFrom.subtract(lookAt)) == 0) {
+            this.vTo = lookAt.subtract(lookFrom).normalized();
+            this.vRight = this.vTo.crossProduct(this.vUp);
+            position = lookFrom;
+            return this;
+        }
+
+        // if new vTo orthogonal to normal
+        if (lookAt.subtract(lookFrom).dotProduct(normal) == 0) {
+            vTo = lookAt.subtract(lookFrom).normalized();
+            vUp = normal.normalized();
+            vRight = vTo.crossProduct(vUp);
+            position = lookFrom;
+            return this;
+        }
+
+        // if intersection point is equal to lookAt point - set only vUp and vTo
+        if (lookAt.subtract(lookFrom).normalized().equals(normal.normalized()) ||
+                lookAt.subtract(lookFrom).normalized().equals(normal.normalized().scale(-1))) {
+            this.vTo = lookAt.subtract(lookFrom).normalized();
+            this.vUp = vRight.crossProduct(vTo);
+            position = lookFrom;
+            return this;
+        }
+
+        Ray ray = new Ray(lookFrom, normal.scale(-1d));
+        List<Intersectable.GeoPoint> intersections = new Plane(lookAt, normal).findGeoIntersections(ray);
+
+        // if camera is under plane - set ray direction again
+        if (intersections == null) {
+            ray = new Ray(lookFrom, normal);
+            intersections = new Plane(lookAt, normal).findGeoIntersections(ray);
+        }
+
         // set new directions
-        this.vRight = lookAt.subtract(intersectionWithPlane).crossProduct(vUp).normalized();
+        this.vRight = lookAt.subtract(intersections.get(0).point).crossProduct(normal).normalized();
         this.vTo = lookAt.subtract(lookFrom).normalized();
-        this.vUp = vRight.crossProduct(vTo);
+        this.vUp = this.vRight.crossProduct(this.vTo);
         position = lookFrom;
         return this;
     }
 
+
     /**
-     * receive to angles (degrees) and point to look at,
+     * receive two angles (degrees) and point to look at,
      * and calculate new point on sphere to look from,
      * sphere's radius is the distance between camera's current position and lookAt point
      *
@@ -173,15 +207,25 @@ public class Camera {
      * @param lookAt
      * @return
      */
-    public Point3D calcPointOnSphere(double theta, double phi, Point3D lookAt) {
+    public Point3D calcPointOnSphere(double phi, double theta, Point3D lookAt) {
         theta = Math.toRadians(theta);
         phi = Math.toRadians(phi);
 
         double radius = position.distance(lookAt);
-        double x = radius * Math.cos(phi) * Math.sin(theta);
-        double y = radius * Math.sin(phi) * Math.sin(theta);
-        double z = radius * Math.cos(theta);
+
+        double z = radius * Math.cos(phi) * Math.sin(theta);
+        double x = radius * Math.sin(phi) * Math.sin(theta);
+        double y = radius * Math.cos(theta);
         return new Point3D(x, y, z);
+    }
+
+    public Point3D calcPointOnVector(Vector vec, double t) {
+        if (t == 0) {
+            return this.position;
+        }
+        return new Ray(position,vec).getPoint(t);
+        //return new Point3D(radius * Math.cos(Math.toRadians(j)), 30, radius * Math.sin(Math.toRadians(j)));
+
     }
 
     /**

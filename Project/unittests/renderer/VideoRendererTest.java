@@ -16,7 +16,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
-import static primitives.Util.*;
 
 public class VideoRendererTest {
     @Test
@@ -213,8 +212,6 @@ public class VideoRendererTest {
         render.writeToImage();
 
 
-
-
         wheel.rotate(new Vector(0, -180, 0));
 
         Vector angleSpeed = new Vector(0D, 0D, 14.4D);
@@ -226,6 +223,96 @@ public class VideoRendererTest {
             System.out.println("finish " + (i + 1) + "/" + images.length);
         }
         VideoWriter.generateVideo("rotate wheel video test", images, 25);
+    }
+
+    @Test
+    public void presentEx7Test() throws IOException {
+        Scene scene = new Scene("Test scene") //
+                .setAmbientLight(new AmbientLight(new Color(java.awt.Color.BLACK), 0.15));
+
+        Camera camera = new Camera(new Point3D(0, 0, 5000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+                .setViewPlaneSize(800, 800)
+                .setDistance(5000); //
+        Material reflectionMat = new Material()
+                .setKD(.5D)
+                .setKS(.5D)
+                .setNShininess(100)
+                .setKR(.6D);
+        Material refractionMat = new Material()
+                .setKD(1D)
+                .setKS(1D)
+                .setNShininess(100)
+                .setKT(.98D);
+        Material regularMat = new Material()
+                .setKD(1D)
+                .setKS(1D)
+                .setNShininess(100);
+        Color woodColor = new Color(153, 101, 21);
+
+
+        Intersectable floor = (Plane) new Plane(Point3D.ZERO, new Vector(0, 1, 0))
+                .setEmission(new Color(java.awt.Color.BLACK))
+                .setMaterial(reflectionMat)
+                .move(new Vector(0, -50, 0));
+        Wheel wheel = new Wheel(100D, 30D, 80D, 12)
+                .setMaterial(regularMat)
+                .setEmission(woodColor);
+        wheel.move(new Vector(200, 0, 0));
+        Intersectable pyramid = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, 200, 0))
+                .setMaterial(regularMat)
+                .setEmission(new Color(java.awt.Color.BLUE))
+                .move(new Vector(0, -50, 0));
+        Intersectable sphere = new Sphere(Point3D.ZERO, 100)
+                .setEmission(new Color(java.awt.Color.GREEN))
+                .setMaterial(regularMat)
+                .move(new Vector(-100, 0, 0));
+        Intersectable hat = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, 200, 0)).setMaterial(refractionMat)
+                .setEmission(new Color(java.awt.Color.orange))
+                .move(new Vector(-100, 80, 0));
+
+
+        wheel.move(new Vector(0, 50, -300));
+        sphere.move(new Vector(-100, 50, 50));
+        hat.move(new Vector(-100, 0, 50));
+
+        //Vector wheelDist = new Vector(new Point3D(0, 4000, -4000)).scale(-1);
+        camera.lookAtTransform(new Point3D(0, 4000, -4000), wheel.getPosition());
+
+
+        scene.geometries.add(floor, wheel.getShapes(), hat, sphere, pyramid);
+//        scene.lights.add(new SpotLight(new Color(400, 1020, 400), new Point3D(-750, -750, -150), new Vector(-1, -1, -4)) //
+//                .setKL(0.00001).setKQ(0.000005));
+        scene.lights.add(new DirectionalLight(new Color(500, 500, 500), new Vector(1, -1, -1)));
+        // scene.lights.add(new PointLight(new Color(255, 255, 255), wheel.getPosition()).setKL(0.00001).setKQ(0.00001));
+        ImageWriter imageWriter = new ImageWriter("test", 1000, 1000);
+        Render render = new Render()//
+                .setImageWriter(imageWriter) //
+                .setCamera(camera) //
+                .setRayTracer(new RayTracerBasic(scene));
+        render.renderImage();
+        render.writeToImage();
+
+        Vector angleSpeed = new Vector(0D, 0D, 14.4D);
+        Vector movementSpeed = new Vector(10D, 0, 0);
+        BufferedImage[] images = new BufferedImage[125];
+        for (int i = 0; i < images.length; i++) {
+            wheel.rotate(angleSpeed);
+            wheel.move(movementSpeed);
+            render.renderImage();
+            images[i] = deepCopy(render.getBufferedImage());
+            System.out.println("finish " + (i + 1) + "/" + images.length);
+        }
+        VideoWriter.generateVideo("shapes combination test", images, 25);
     }
 
     private Scene setScenePyramid() {
@@ -255,6 +342,7 @@ public class VideoRendererTest {
         // pyramid2.move(new Vector(0, -30, 0));
         return scene;
     }
+
 
     private BufferedImage deepCopy(BufferedImage bi) {
         ColorModel cm = bi.getColorModel();
@@ -295,20 +383,45 @@ public class VideoRendererTest {
                 .setCamera(camera) //
                 .setRayTracer(new RayTracerBasic(scene));
 
-        BufferedImage[] images = new BufferedImage[100];
+        BufferedImage[] images = new BufferedImage[150];
 
-        double angleSpeed = 1.8D;
+        double angleSpeed = 5D;
         Vector vec= camera.getVUp();
         double radius = camera.getPosition().distance(Point3D.ZERO);
-        for (int i = 0; i < images.length; i++) {
+        for (int i = 0; i < 50; i++) {
 
-            Point3D pnt = camera.calcPointOnVector(vec,4,i*5,radius);
+            Point3D pnt = camera.calcPointOnSphere(i*angleSpeed,90-i*0.5, Point3D.ZERO);
+
             //camera.rotate(i*0.05);
             camera.lookAtTransform(pnt,Point3D.ZERO);
+
             render.renderImage();
             images[i] = deepCopy(render.getBufferedImage());
             System.out.println("finish " + (i + 1) + "/" + images.length);
         }
+        for (int i = 0; i < 50; i++) {
+
+            Point3D pnt = camera.calcPointOnVector(Point3D.ZERO.subtract(camera.getPosition()),i);
+
+            //camera.rotate(i*0.05);
+            camera.lookAtTransform(pnt,Point3D.ZERO);
+
+            render.renderImage();
+            images[i+50] = deepCopy(render.getBufferedImage());
+            System.out.println("finish " + (i + 51) + "/" + images.length);
+        }
+        for (int i = 0; i < 50; i++) {
+
+            Point3D pnt = camera.calcPointOnVector(new Vector(0,1,0),i*2);
+
+            //camera.rotate(i*0.05);
+            camera.lookAtTransform(pnt,Point3D.ZERO);
+
+            render.renderImage();
+            images[i+100] = deepCopy(render.getBufferedImage());
+            System.out.println("finish " + (i + 101) + "/" + images.length);
+        }
+
         VideoWriter.generateVideo("transform video test", images, 25);
 
     }

@@ -48,6 +48,7 @@ public class Wheel implements Intersectable, Serializable {
             this.move(new Vector(position).scale(-1D));
             shapes.rotate(euler);
             this.move(new Vector(tempPos));
+            return this;
         }
         shapes.rotate(euler);
         return this;

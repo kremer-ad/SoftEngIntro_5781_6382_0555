@@ -1,4 +1,4 @@
-package renderer;
+package renderer.videoRenderer;
 
 import elements.Camera;
 import elements.lights.AmbientLight;
@@ -8,8 +8,9 @@ import elements.lights.SpotLight;
 import geometries.*;
 import org.junit.Test;
 import primitives.*;
+import renderer.ImageWriter;
+import renderer.Render;
 import renderer.rayTracers.RayTracerBasic;
-import renderer.videoRenderer.VideoWriter;
 import scene.Scene;
 
 import java.awt.image.BufferedImage;
@@ -316,42 +317,6 @@ public class VideoRendererTest {
         VideoWriter.generateVideo("shapes combination test", images, 25);
     }
 
-    private Scene setScenePyramid() {
-        Scene scene = new Scene("Test scene") //
-                .setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
-        Geometry pyramid1 = new Pyramid(new Polygon(
-                new Point3D(36.602540378444, 0, 136.60254037844),
-                new Point3D(136.60254037844, 0, -36.602540378444),
-                new Point3D(-36.602540378444, 0, -136.60254037844),
-                new Point3D(-136.60254037844, 0, 36.602540378444)
-        ), new Point3D(0, 200, 0))
-                .setEmission(new Color(java.awt.Color.BLUE)) //
-                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
-        Geometry pyramid2 = new Pyramid(new Polygon(
-                new Point3D(36.602540378444, 0, 136.60254037844),
-                new Point3D(136.60254037844, 0, -36.602540378444),
-                new Point3D(-36.602540378444, 0, -136.60254037844),
-                new Point3D(-136.60254037844, 0, 36.602540378444)
-        ), new Point3D(0, -200, 0))
-                .setEmission(new Color(java.awt.Color.RED)) //
-                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
-        scene.geometries.add(pyramid1, pyramid2);
-        scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
-        scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
-                .setKL(0.00001).setKQ(0.000001));
-        // pyramid1.move(new Vector(0, -30, 0));
-        // pyramid2.move(new Vector(0, -30, 0));
-        return scene;
-    }
-
-
-    private BufferedImage deepCopy(BufferedImage bi) {
-        ColorModel cm = bi.getColorModel();
-        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-        WritableRaster raster = bi.copyData(null);
-        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
-    }
-
     @Test
     public void TestTransformSphereRoute() throws IOException {
         Scene scene = new Scene("Test scene"); //
@@ -426,4 +391,42 @@ public class VideoRendererTest {
         VideoWriter.generateVideo("transform video test", images, 25);
 
     }
+
+    private Scene setScenePyramid() {
+        Scene scene = new Scene("Test scene") //
+                .setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+        Geometry pyramid1 = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, 200, 0))
+                .setEmission(new Color(java.awt.Color.BLUE)) //
+                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
+        Geometry pyramid2 = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, -200, 0))
+                .setEmission(new Color(java.awt.Color.RED)) //
+                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
+        scene.geometries.add(pyramid1, pyramid2);
+        scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
+        scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
+                .setKL(0.00001).setKQ(0.000001));
+        // pyramid1.move(new Vector(0, -30, 0));
+        // pyramid2.move(new Vector(0, -30, 0));
+        return scene;
+    }
+
+
+    private BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
+
+
 }

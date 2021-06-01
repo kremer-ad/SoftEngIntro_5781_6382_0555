@@ -63,7 +63,6 @@ public class RenderTests {
 		ImageWriter imageWriter = new ImageWriter("json render test", 1000, 1000);
 		Render render = new Render() //
 				.setWriter(imageWriter) //
-				.setScene(scene) //
 				.setCamera(camera) //
 				.setRayTracer(new RayTracerBasic(scene));
 

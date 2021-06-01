@@ -4,15 +4,14 @@ import elements.Camera;
 import primitives.Color;
 import primitives.Ray;
 import renderer.rayTracers.RayTracerBase;
-import scene.Scene;
 
 import java.awt.image.BufferedImage;
 import java.util.MissingResourceException;
 
 public class Render {
-    private ImageWriter writer;
-    private Camera camera;
-    private RayTracerBase rayTracer;
+    protected ImageWriter writer;
+    protected Camera camera;
+    protected RayTracerBase rayTracer;
 
     public Render() {
 
@@ -37,10 +36,6 @@ public class Render {
         return this;
     }
 
-    public Render setScene(Scene scene) {
-        return this;
-    }
-
     public Render setCamera(Camera camera) {
         this.camera = camera;
         return this;
@@ -55,6 +50,19 @@ public class Render {
      * render the image
      */
     public void renderImage() {
+        checkForVariables();
+
+        for (int i = 0; i < writer.getNx(); i++) {
+            for (int j = 0; j < writer.getNy(); j++) {
+                Ray ray = camera.constructRayThroughPixel(writer.getNx(), writer.getNy(), i, j);
+                Color colorToWrite = rayTracer.traceRay(ray);
+                writer.writePixel(i, j, colorToWrite);
+            }
+        }
+
+    }
+
+    protected void checkForVariables() {
         //check that we have all the resources for rendering the image
         if (this.camera == null) {
             throw new MissingResourceException("The camera value cant be null", "Camera", "camera");
@@ -68,15 +76,6 @@ public class Render {
         if (this.rayTracer == null) {
             throw new MissingResourceException("The rayTracer value cant be null", "RayTracerBase", "rayTracer");
         }
-
-        for (int i = 0; i < writer.getNx(); i++) {
-            for (int j = 0; j < writer.getNy(); j++) {
-                Ray ray = camera.constructRayThroughPixel(writer.getNx(), writer.getNy(), i, j);
-                Color colorToWrite = rayTracer.traceRay(ray);
-                writer.writePixel(i, j, colorToWrite);
-            }
-        }
-
     }
 
     /**

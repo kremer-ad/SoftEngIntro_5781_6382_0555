@@ -8,7 +8,7 @@ import renderer.rayTracers.RayTracerBase;
 import java.awt.image.BufferedImage;
 import java.util.MissingResourceException;
 
-public class Render {
+public class Render implements ImageRenderer {
     protected ImageWriter writer;
     protected Camera camera;
     protected RayTracerBase rayTracer;

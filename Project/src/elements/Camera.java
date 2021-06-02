@@ -10,6 +10,7 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 
 public class Camera {
@@ -267,7 +268,7 @@ public class Camera {
 
     /**
      * Generate a rays from camera to a given pixel
-     *
+     * <p>
      * the first ray pixel always hit the middle
      * the next 4 will hit the pixel edges
      * the other will hit the pixel randomly
@@ -280,26 +281,15 @@ public class Camera {
      * @return A ray from the camera to the given pixel
      */
     public Ray[] constructRaysThroughPixel(int nX, int nY, int j, int i, int amount) {
-        if(amount<=0){
-            throw  new IllegalArgumentException("cant throw less then one ray threw the pixel");
+        if (amount <= 0) {
+            throw new IllegalArgumentException("cant throw less then one ray threw the pixel");
         }
-        Ray[] ret =new Ray[amount];
+        Ray[] ret = new Ray[amount];
 
         // calculate image center: pC=p0+d*vTo
         Point3D pCenter = position.add(vTo.scale(distance));
 
-        //calculate pixel square
-        //TODO:: get all the edges of the pixel
-
-        //put the center pixel at the first place of the array
-        //TODO :: put the center of the pixel at the start of the array
-
-        //start putting the edges of the pixel in the array
-        //TODO :: put the edges of the pixel in the array
-
-        //start throwing random ray on the pixel and add them to the array
-        //TODO :: full the array with random rays to the pixel
-
+        //calculate the middle of the pixel and put it at the start of the array
         // calculate ratio (pixel width and height)
         double rY = height / nY;
         double rX = width / nX;
@@ -316,9 +306,56 @@ public class Camera {
         if (yI != 0) {
             pIJ = pIJ.add(vUp.scale(yI));
         }
-        ret[0] =  new Ray(position, pIJ.subtract(position));
+        ret[0] = new Ray(position, pIJ.subtract(position));
+
+        //start putting the edges of the pixel in the array
+        //top right
+        //Point3D pIJCenter = pIJ;
+        if (amount > 1) {
+            ret[1] = new Ray(position, moveInPixel(pIJ, 1, 1, rX, rY).subtract(position));
+        }
+        //bottom right
+        if (amount > 2) {
+            ret[2] = new Ray(position, moveInPixel(pIJ, 1, 0, rX, rY).subtract(position));
+        }
+        //bottom left
+        if (amount > 3) {
+            ret[3] = new Ray(position, moveInPixel(pIJ, 0, 0, rX, rY).subtract(position));
+        }
+        //top left
+        if (amount > 4) {
+            ret[4] = new Ray(position, moveInPixel(pIJ, 0, 1, rX, rY).subtract(position));
+        }
+
+        //start throwing random rays on the pixel and add them to the array
+        for (int k = 5; k < amount; k++) {
+            ret[k] = new Ray(position, moveInPixel(pIJ, Math.random(), Math.random(), rX, rY).subtract(position));
+        }
+
+
         return ret;
-        //return new Ray(position, pIJ.subtract(position));
     }
 
+    /**
+     * returm point thet moved in the pixel boundary
+     *
+     * @param pt the middle of the pixel
+     * @param x  the ratio to move in x [0,1]
+     * @param y  the ration to move in y [0,1]
+     * @param rX the pixel width
+     * @param rY the pixel height
+     * @return the moved point
+     */
+    private Point3D moveInPixel(Point3D pt, double x, double y, double rX, double rY) {
+        Point3D ret = pt;
+        double moveX = rX * (x - 0.5);
+        double moveY = rY * (y - 0.5);
+        if (!isZero(moveX)) {
+            ret = ret.add(vRight.scale(moveX));
+        }
+        if (!isZero(moveY)) {
+            ret = ret.add(vUp.scale(moveY));
+        }
+        return ret;
+    }
 }

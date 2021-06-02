@@ -1,4 +1,4 @@
-package renderer;
+package renderer.videoRenderer;
 
 import elements.Camera;
 import elements.lights.AmbientLight;
@@ -8,8 +8,9 @@ import elements.lights.SpotLight;
 import geometries.*;
 import org.junit.Test;
 import primitives.*;
+import renderer.ImageWriter;
+import renderer.Render;
 import renderer.rayTracers.RayTracerBasic;
-import renderer.videoRenderer.VideoWriter;
 import scene.Scene;
 
 import java.awt.image.BufferedImage;
@@ -193,7 +194,9 @@ public class VideoRendererTest {
         wheel.add(outerRing, innerBall);
         wheel.add(sticks);
 
-        scene.geometries.add(wheel/*, floor*/);
+        Wheel wheel2 = new Wheel(100,50,80,12);
+
+        scene.geometries.add(wheel2/*, floor*/);
         scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
         scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
                 .setKL(0.00001).setKQ(0.000001));
@@ -212,10 +215,8 @@ public class VideoRendererTest {
         render.writeToImage();
 
 
-        wheel.rotate(new Vector(0, -180, 0));
-
-        Vector angleSpeed = new Vector(0D, 0D, 14.4D);
-        BufferedImage[] images = new BufferedImage[100];
+        Vector angleSpeed = new Vector(0D, 0D, -14.4D);
+        BufferedImage[] images = new BufferedImage[25];
         for (int i = 0; i < images.length; i++) {
             scene.geometries.rotate(angleSpeed);
             render.renderImage();
@@ -290,7 +291,7 @@ public class VideoRendererTest {
 
 
 
-        scene.geometries.add(floor, wheel.getShapes(), hat, sphere, pyramid);
+        scene.geometries.add(floor, wheel, hat, sphere, pyramid);
 //        scene.lights.add(new SpotLight(new Color(400, 1020, 400), new Point3D(-750, -750, -150), new Vector(-1, -1, -4)) //
 //                .setKL(0.00001).setKQ(0.000005));
         scene.lights.add(new DirectionalLight(new Color(500, 500, 500), new Vector(1, -1, -1)));
@@ -303,54 +304,17 @@ public class VideoRendererTest {
         render.renderImage();
         render.writeToImage();
 
-        Vector angleSpeed = new Vector(0D, 0D, -1250D/(25*4));
-        Vector movementSpeed = new Vector(-10D, 0, 0);
+        Vector angleSpeed = new Vector(0D, 0D, 10D);
+        Vector movementSpeed = new Vector(-1250D/(25*4), 0, 0);
         BufferedImage[] images = new BufferedImage[100];
         for (int i = 0; i < images.length; i++) {
             wheel.rotate(angleSpeed);
             wheel.move(movementSpeed);
-            camera.lookAtTransform(camera.getPosition(),wheel.getPosition());
             render.renderImage();
             images[i] = deepCopy(render.getBufferedImage());
             System.out.println("finish " + (i + 1) + "/" + images.length);
         }
         VideoWriter.generateVideo("shapes combination test", images, 25);
-    }
-
-    private Scene setScenePyramid() {
-        Scene scene = new Scene("Test scene") //
-                .setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
-        Geometry pyramid1 = new Pyramid(new Polygon(
-                new Point3D(36.602540378444, 0, 136.60254037844),
-                new Point3D(136.60254037844, 0, -36.602540378444),
-                new Point3D(-36.602540378444, 0, -136.60254037844),
-                new Point3D(-136.60254037844, 0, 36.602540378444)
-        ), new Point3D(0, 200, 0))
-                .setEmission(new Color(java.awt.Color.BLUE)) //
-                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
-        Geometry pyramid2 = new Pyramid(new Polygon(
-                new Point3D(36.602540378444, 0, 136.60254037844),
-                new Point3D(136.60254037844, 0, -36.602540378444),
-                new Point3D(-36.602540378444, 0, -136.60254037844),
-                new Point3D(-136.60254037844, 0, 36.602540378444)
-        ), new Point3D(0, -200, 0))
-                .setEmission(new Color(java.awt.Color.RED)) //
-                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
-        scene.geometries.add(pyramid1, pyramid2);
-        scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
-        scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
-                .setKL(0.00001).setKQ(0.000001));
-        // pyramid1.move(new Vector(0, -30, 0));
-        // pyramid2.move(new Vector(0, -30, 0));
-        return scene;
-    }
-
-
-    private BufferedImage deepCopy(BufferedImage bi) {
-        ColorModel cm = bi.getColorModel();
-        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-        WritableRaster raster = bi.copyData(null);
-        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
     @Test
@@ -405,4 +369,42 @@ public class VideoRendererTest {
         VideoWriter.generateVideo("transform video test", images, 25);
 
     }
+
+    private Scene setScenePyramid() {
+        Scene scene = new Scene("Test scene") //
+                .setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+        Geometry pyramid1 = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, 200, 0))
+                .setEmission(new Color(java.awt.Color.BLUE)) //
+                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
+        Geometry pyramid2 = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, -200, 0))
+                .setEmission(new Color(java.awt.Color.RED)) //
+                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(100));
+        scene.geometries.add(pyramid1, pyramid2);
+        scene.lights.add(new DirectionalLight(new Color(500, 300, 0).scale(.5D), new Vector(0, 0, -1)));
+        scene.lights.add(new PointLight(new Color(500, 300, 0).reduce(2), new Point3D(100, 50, 50))//
+                .setKL(0.00001).setKQ(0.000001));
+        // pyramid1.move(new Vector(0, -30, 0));
+        // pyramid2.move(new Vector(0, -30, 0));
+        return scene;
+    }
+
+
+    private BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
+
+
 }

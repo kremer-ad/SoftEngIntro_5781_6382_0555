@@ -223,7 +223,7 @@ public class Camera {
         if (t == 0) {
             return this.position;
         }
-        return new Ray(position,vec).getPoint(t);
+        return new Ray(position, vec).getPoint(t);
         //return new Point3D(radius * Math.cos(Math.toRadians(j)), 30, radius * Math.sin(Math.toRadians(j)));
 
     }
@@ -238,6 +238,8 @@ public class Camera {
      * @return A ray from the camera to the given pixel
      */
     public Ray constructRayThroughPixel(int nX, int nY, int j, int i) {
+        return this.constructRaysThroughPixel(nX, nY, j, i, 1)[0];
+        /*
         // calculate image center: pC=p0+d*vTo
         Point3D pCenter = position.add(vTo.scale(distance));
 
@@ -259,5 +261,64 @@ public class Camera {
         }
 
         return new Ray(position, pIJ.subtract(position));
+        */
+
     }
+
+    /**
+     * Generate a rays from camera to a given pixel
+     *
+     * the first ray pixel always hit the middle
+     * the next 4 will hit the pixel edges
+     * the other will hit the pixel randomly
+     *
+     * @param nX     - number of pixels for width
+     * @param nY     - number of pixels for height
+     * @param j      - number of column in row
+     * @param i      - number of row in column
+     * @param amount - the amount of rays to construct
+     * @return A ray from the camera to the given pixel
+     */
+    public Ray[] constructRaysThroughPixel(int nX, int nY, int j, int i, int amount) {
+        if(amount<=0){
+            throw  new IllegalArgumentException("cant throw less then one ray threw the pixel");
+        }
+        Ray[] ret =new Ray[amount];
+
+        // calculate image center: pC=p0+d*vTo
+        Point3D pCenter = position.add(vTo.scale(distance));
+
+        //calculate pixel square
+        //TODO:: get all the edges of the pixel
+
+        //put the center pixel at the first place of the array
+        //TODO :: put the center of the pixel at the start of the array
+
+        //start putting the edges of the pixel in the array
+        //TODO :: put the edges of the pixel in the array
+
+        //start throwing random ray on the pixel and add them to the array
+        //TODO :: full the array with random rays to the pixel
+
+        // calculate ratio (pixel width and height)
+        double rY = height / nY;
+        double rX = width / nX;
+        // calculate pixel[i,j] center
+        double yI = -(i - (nY - 1) / 2d) * rY;
+        double xJ = (j - (nX - 1) / 2d) * rX;
+
+        // in case yI or xJ are zero exception will be thrown
+        // to avoid it we will handle them step by step
+        Point3D pIJ = pCenter;
+        if (!Util.isZero(xJ)) {
+            pIJ = pIJ.add(vRight.scale(xJ));
+        }
+        if (yI != 0) {
+            pIJ = pIJ.add(vUp.scale(yI));
+        }
+        ret[0] =  new Ray(position, pIJ.subtract(position));
+        return ret;
+        //return new Ray(position, pIJ.subtract(position));
+    }
+
 }

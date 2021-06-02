@@ -385,43 +385,21 @@ public class VideoRendererTest {
                 .setCamera(camera) //
                 .setRayTracer(new RayTracerBasic(scene));
 
-        BufferedImage[] images = new BufferedImage[150];
+        BufferedImage[] images = new BufferedImage[70];
 
         double angleSpeed = 5D;
         Vector vec= camera.getVUp();
         double radius = camera.getPosition().distance(Point3D.ZERO);
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < images.length; i++) {
 
             Point3D pnt = camera.calcPointOnSphere(i*angleSpeed,90-i*0.5, Point3D.ZERO);
 
             //camera.rotate(i*0.05);
-            camera.lookAtTransform(pnt,Point3D.ZERO);
+            camera.lookAtTransform(new Point3D(2000,50,2000),new Point3D(i,50,i*4));
 
             render.renderImage();
             images[i] = deepCopy(render.getBufferedImage());
             System.out.println("finish " + (i + 1) + "/" + images.length);
-        }
-        for (int i = 0; i < 50; i++) {
-
-            Point3D pnt = camera.calcPointOnVector(Point3D.ZERO.subtract(camera.getPosition()),i);
-
-            //camera.rotate(i*0.05);
-            camera.lookAtTransform(pnt,Point3D.ZERO);
-
-            render.renderImage();
-            images[i+50] = deepCopy(render.getBufferedImage());
-            System.out.println("finish " + (i + 51) + "/" + images.length);
-        }
-        for (int i = 0; i < 50; i++) {
-
-            Point3D pnt = camera.calcPointOnVector(new Vector(0,1,0),i*2);
-
-            //camera.rotate(i*0.05);
-            camera.lookAtTransform(pnt,Point3D.ZERO);
-
-            render.renderImage();
-            images[i+100] = deepCopy(render.getBufferedImage());
-            System.out.println("finish " + (i + 101) + "/" + images.length);
         }
 
         VideoWriter.generateVideo("transform video test", images, 25);

@@ -21,7 +21,7 @@ public class AntialiasingRenderer extends Render {
                 for (var ray : rays) {
                     sum = sum.add(rayTracer.traceRay(ray));
                 }
-                writer.writePixel(i, j, sum/*.scale(1 / RAYS_IN_BEAM)*/);
+                writer.writePixel(i, j, sum.reduce( RAYS_IN_BEAM));
             }
         }
     }

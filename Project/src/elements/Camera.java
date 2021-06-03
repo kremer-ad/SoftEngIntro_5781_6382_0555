@@ -332,7 +332,6 @@ public class Camera {
             ret[k] = new Ray(position, moveInPixel(pIJ, Math.random(), Math.random(), rX, rY).subtract(position));
         }
 
-
         return ret;
     }
 

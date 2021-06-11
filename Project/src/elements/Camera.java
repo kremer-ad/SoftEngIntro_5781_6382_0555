@@ -209,7 +209,7 @@ public class Camera {
      * @return
      */
     public Point3D calcPointOnSphere(double phi, double theta, Point3D lookAt) {
-        theta = Math.toRadians(theta);
+        theta = Math.toRadians(90-theta);
         phi = Math.toRadians(phi);
 
         double radius = position.distance(lookAt);

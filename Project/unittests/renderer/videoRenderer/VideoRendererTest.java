@@ -8,6 +8,7 @@ import elements.lights.SpotLight;
 import geometries.*;
 import org.junit.Test;
 import primitives.*;
+import renderer.AntialiasingRenderer;
 import renderer.ImageWriter;
 import renderer.Render;
 import renderer.rayTracers.RayTracerBasic;
@@ -231,7 +232,7 @@ public class VideoRendererTest {
         Scene scene = new Scene("Test scene") //
                 .setAmbientLight(new AmbientLight(new Color(java.awt.Color.BLACK), 0.15));
 
-        Camera camera = new Camera(new Point3D(0, 0, 5000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+        Camera camera = new Camera(new Point3D(300, 5000, -5000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
                 .setViewPlaneSize(800, 800)
                 .setDistance(5000); //
         Material reflectionMat = new Material()
@@ -283,9 +284,8 @@ public class VideoRendererTest {
 
 
         //Vector wheelDist = new Vector(new Point3D(0, 4000, -4000)).scale(-1);
-        camera.lookAtTransform(new Point3D(0, 4000, -4000), wheel.getPosition());
 
-        wheel.move(new Vector(550, 50, -300));
+        wheel.move(new Vector(400, 50, -300));
         sphere.move(new Vector(-100, 50, 50));
         hat.move(new Vector(-100, 0, 50));
 
@@ -306,8 +306,19 @@ public class VideoRendererTest {
 
         Vector angleSpeed = new Vector(0D, 0D, 10D);
         Vector movementSpeed = new Vector(-1250D/(25*4), 0, 0);
-        BufferedImage[] images = new BufferedImage[100];
-        for (int i = 0; i < images.length; i++) {
+        BufferedImage[] images = new BufferedImage[200];
+        for (int i = 0; i < 100; i++) {
+            camera.lookAtTransform(camera.getPosition(), wheel.getPosition());
+            wheel.rotate(angleSpeed);
+            wheel.move(movementSpeed);
+            render.renderImage();
+            images[i] = deepCopy(render.getBufferedImage());
+            System.out.println("finish " + (i + 1) + "/" + images.length);
+        }
+        Point3D position = camera.getPosition();
+        for (int i = 100; i < 200; i++) {
+            Vector vec = camera.calcPointOnSphere((i-99)*5,((i-99)*0.1),wheel.getPosition()).subtract(wheel.getPosition());
+            camera.lookAtTransform(position.add(vec), wheel.getPosition());
             wheel.rotate(angleSpeed);
             wheel.move(movementSpeed);
             render.renderImage();
@@ -349,43 +360,21 @@ public class VideoRendererTest {
                 .setCamera(camera) //
                 .setRayTracer(new RayTracerBasic(scene));
 
-        BufferedImage[] images = new BufferedImage[150];
+        BufferedImage[] images = new BufferedImage[70];
 
         double angleSpeed = 5D;
         Vector vec= camera.getVUp();
         double radius = camera.getPosition().distance(Point3D.ZERO);
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < images.length; i++) {
 
-            Point3D pnt = camera.calcPointOnSphere(i*angleSpeed,90-i*0.5, Point3D.ZERO);
+            Point3D pnt = camera.calcPointOnSphere(i*angleSpeed,i*0.5, Point3D.ZERO);
 
             //camera.rotate(i*0.05);
-            camera.lookAtTransform(pnt,Point3D.ZERO);
+            camera.lookAtTransform(new Point3D(2000,50,2000),new Point3D(i,50,i*4));
 
             render.renderImage();
             images[i] = deepCopy(render.getBufferedImage());
             System.out.println("finish " + (i + 1) + "/" + images.length);
-        }
-        for (int i = 0; i < 50; i++) {
-
-            Point3D pnt = camera.calcPointOnVector(Point3D.ZERO.subtract(camera.getPosition()),i);
-
-            //camera.rotate(i*0.05);
-            camera.lookAtTransform(pnt,Point3D.ZERO);
-
-            render.renderImage();
-            images[i+50] = deepCopy(render.getBufferedImage());
-            System.out.println("finish " + (i + 51) + "/" + images.length);
-        }
-        for (int i = 0; i < 50; i++) {
-
-            Point3D pnt = camera.calcPointOnVector(new Vector(0,1,0),i*2);
-
-            //camera.rotate(i*0.05);
-            camera.lookAtTransform(pnt,Point3D.ZERO);
-
-            render.renderImage();
-            images[i+100] = deepCopy(render.getBufferedImage());
-            System.out.println("finish " + (i + 101) + "/" + images.length);
         }
 
         VideoWriter.generateVideo("transform video test", images, 25);

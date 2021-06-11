@@ -52,7 +52,7 @@ public class RayTracerBasic extends RayTracerBase {
      * @param l     l parameter of the light
      * @param n     normal
      * @param gp    the point
-     * @return
+     * @return the transparancy percent of the shadow
      */
     private double transparency(LightSource light, Vector l, Vector n, GeoPoint gp) {
         Vector lightDirection = l.scale(-1);

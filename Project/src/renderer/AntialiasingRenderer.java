@@ -16,13 +16,22 @@ public class AntialiasingRenderer extends Render {
 
         for (int i = 0; i < writer.getNx(); i++) {
             for (int j = 0; j < writer.getNy(); j++) {
-                Ray[] rays = camera.constructRaysThroughPixel(writer.getNx(), writer.getNy(), i, j, RAYS_IN_BEAM);
-                Color sum = Color.BLACK;
-                for (var ray : rays) {
-                    sum = sum.add(rayTracer.traceRay(ray));
-                }
-                writer.writePixel(i, j, sum.reduce( RAYS_IN_BEAM));
+                renderPixel(i,j);
             }
         }
+    }
+
+    /**
+     * render one pixel to the image writer
+     * @param x the pixel number from the right
+     * @param y the pixel number from the top
+     */
+    protected void renderPixel(int x,int y){
+        Ray[] rays = camera.constructRaysThroughPixel(writer.getNx(), writer.getNy(), x, y, RAYS_IN_BEAM);
+        Color sum = Color.BLACK;
+        for (var ray : rays) {
+            sum = sum.add(rayTracer.traceRay(ray));
+        }
+        writer.writePixel(x, y, sum.reduce( RAYS_IN_BEAM));
     }
 }

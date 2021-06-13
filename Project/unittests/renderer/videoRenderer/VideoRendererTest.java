@@ -307,7 +307,7 @@ public class VideoRendererTest {
         Vector angleSpeed = new Vector(0D, 0D, 10D);
         Vector movementSpeed = new Vector(-1250D/(25*4), 0, 0);
         BufferedImage[] images = new BufferedImage[200];
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             camera.lookAtTransform(camera.getPosition(), wheel.getPosition());
             wheel.rotate(angleSpeed);
             wheel.move(movementSpeed);
@@ -316,9 +316,10 @@ public class VideoRendererTest {
             System.out.println("finish " + (i + 1) + "/" + images.length);
         }
         Point3D position = camera.getPosition();
-        for (int i = 100; i < 200; i++) {
-            Vector vec = camera.calcPointOnSphere((i-99)*5,((i-99)*0.1),wheel.getPosition()).subtract(wheel.getPosition());
-            camera.lookAtTransform(position.add(vec), wheel.getPosition());
+        for (int i = 50; i < 200; i++) {
+            camera.lookAtTransform(position.add(movementSpeed),wheel.getPosition());
+            Point3D pnt = camera.calcPointOnSphere(i+90,(i-49)*0.1,wheel.getPosition());
+            camera.lookAtTransform(pnt, wheel.getPosition());
             wheel.rotate(angleSpeed);
             wheel.move(movementSpeed);
             render.renderImage();

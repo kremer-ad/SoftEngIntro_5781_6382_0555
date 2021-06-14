@@ -1,37 +1,22 @@
+package primitives;
+
 import elements.Camera;
 import elements.lights.AmbientLight;
 import elements.lights.DirectionalLight;
 import geometries.*;
-import primitives.*;
-import renderer.FastRenderer;
+import org.junit.Test;
+import renderer.AntialiasingRenderer;
 import renderer.ImageWriter;
+import renderer.Render;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
 
-import static java.lang.Integer.parseInt;
+public class BoxColliderTest {
 
-/**
- * Test program for the 1st stage
- *
- * @author Dan Zilberstein
- */
-public final class Main {
+    private Render render = new AntialiasingRenderer();
 
-    /**
-     * Main program to tests initial functionality of the 1st stage
-     * 
-     * @param args irrelevant here
-     */
-    public static void main(String[] args) {
-        System.out.println("start");
-        wheel(parseInt(args[0]));
-        System.out.println("finish");
-    }
-
-    private static void wheel(int threads) {
-        FastRenderer render = new FastRenderer();
-        render.setMultithreading(threads);
-
+    @Test
+    public void wheelTest() {
         Scene scene = new Scene("Test scene") //
                 .setAmbientLight(new AmbientLight(new Color(java.awt.Color.BLACK), 0.15));
 
@@ -96,13 +81,13 @@ public final class Main {
         hat.move(new Vector(-100, 0, 50));
 
         Geometries sideShapes = new Geometries();
-        sideShapes.add(hat, pyramid, sphere);
-        sideShapes.setCollider(new BoxCollider(new Point3D(-50, 100, -50), new Point3D(400, 250, 300)));
-        scene.geometries.add(floor, wheel, sideShapes);
+        sideShapes.add(hat,pyramid,sphere);
+        sideShapes.setCollider(new BoxCollider(new Point3D(-50,100,-50),new Point3D(400,250,300)));
+        scene.geometries.add(floor, wheel,sideShapes);
         scene.lights.add(new DirectionalLight(new Color(500, 500, 500), new Vector(1, -1, -1)));
         // scene.lights.add(new PointLight(new Color(255, 255, 255), wheel.getPosition()).setKL(0.00001).setKQ(0.00001));
         ImageWriter imageWriter = new ImageWriter("wheel colliders", 1000, 1000);
-        render.setImageWriter(imageWriter) //
+        this.render.setImageWriter(imageWriter) //
                 .setCamera(camera) //
                 .setRayTracer(new RayTracerBasic(scene));
         render.renderImage();
@@ -112,3 +97,4 @@ public final class Main {
 
     }
 }
+

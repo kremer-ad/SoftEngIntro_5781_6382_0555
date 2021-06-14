@@ -53,17 +53,13 @@ public class Ring extends Geometry {
         return outerCylinder.getNormal(pnt);
     }
 
-    @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        List<GeoPoint> ret = this.findGeoIntersections(ray);
-        if (ret == null) {
-            return null;
-        }
-        return ret.stream().map(pt -> pt.point).collect(Collectors.toList());
-    }
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        if(!this.isIntersectingCollider(ray,maxDistance)){
+            return null;
+        }
+
         List<GeoPoint> outerIntersections = outerCylinder.findGeoIntersections(ray, maxDistance);
         List<GeoPoint> innerIntersections = holeCylinder.findGeoIntersections(ray, maxDistance);
         //the intersection formula is: (CvH)-(C^H)
@@ -92,6 +88,7 @@ public class Ring extends Geometry {
 
 
     public Intersectable move(Vector x) {
+        super.move(x);
         this.outerCylinder.move(x);
         this.holeCylinder.move(x);
 

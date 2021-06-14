@@ -6,7 +6,7 @@ import primitives.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import static primitives.Util.*;
+import static primitives.Util.alignZero;
 
 public class Sphere extends Geometry {
     /**
@@ -18,6 +18,10 @@ public class Sphere extends Geometry {
      * radius of sphere
      */
     private double radius;
+    /**
+     * the sphere collider
+     */
+    private BoxCollider collider;
 
     /**
      * sphere constructor
@@ -43,9 +47,10 @@ public class Sphere extends Geometry {
         return radius;
     }
 
-    public Intersectable move(Vector x){
+    public Intersectable move(Vector x) {
+        super.move(x);
         //move the center and all the sphere will move
-        this.center=this.center.add(x);
+        this.center = this.center.add(x);
 
         return this;
     }
@@ -67,6 +72,9 @@ public class Sphere extends Geometry {
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        if (!this.isIntersectingCollider(ray, maxDistance)) {
+            return null;
+        }
         if (center.equals(ray.getP0())) { // Ray head is the center of the sphere
             return List.of(new GeoPoint(this, center.add(ray.getDir().scale(radius))));
         }
@@ -88,11 +96,11 @@ public class Sphere extends Geometry {
         }
 
         List<GeoPoint> ret = new LinkedList<>();
-        if (tm - th1 > 0 && alignZero(tm - th1 - maxDistance) <=0 ) {
-                ret.add(new GeoPoint(this, ray.getPoint(tm - th1)));
+        if (tm - th1 > 0 && alignZero(tm - th1 - maxDistance) <= 0) {
+            ret.add(new GeoPoint(this, ray.getPoint(tm - th1)));
         }
 
-        if (tm - th2 > 0 && alignZero(tm - th1 - maxDistance) <=0) {
+        if (tm - th2 > 0 && alignZero(tm - th1 - maxDistance) <= 0) {
             ret.add(new GeoPoint(this, ray.getPoint(tm - th2)));
         }
 
@@ -115,12 +123,18 @@ public class Sphere extends Geometry {
         this.radius = (double) json.get("radius");
         return this;
     }
+
     public Geometry getEmission(Color color) {
         return this.setEmission(color);
     }
 
     @Override
-    public Intersectable rotate(Vector euler){
+    public BoxCollider getCollider() {
+        return this.collider;
+    }
+
+    @Override
+    public Intersectable rotate(Vector euler) {
         return this;
     }
 }

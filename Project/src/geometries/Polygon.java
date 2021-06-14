@@ -94,12 +94,16 @@ public class Polygon extends Geometry {
 
     /**
      * search for all intersection points within maxDistance from ray's head
+     *
      * @param ray
      * @param maxDistance
      * @return
      */
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        if(!isIntersectingCollider(ray,maxDistance)){
+            return null;
+        }
         //there is two option, 1: the ray have intersection point with the plane, 2 the ray is on the plane
         //check option 1
         List<GeoPoint> ret = plane.findGeoIntersections(ray, maxDistance);
@@ -138,13 +142,35 @@ public class Polygon extends Geometry {
         return true;
     }
 
-    public Intersectable move(Vector x){
+
+    public Intersectable move(Vector x) {
+        super.move(x);
         //move all the vertices of the polygon
-        this.vertices = this.vertices.stream().map(v->v.add(x)).collect(Collectors.toList());
+        this.vertices = this.vertices.stream().map(v -> v.add(x)).collect(Collectors.toList());
         //next, we want to move the plane
         this.plane.move(x);
         return this;
     }
+
+    /**
+     * get the center of the polygon
+     *
+     * @return the center of the polygon
+     */
+    public Point3D getCenter() {
+        //centroid of polygon : sum(vertices)/n
+        Point3D sum = Point3D.ZERO;
+        for (var v : this.vertices) {
+            if (!v.equals(Point3D.ZERO)) {
+                sum = sum.add(new Vector(v));
+            }
+        }
+        if (sum.equals(Point3D.ZERO)) {
+            return Point3D.ZERO;
+        }
+        return (new Vector(sum)).scale(1 / vertices.size()).getHead();
+    }
+
 
     @Override
     public JSONObject toJSON() {
@@ -175,8 +201,9 @@ public class Polygon extends Geometry {
 
     @Override
     public Intersectable rotate(Vector euler) {
-        this.vertices = this.vertices.stream().map(v->v.rotate(euler)).collect(Collectors.toList());
-        this.plane = new Plane(this.vertices.get(0),this.vertices.get(1),this.vertices.get(2));
+        this.vertices = this.vertices.stream().map(v -> v.rotate(euler)).collect(Collectors.toList());
+        this.plane = new Plane(this.vertices.get(0), this.vertices.get(1), this.vertices.get(2));
         return this;
     }
+    
 }

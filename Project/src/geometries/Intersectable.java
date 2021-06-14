@@ -1,5 +1,6 @@
 package geometries;
 
+import primitives.BoxCollider;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -76,6 +77,12 @@ public interface Intersectable {
     }
 
     /**
+     * get the collider of the intersectable shape (not have to be a parameter of the class)
+     * @return the collider
+     */
+    BoxCollider getCollider();
+
+    /**
      * PDS class that contain data about a point and its geometry
      * created to gain efficient
      */
@@ -103,6 +110,13 @@ public interface Intersectable {
         }
 
 
+    }
+
+    default boolean isIntersectingCollider(Ray ray, double distance){
+        if(this.getCollider()==null){
+            return true;
+        }
+        return this.getCollider().isIntersecting(ray,distance);
     }
 
 }

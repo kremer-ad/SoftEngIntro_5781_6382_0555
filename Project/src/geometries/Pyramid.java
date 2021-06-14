@@ -21,6 +21,7 @@ public class Pyramid extends Geometry {
      * @param topPoint the pyramid top
      */
     public Pyramid(Polygon base, Point3D topPoint) {
+
         this.base = base;
         this.edges = new ArrayList<Triangle>(base.vertices.size());
         //create triangle from each 2 near vertices of the base to the topPoint
@@ -28,6 +29,7 @@ public class Pyramid extends Geometry {
             edges.add(new Triangle(base.vertices.get(i), base.vertices.get(i + 1), topPoint));
         }
         edges.add(new Triangle(base.vertices.get(0), base.vertices.get(base.vertices.size() - 1), topPoint));
+
     }
 
     @Override
@@ -40,6 +42,12 @@ public class Pyramid extends Geometry {
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray,double maxDistance) {
+        if(!this.isIntersectingCollider(ray,maxDistance)){
+            return null;
+        }
+        if(!this.isIntersectingCollider(ray,maxDistance)){
+            return null;
+        }
         List<GeoPoint> ret = new LinkedList<GeoPoint>();
         appendIfNotNull(ret, base.findGeoIntersections(ray,maxDistance));
         for (var edge : edges) {
@@ -75,6 +83,7 @@ public class Pyramid extends Geometry {
 
     @Override
     public Intersectable move(Vector x) {
+        super.move(x);
         base.move(x);
         for (var edge : edges) {
             edge.move(x);

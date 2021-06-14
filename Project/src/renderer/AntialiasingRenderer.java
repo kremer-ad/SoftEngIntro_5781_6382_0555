@@ -4,7 +4,7 @@ import primitives.Color;
 import primitives.Ray;
 
 public class AntialiasingRenderer extends Render {
-    private static final int RAYS_IN_BEAM = 60;
+    private static final int RAYS_IN_BEAM = 81;
 
     public AntialiasingRenderer() {
         super();

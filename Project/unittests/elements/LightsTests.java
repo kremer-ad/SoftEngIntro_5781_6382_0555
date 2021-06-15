@@ -10,7 +10,7 @@ import org.junit.Test;
 import primitives.*;
 import renderer.ImageWriter;
 import renderer.rayTracers.RayTracerBasic;
-import renderer.Render;
+import renderer.imageRenderer.Render;
 import scene.Scene;
 
 /**

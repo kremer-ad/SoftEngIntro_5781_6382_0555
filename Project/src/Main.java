@@ -3,7 +3,7 @@ import elements.lights.AmbientLight;
 import elements.lights.DirectionalLight;
 import geometries.*;
 import primitives.*;
-import renderer.FastRenderer;
+import renderer.imageRenderer.FastRenderer;
 import renderer.ImageWriter;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;

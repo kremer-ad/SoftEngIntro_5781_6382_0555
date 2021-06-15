@@ -8,6 +8,7 @@ import elements.*;
 import geometries.*;
 import primitives.*;
 import renderer.*;
+import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
 

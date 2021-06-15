@@ -1,4 +1,4 @@
-package renderer;
+package renderer.imageRenderer;
 
 import primitives.Color;
 import primitives.Ray;
@@ -26,6 +26,7 @@ public class AntialiasingRenderer extends Render {
      * @param x the pixel number from the right
      * @param y the pixel number from the top
      */
+    @Override
     protected void renderPixel(int x,int y){
         Ray[] rays = camera.constructRaysThroughPixel(writer.getNx(), writer.getNy(), x, y, RAYS_IN_BEAM);
         Color sum = Color.BLACK;

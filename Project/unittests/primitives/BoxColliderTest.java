@@ -5,9 +5,9 @@ import elements.lights.AmbientLight;
 import elements.lights.DirectionalLight;
 import geometries.*;
 import org.junit.Test;
-import renderer.AntialiasingRenderer;
+import renderer.imageRenderer.AntialiasingRenderer;
 import renderer.ImageWriter;
-import renderer.Render;
+import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
 

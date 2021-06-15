@@ -7,8 +7,14 @@ import elements.lights.PointLight;
 import geometries.*;
 import org.junit.Test;
 import primitives.*;
+import renderer.imageRenderer.BasicFastRenderer;
+import renderer.imageRenderer.FastRenderer;
+import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
+import renderer.videoRenderer.FunctionalVideoRenderer;
 import scene.Scene;
+
+import java.io.IOException;
 
 /**
  * Test rendering an image
@@ -560,7 +566,7 @@ public class FastRendererTest {
      * Produce a scene with a 3D model and render it into a png image
      */
     @Test
-    public void teapot1() {
+    public void teapot1() throws IOException {
         scene.geometries.add( //
                 new Triangle(pnts[7], pnts[6], pnts[1]).setEmission(color).setMaterial(mat), //
                 new Triangle(pnts[1], pnts[2], pnts[7]).setEmission(color).setMaterial(mat), //
@@ -1555,18 +1561,29 @@ public class FastRendererTest {
                 new Triangle(pnts[470], pnts[469], pnts[529]).setEmission(color).setMaterial(mat), //
                 new Triangle(pnts[529], pnts[530], pnts[470]).setEmission(color).setMaterial(mat) //
         );
+        scene.geometries.setCollider(new BoxCollider(Point3D.ZERO, new Point3D(80, 40, 50)));
         scene.lights.add(new PointLight(new Color(500, 500, 500), new Point3D(100, 0, -100)) //
                 .setKQ(0.000001));
 
         ImageWriter imageWriter = new ImageWriter("teapot", 800, 800);
-        FastRenderer render = (FastRenderer) new FastRenderer() //
+        Render render = new BasicFastRenderer() //
                 .setCamera(camera) //
                 .setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene)); //
-        render.setMultithreading(3).setDebugPrint();
         render.renderImage();
         render.printGrid(50, new Color(java.awt.Color.YELLOW));
         render.writeToImage();
+        FunctionalVideoRenderer videoRender = new FunctionalVideoRenderer(render, scene)
+                .setName("teapot rotation")
+                .setFps(25)
+                .setLength(100)
+                .setAlgorithm(data -> {
+                    Point3D nextPoint = camera.calcPointOnSphere(0, Math.toRadians((360D / 100D) * data.frameNumber), Point3D.ZERO);
+                    data.camera.lookAtTransform(nextPoint, Point3D.ZERO);
+                    return data;
+                }).setTrackFunction(data -> System.out.println((data.frameNumber + 1) + "/100"));
+        videoRender.renderVideo();
+
     }
 
     @Test
@@ -1574,12 +1591,148 @@ public class FastRendererTest {
         FastRenderer render = new FastRenderer();
         render.setMultithreading(3);
 
+        Wheel wheel = new Wheel(100D, 30D, 80D, 12);
+        // scene.lights.add(new PointLight(new Color(255, 255, 255), wheel.getPosition()).setKL(0.00001).setKQ(0.00001));
+        ImageWriter imageWriter = new ImageWriter("wheel colliders", 1000, 1000);
+        render.setImageWriter(imageWriter) //
+                .setCamera(setCameraForWheel()) //
+                .setRayTracer(new RayTracerBasic(setSceneForWheel(wheel)));
+        render.renderImage();
+        render.writeToImage();
+
+        //  Vector angleSpeed = new Vector(0D, 0D, -14.4D);
+
+    }
+
+    @Test
+    public void fastMovingWheelTest() throws IOException {
+        Wheel wheel = new Wheel(100D, 30D, 80D, 12);
+        Scene scene = setSceneForWheel(wheel);
+        Camera camera = setCameraForWheel();
+        Render renderer = new BasicFastRenderer()
+                .setImageWriter(new ImageWriter("movie", 1000, 1000))
+                .setCamera(camera)
+                .setRayTracer(new RayTracerBasic(scene));
+        Vector angleSpeed = new Vector(0D, 0D, -14.4D);
+        Vector movementSpeed = new Vector(-1250D / (25), 0, 0);
+        FunctionalVideoRenderer videoRenderer = new FunctionalVideoRenderer(renderer, scene)
+                .setFps(25)
+                .setLength(25)
+                .setName("test wheel video")
+                .setAlgorithm(data -> {
+                    wheel.move(movementSpeed);
+                    wheel.rotate(angleSpeed);
+                    return data;
+                })
+                .setTrackFunction(data -> System.out.println((data.frameNumber + 1) + "/25"));
+        videoRenderer.renderVideo();
+    }
+
+    @Test
+    public void machineTest() throws IOException {
+
         Scene scene = new Scene("Test scene") //
                 .setAmbientLight(new AmbientLight(new Color(java.awt.Color.BLACK), 0.15));
 
+
+        Material reflectionMat = new Material()
+                .setKD(.5D)
+                .setKS(.5D)
+                .setNShininess(100)
+                .setKR(.6D);
+        Material refractionMat = new Material()
+                .setKD(1D)
+                .setKS(1D)
+                .setNShininess(100)
+                .setKT(.98D);
+        Material regularMat = new Material()
+                .setKD(1D)
+                .setKS(1D)
+                .setNShininess(100);
+        Color woodColor = new Color(153, 101, 21);
+
+        Machine machine = new Machine(regularMat, woodColor);
+
+        Intersectable floor = (Plane) new Plane(Point3D.ZERO, new Vector(0, 1, 0))
+                .setEmission(new Color(java.awt.Color.BLACK))
+                .setMaterial(reflectionMat)
+                .setCollider(new BoxCollider(Point3D.ZERO, new Point3D(99999999, .001, 99999999)))
+                .move(new Vector(0, -50, 0));
+        Intersectable pyramid = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, 200, 0))
+                .setMaterial(regularMat)
+                .setEmission(new Color(java.awt.Color.BLUE))
+                .move(new Vector(0, -50, 0));
+        Intersectable sphere = new Sphere(Point3D.ZERO, 100)
+                .setEmission(new Color(java.awt.Color.GREEN))
+                .setMaterial(regularMat)
+                .move(new Vector(-100, 0, 0));
+        Intersectable hat = new Pyramid(new Polygon(
+                new Point3D(36.602540378444, 0, 136.60254037844),
+                new Point3D(136.60254037844, 0, -36.602540378444),
+                new Point3D(-36.602540378444, 0, -136.60254037844),
+                new Point3D(-136.60254037844, 0, 36.602540378444)
+        ), new Point3D(0, 200, 0)).setMaterial(refractionMat)
+                .setEmission(new Color(java.awt.Color.orange))
+                .move(new Vector(-100, 80, 0));
+
+        //wheel.move(new Vector(0, 50, -300));
+        sphere.move(new Vector(-100, 50, 50));
+        hat.move(new Vector(-100, 0, 50));
+
+        Geometries sideShapes = new Geometries();
+        sideShapes.add(hat, pyramid, sphere);
+        sideShapes.setCollider(new BoxCollider(new Point3D(-50, 100, -50), new Point3D(400, 250, 300)));
+        scene.geometries.add(floor, machine, sideShapes);
+        scene.lights.add(new DirectionalLight(new Color(500, 500, 500), new Vector(1, -1, -1)));
+
+        Camera camera = setCameraForWheel();
+        Render renderer = new BasicFastRenderer()
+                .setImageWriter(new ImageWriter("machine test", 10000, 10000))
+                .setCamera(camera)
+                .setRayTracer(new RayTracerBasic(scene));
+
+        renderer.renderImage();
+        renderer.writeToImage();
+        Vector angleSpeed = new Vector(0D, 0D, -14.4D);
+        Vector movementSpeed = new Vector(-1250D / (25), 0, 0);
+
+      /*
+        FunctionalVideoRenderer videoRenderer = new FunctionalVideoRenderer(renderer, scene)
+                .setFps(25)
+                .setLength(25)
+                .setName("test wheel video")
+                .setAlgorithm(data -> {
+                    wheel.move(movementSpeed);
+                    wheel.rotate(angleSpeed);
+                    return data;
+                })
+                .setTrackFunction(data -> System.out.println((data.frameNumber + 1) + "/25"));
+        videoRenderer.renderVideo();
+        */
+    }
+
+    private Camera setCameraForWheel() {
         Camera camera = new Camera(new Point3D(0, 0, 5000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
                 .setViewPlaneSize(800, 800)
                 .setDistance(5000); //
+
+
+        //Vector wheelDist = new Vector(new Point3D(0, 4000, -4000)).scale(-1);
+        camera.lookAtTransform(new Point3D(0, 5000, -5000), new Point3D(0, 50, -300));
+
+        return camera;
+    }
+
+    private Scene setSceneForWheel(Wheel wheel) {
+        Scene scene = new Scene("Test scene") //
+                .setAmbientLight(new AmbientLight(new Color(java.awt.Color.BLACK), 0.15));
+
+
         Material reflectionMat = new Material()
                 .setKD(.5D)
                 .setKS(.5D)
@@ -1600,10 +1753,9 @@ public class FastRendererTest {
         Intersectable floor = (Plane) new Plane(Point3D.ZERO, new Vector(0, 1, 0))
                 .setEmission(new Color(java.awt.Color.BLACK))
                 .setMaterial(reflectionMat)
-                //.setCollider(new BoxCollider(Point3D.ZERO, new Point3D(Double.POSITIVE_INFINITY, .001, Double.POSITIVE_INFINITY)))
+                .setCollider(new BoxCollider(Point3D.ZERO, new Point3D(99999999, .001, 99999999)))
                 .move(new Vector(0, -50, 0));
-        Wheel wheel = new Wheel(100D, 30D, 80D, 12)
-                .setMaterial(regularMat)
+        wheel.setMaterial(regularMat)
                 .setEmission(woodColor)
                 .setCollider(new BoxCollider(Point3D.ZERO, new Point3D(210D, 210D, 40)).move(new Vector(0, 105, 0)));
         wheel.move(new Vector(200, 0, 0));
@@ -1629,10 +1781,6 @@ public class FastRendererTest {
                 .setEmission(new Color(java.awt.Color.orange))
                 .move(new Vector(-100, 80, 0));
 
-
-        //Vector wheelDist = new Vector(new Point3D(0, 4000, -4000)).scale(-1);
-        camera.lookAtTransform(new Point3D(0, 4000, -4000), wheel.getPosition());
-
         wheel.move(new Vector(0, 50, -300));
         sphere.move(new Vector(-100, 50, 50));
         hat.move(new Vector(-100, 0, 50));
@@ -1642,16 +1790,9 @@ public class FastRendererTest {
         sideShapes.setCollider(new BoxCollider(new Point3D(-50, 100, -50), new Point3D(400, 250, 300)));
         scene.geometries.add(floor, wheel, sideShapes);
         scene.lights.add(new DirectionalLight(new Color(500, 500, 500), new Vector(1, -1, -1)));
-        // scene.lights.add(new PointLight(new Color(255, 255, 255), wheel.getPosition()).setKL(0.00001).setKQ(0.00001));
-        ImageWriter imageWriter = new ImageWriter("wheel colliders", 1000, 1000);
-        render.setImageWriter(imageWriter) //
-                .setCamera(camera) //
-                .setRayTracer(new RayTracerBasic(scene));
-        render.renderImage();
-        render.writeToImage();
 
-        //  Vector angleSpeed = new Vector(0D, 0D, -14.4D);
-
+        return scene;
     }
+
 
 }

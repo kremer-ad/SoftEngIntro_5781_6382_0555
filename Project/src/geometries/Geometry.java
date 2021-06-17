@@ -7,6 +7,7 @@ public abstract class Geometry implements Intersectable, Serializable {
 
     protected Color emission = Color.BLACK;
     protected Material material = new Material();
+    protected  BoxCollider collider;
 
     public Color getEmission() {
         return emission;
@@ -22,7 +23,14 @@ public abstract class Geometry implements Intersectable, Serializable {
         return this;
     }
 
+    public BoxCollider getCollider(){
+        return this.collider;
+    }
 
+    public Geometry setCollider(BoxCollider collider){
+        this.collider = collider;
+        return this;
+    }
 
     public Material getMaterial() {
         return material;
@@ -50,4 +58,13 @@ public abstract class Geometry implements Intersectable, Serializable {
         this.material.load((JSONObject) json.get("material"));
         return this;
     }
+
+    public Intersectable move(Vector x){
+        if(this.collider==null){
+            return this;//branchless
+        }
+        this.collider.move(x);
+        return this;
+    }
+
 }

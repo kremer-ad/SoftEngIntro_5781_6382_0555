@@ -8,6 +8,7 @@ import java.util.List;
 public class Wheel implements Intersectable, Serializable {
     private Geometries shapes;
     private Point3D position;
+    private BoxCollider collider;
 
     public Wheel(double radius, double height, double hole, int sticksNumber) {
         Geometry outerRing = new Ring(new Ray(Point3D.ZERO, new Vector(0, 0, 1)), radius, hole, height);
@@ -22,7 +23,7 @@ public class Wheel implements Intersectable, Serializable {
         this.shapes = new Geometries();
         shapes.add(outerRing, innerBall);
         shapes.add(sticks);
-
+        this.collider = new BoxCollider(this.position, Math.max(height, radius * 2));//due to rotations problem the box will be always cube
     }
 
     @Override
@@ -32,12 +33,15 @@ public class Wheel implements Intersectable, Serializable {
 
     @Override
     public Intersectable move(Vector x) {
+        if (this.collider != null) {
+            this.collider.move(x);
+        }
         this.position = this.position.add(x);
         shapes.move(x);
         return this;
     }
 
-    public Point3D getPosition(){
+    public Point3D getPosition() {
         return this.position;
     }
 
@@ -52,6 +56,11 @@ public class Wheel implements Intersectable, Serializable {
         }
         shapes.rotate(euler);
         return this;
+    }
+
+    @Override
+    public BoxCollider getCollider() {
+        return collider;
     }
 
     @Override
@@ -76,6 +85,11 @@ public class Wheel implements Intersectable, Serializable {
         for (var shape : this.shapes.shapes) {
             ((Geometry) shape).setEmission(color);
         }
+        return this;
+    }
+
+    public Wheel setCollider(BoxCollider collider) {
+        this.collider = collider;
         return this;
     }
 

@@ -3,7 +3,7 @@ package renderer.videoRenderer;
 import elements.Camera;
 import scene.Scene;
 
-class VideoData {
+public class VideoData {
     public Scene scene;
     public int frameNumber;
     public Camera camera;

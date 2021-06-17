@@ -1,22 +1,18 @@
 package elements;
 
-import static java.lang.System.mapLibraryName;
-import static java.lang.System.out;
-import static org.junit.Assert.*;
-
 import elements.lights.AmbientLight;
 import elements.lights.SpotLight;
 import geometries.Cylinder;
 import geometries.Sphere;
 import geometries.Triangle;
 import org.junit.Test;
-
 import primitives.*;
 import renderer.ImageWriter;
-import renderer.Render;
+import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
-import renderer.videoRenderer.VideoWriter;
 import scene.Scene;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Testing Camera Class

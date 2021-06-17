@@ -75,6 +75,7 @@ public class Tube extends Geometry {
     }
 
     public  Intersectable move(Vector x){
+        super.move(x);
         //move the base of the ray and all the tube will move
         this.axisRay = new Ray(this.axisRay.getP0().add(x),this.axisRay.getDir());
         return this;
@@ -82,6 +83,10 @@ public class Tube extends Geometry {
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        if(!isIntersectingCollider(ray,maxDistance)){
+            return null;
+        }
+
         //for using less functions we storing all teh parameters in other variables
         double rayOriginX = ray.getP0().getX();
         double rayOriginY = ray.getP0().getY();

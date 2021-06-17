@@ -2,10 +2,7 @@ package geometries;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Serializable;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +16,11 @@ public class Geometries implements Intersectable, Serializable {
     public Geometries() {
         shapes = new LinkedList<Intersectable>();
     }
+
+    /**
+     * the collider of the geometries
+     */
+    private BoxCollider collider;
 
     /**
      * constructor - gets collection of geometries
@@ -51,9 +53,12 @@ public class Geometries implements Intersectable, Serializable {
      */
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        if (!this.isIntersectingCollider(ray, maxDistance)) {
+            return null;
+        }
         List<GeoPoint> ret = new LinkedList<GeoPoint>();
         for (Intersectable shape : shapes) {
-            var geoIntersection = shape.findGeoIntersections(ray,maxDistance);
+            var geoIntersection = shape.findGeoIntersections(ray, maxDistance);
             if (geoIntersection == null) {
                 continue;
             } // if there is no intersections points - continue
@@ -62,12 +67,16 @@ public class Geometries implements Intersectable, Serializable {
                 ret.add(gPnt);
             }
         }
-        return ret.isEmpty() ? null : ret;    }
+        return ret.isEmpty() ? null : ret;
+    }
 
     @Override
     public Intersectable move(Vector x) {
+        if (this.collider != null) {
+            this.collider.move(x);
+        }
         //move all the shapes in the collections
-        for (var shape : shapes){
+        for (var shape : shapes) {
             shape.move(x);
         }
         return this;
@@ -87,11 +96,16 @@ public class Geometries implements Intersectable, Serializable {
         return ret;
     }
 
-    public Intersectable rotate(Vector euler){
-        for(var geometry : this.shapes){
+    public Intersectable rotate(Vector euler) {
+        for (var geometry : this.shapes) {
             geometry.rotate(euler);
         }
         return this;
+    }
+
+    @Override
+    public BoxCollider getCollider() {
+        return this.collider;
     }
 
 
@@ -107,6 +121,7 @@ public class Geometries implements Intersectable, Serializable {
 
     /**
      * load all the given geometry from json object
+     *
      * @param json json object that present geometry
      * @return the geometry
      */
@@ -133,7 +148,7 @@ public class Geometries implements Intersectable, Serializable {
                 break;
             case "Polygon":
                 Polygon polygon = new Polygon(Point3D.ZERO, new Point3D(0, 0, 1), new Point3D(0, 1, 0), new Point3D(0, 1, 1));
-                ret=(Intersectable) polygon.load(json);
+                ret = (Intersectable) polygon.load(json);
                 break;
             case "Sphere":
                 Sphere sphere = new Sphere(Point3D.ZERO, 1);
@@ -142,4 +157,17 @@ public class Geometries implements Intersectable, Serializable {
         }
         return ret;
     }
+
+    /**
+     * setter
+     *
+     * @param collider the collider to set
+     * @return this
+     */
+    public Geometries setCollider(BoxCollider collider) {
+        this.collider = collider;
+        return this;
+    }
+
+
 }

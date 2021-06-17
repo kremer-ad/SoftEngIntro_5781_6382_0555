@@ -9,13 +9,14 @@ import primitives.Color;
 import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
+import renderer.imageRenderer.AntialiasingRenderer;
+import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
 
 import java.io.IOException;
 
 public class AntialiasingRenderTest {
-
     private Camera camera = new Camera(Point3D.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0)) //
             .setDistance(100) //
             .setViewPlaneSize(500, 500);

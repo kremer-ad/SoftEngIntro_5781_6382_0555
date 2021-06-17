@@ -2,7 +2,7 @@ package renderer.videoRenderer;
 
 import elements.Camera;
 import renderer.ImageWriter;
-import renderer.Render;
+import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
 
@@ -51,6 +51,12 @@ public class FunctionalVideoRenderer {
      * the image height
      */
     private int nY;
+    /**
+     * for choosing custom renderer
+     */
+    private Render render;
+
+
 
     public FunctionalVideoRenderer setScene(Scene scene) {
         this.scene = scene;
@@ -72,9 +78,26 @@ public class FunctionalVideoRenderer {
         return this;
     }
 
+    /**
+     * create video renderer with size of render
+     * @param nX width
+     * @param nY height
+     */
     public FunctionalVideoRenderer(int nX, int nY) {
+        this.render = null;//so we can work with the auto render
         this.nX = nX;
         this.nY = nY;
+    }
+
+    /**
+     * create video renderer with custom render
+     * @param render the render
+     * @param scene the scene in the render image writer
+     */
+    public FunctionalVideoRenderer(Render render,Scene scene){
+        this.render = render;
+        this.scene = scene;
+        this.camera = render.getCamera();
     }
 
     public FunctionalVideoRenderer setFps(int fps) {
@@ -107,15 +130,17 @@ public class FunctionalVideoRenderer {
                 .setCamera(this.camera)
                 .setScene(this.scene);
         BufferedImage[] videoImages = new BufferedImage[length];
-        Render renderer = new Render()
-                .setCamera(this.camera)
-                .setRayTracer(new RayTracerBasic(this.scene))
-                .setImageWriter(new ImageWriter("temp", this.nX, this.nY));
+        if(render ==null) {
+            this.render =  new Render()
+                    .setCamera(this.camera)
+                    .setRayTracer(new RayTracerBasic(this.scene))
+                    .setImageWriter(new ImageWriter("temp", this.nX, this.nY));
+        }
         for (int i = 0; i < this.length; i++) {
             data.setFrameNumber(i);
             data = algorithm.apply(data);
-            renderer.renderImage();
-            videoImages[i] = deepCopy(renderer.getBufferedImage());
+            this.render.renderImage();
+            videoImages[i] = deepCopy(this.render.getBufferedImage());
             if (trackFunction != null) {
                 trackFunction.accept(data);
             }

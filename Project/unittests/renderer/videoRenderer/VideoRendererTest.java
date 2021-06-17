@@ -8,9 +8,8 @@ import elements.lights.SpotLight;
 import geometries.*;
 import org.junit.Test;
 import primitives.*;
-import renderer.AntialiasingRenderer;
 import renderer.ImageWriter;
-import renderer.Render;
+import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
 

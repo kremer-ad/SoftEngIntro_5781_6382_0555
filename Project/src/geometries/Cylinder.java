@@ -92,6 +92,9 @@ public class Cylinder extends Tube {
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray, double distance) {
+        if(!isIntersectingCollider(ray,distance)){
+            return null;
+        }
         List<GeoPoint> ret = super.findGeoIntersections(ray,distance);
         if (ret == null) {
             ret = new LinkedList<GeoPoint>();

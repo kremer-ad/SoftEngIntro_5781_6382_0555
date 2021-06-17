@@ -84,6 +84,9 @@ public class Plane extends Geometry {
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        if(!isIntersectingCollider(ray,maxDistance)){
+            return null;
+        }
         if (q0.equals(ray.getP0())) {
             return null;
         }
@@ -114,6 +117,7 @@ public class Plane extends Geometry {
     }
 
     public Intersectable move(Vector x) {
+        super.move(x);
         //move the point on the plane and all the points will move
         this.q0 = this.q0.add(x);
         return this;

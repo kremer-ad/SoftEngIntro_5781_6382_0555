@@ -1,14 +1,15 @@
-package renderer;
+package renderer.imageRenderer;
 
 import elements.Camera;
 import primitives.Color;
 import primitives.Ray;
+import renderer.ImageWriter;
 import renderer.rayTracers.RayTracerBase;
 
 import java.awt.image.BufferedImage;
 import java.util.MissingResourceException;
 
-public class Render implements ImageRenderer {
+public class Render {
     protected ImageWriter writer;
     protected Camera camera;
     protected RayTracerBase rayTracer;
@@ -127,5 +128,15 @@ public class Render implements ImageRenderer {
     public Render setImageWriter(ImageWriter imageWriter) {
         writer = imageWriter;
         return this;
+    }
+
+    /**
+     * render one pixel to the image writer
+     * @param x the pixel number from the right
+     * @param y the pixel number from the top
+     */
+    protected void renderPixel(int x,int y){
+        Ray[] rays = camera.constructRaysThroughPixel(writer.getNx(), writer.getNy(), x, y, 1);
+        writer.writePixel(x, y, rayTracer.traceRay(rays[0]));
     }
 }

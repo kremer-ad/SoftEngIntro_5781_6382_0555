@@ -1,5 +1,9 @@
 package renderer.imageRenderer;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.MissingResourceException;
 
 /**
@@ -9,7 +13,7 @@ import java.util.MissingResourceException;
  * @author Dan
  */
 public class FastRenderer extends AntialiasingRenderer {
-
+    private static final Logger logger = LoggerFactory.getLogger(FastRenderer.class);
     private static final String RESOURCE_ERROR = "Renderer resource not set";
     private static final String RENDER_CLASS = "Render";
     private static final String IMAGE_WRITER_COMPONENT = "Image writer";
@@ -20,7 +24,7 @@ public class FastRenderer extends AntialiasingRenderer {
     private int threadsCount = 0;
     private static final int SPARE_THREADS = 2; // Spare threads if trying to use all the cores
 
-    public FastRenderer(){
+    public FastRenderer() {
         super();
         this.setMultithreading(DEFAULT_THREADS_AMOUNT);
     }
@@ -57,8 +61,10 @@ public class FastRenderer extends AntialiasingRenderer {
         for (int i = threadsCount - 1; i >= 0; --i) {
             threads[i] = new Thread(() -> {
                 Pixel pixel = new Pixel();
-                while (thePixel.nextPixel(pixel))
+                while (thePixel.nextPixel(pixel)) {
+                    logger.info("" + (pixel.col * nY + pixel.row) / (nX * nY)+"%");
                     super.renderPixel(pixel.col, pixel.row);
+                }
             });
         }
         // Start threads

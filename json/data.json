@@ -1,0 +1,186 @@
+{
+  "ambient-light": {
+    "intensity": {
+      "r": 255.0,
+      "b": 255.0,
+      "g": 255.0,
+      "type": "color"
+    },
+    "type": "ambient-light"
+  },
+  "background": {
+    "r": 75.0,
+    "b": 90.0,
+    "g": 127.0,
+    "type": "color"
+  },
+  "geometries": {
+    "data": [
+      {
+        "center": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": -100.0,
+          "type": "point3d"
+        },
+        "type": "sphere",
+        "radius": 50.0
+      },
+      {
+        "plane": {
+          "normal": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0,
+            "type": "vector"
+          },
+          "type": "plane",
+          "q0": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": -100.0,
+            "type": "point3d"
+          }
+        },
+        "vertices": [
+          {
+            "x": -100.0,
+            "y": 0.0,
+            "z": -100.0,
+            "type": "point3d"
+          },
+          {
+            "x": 0.0,
+            "y": 100.0,
+            "z": -100.0,
+            "type": "point3d"
+          },
+          {
+            "x": -100.0,
+            "y": 100.0,
+            "z": -100.0,
+            "type": "point3d"
+          }
+        ],
+        "type": "triangle"
+      },
+      {
+        "plane": {
+          "normal": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0,
+            "type": "vector"
+          },
+          "type": "plane",
+          "q0": {
+            "x": 100.0,
+            "y": 0.0,
+            "z": -100.0,
+            "type": "point3d"
+          }
+        },
+        "vertices": [
+          {
+            "x": 100.0,
+            "y": 0.0,
+            "z": -100.0,
+            "type": "point3d"
+          },
+          {
+            "x": 0.0,
+            "y": 100.0,
+            "z": -100.0,
+            "type": "point3d"
+          },
+          {
+            "x": 100.0,
+            "y": 100.0,
+            "z": -100.0,
+            "type": "point3d"
+          }
+        ],
+        "type": "triangle"
+      },
+      {
+        "plane": {
+          "normal": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0,
+            "type": "vector"
+          },
+          "type": "plane",
+          "q0": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": -100.0,
+            "type": "point3d"
+          }
+        },
+        "vertices": [
+          {
+            "x": -100.0,
+            "y": 0.0,
+            "z": -100.0,
+            "type": "point3d"
+          },
+          {
+            "x": 0.0,
+            "y": -100.0,
+            "z": -100.0,
+            "type": "point3d"
+          },
+          {
+            "x": -100.0,
+            "y": -100.0,
+            "z": -100.0,
+            "type": "point3d"
+          }
+        ],
+        "type": "triangle"
+      },
+      {
+        "plane": {
+          "normal": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0,
+            "type": "vector"
+          },
+          "type": "plane",
+          "q0": {
+            "x": 100.0,
+            "y": 0.0,
+            "z": -100.0,
+            "type": "point3d"
+          }
+        },
+        "vertices": [
+          {
+            "x": 100.0,
+            "y": 0.0,
+            "z": -100.0,
+            "type": "point3d"
+          },
+          {
+            "x": 0.0,
+            "y": -100.0,
+            "z": -100.0,
+            "type": "point3d"
+          },
+          {
+            "x": 100.0,
+            "y": -100.0,
+            "z": -100.0,
+            "type": "point3d"
+          }
+        ],
+        "type": "triangle"
+      }
+    ],
+    "type": "geometries"
+  },
+  "name": "Test scene",
+  "type": "scene"
+}

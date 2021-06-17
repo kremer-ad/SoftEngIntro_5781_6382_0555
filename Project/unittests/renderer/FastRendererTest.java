@@ -11,6 +11,7 @@ import renderer.imageRenderer.BasicFastRenderer;
 import renderer.imageRenderer.FastRenderer;
 import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
+import renderer.rayTracers.RayTracerCheap;
 import renderer.videoRenderer.FunctionalVideoRenderer;
 import scene.Scene;
 
@@ -1656,8 +1657,8 @@ public class FastRendererTest {
         Machine[] machines = {
                 //new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
                 //new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
-                new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
-                new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
+                     new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
+                   new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
                 new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200))
         };
 
@@ -1665,7 +1666,7 @@ public class FastRendererTest {
         //machines[1].move(new Vector(-1200, 0, 0));
         //machines[2].move(new Vector(0, 125, 0));
         //machines[3].move(new Vector(1200, 0, 0));
-        machines[2].move(new Vector(2400, 0, 0));
+           machines[2].move(new Vector(2400, 0, 0));
 
         Intersectable floor = (Plane) new Plane(Point3D.ZERO, new Vector(0, 1, 0))
                 .setEmission(new Color(java.awt.Color.BLACK))
@@ -1702,9 +1703,12 @@ public class FastRendererTest {
         //sideShapes.add(hat, pyramid, sphere);
         //sideShapes.setCollider(new BoxCollider(new Point3D(-50, 100, -50), new Point3D(400, 250, 300)));
         //scene.geometries.add(floor, machine, sideShapes);
-        scene.geometries.add(floor,
-                machines[0],machines[1], machines[2]/*,machines[3],machines[4]*/);
-        scene.lights.add(new DirectionalLight(new Color(500, 500, 500), new Vector(1, -1, -1)));
+        Geometries machinesGeo = new Geometries();
+        machinesGeo.add(machines);
+        machinesGeo.setCollider(new BoxCollider(Point3D.ZERO, new Point3D(4000, 1000, 1000)));
+        scene.geometries.add(floor/*,machines[3],machines[4]*/);
+        scene.geometries.add(machinesGeo);
+        scene.lights.add(new DirectionalLight(new Color(255, 255, 255), new Vector(1, -1, -1)));
 
         Camera camera = new Camera(new Point3D(0, 0, 5000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
                 .setViewPlaneSize(800, 800)
@@ -1713,8 +1717,8 @@ public class FastRendererTest {
 
         //Vector wheelDist = new Vector(new Point3D(0, 4000, -4000)).scale(-1);
         camera.lookAtTransform(new Point3D(-6000, 500, -2000), new Point3D(1200, 200, 150));
-        Render renderer = new FastRenderer()
-                .setImageWriter(new ImageWriter("machine test", 10000, 10000))
+        Render renderer = new BasicFastRenderer()
+                .setImageWriter(new ImageWriter("machine test", 5000, 5000))
                 .setCamera(camera)
                 .setRayTracer(new RayTracerBasic(scene));
 

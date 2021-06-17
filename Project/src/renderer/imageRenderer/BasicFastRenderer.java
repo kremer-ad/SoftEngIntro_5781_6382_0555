@@ -1,8 +1,12 @@
 package renderer.imageRenderer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.MissingResourceException;
 
 public class BasicFastRenderer extends Render{
+    private static final Logger logger = LoggerFactory.getLogger(FastRenderer.class);
     private static final String RESOURCE_ERROR = "Renderer resource not set";
     private static final String RENDER_CLASS = "Render";
     private static final String IMAGE_WRITER_COMPONENT = "Image writer";
@@ -50,8 +54,10 @@ public class BasicFastRenderer extends Render{
         for (int i = threadsCount - 1; i >= 0; --i) {
             threads[i] = new Thread(() -> {
                 Pixel pixel = new Pixel();
-                while (thePixel.nextPixel(pixel))
+                while (thePixel.nextPixel(pixel)) {
+                    logger.info((pixel.col * nY + pixel.row) + "/" + (nX * nY) +" , " + (pixel.col * nY + pixel.row) / (nX * nY)+"%");
                     super.renderPixel(pixel.col, pixel.row);
+                }
             });
         }
         // Start threads

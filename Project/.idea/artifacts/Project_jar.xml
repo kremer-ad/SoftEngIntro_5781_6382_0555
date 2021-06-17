@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Project:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Project_jar</output-path>
+    <root id="archive" name="Project.jar">
+      <element id="module-output" name="Project" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jcodec/jcodec-javase/0.2.5/jcodec-javase-0.2.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jcodec/jcodec/0.2.5/jcodec-0.2.5.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

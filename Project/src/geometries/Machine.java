@@ -21,7 +21,6 @@ public class Machine implements Intersectable {
         this.wheels[2].move(new Vector(0, 125, 300));
         this.wheels[3] = new Wheel(125D, 50D, 100, 12).setEmission(emission).setMaterial(material);
         this.wheels[3].move(new Vector(800, 125, 300));
-        this.data.add(wheels);
 
         //the wheel holders
         Geometry[] holders = {
@@ -30,7 +29,12 @@ public class Machine implements Intersectable {
         };
         holders[0].move(new Vector(0, 125, 0));
         holders[1].move(new Vector(0, 125, 300));
-        data.add(holders);
+
+        Geometries wheelsGeos = new Geometries(wheels);
+        wheelsGeos.add(holders);
+        wheelsGeos.setCollider(new BoxCollider(new Point3D(400,125,150),new Point3D(1000,300,1000)));
+
+        this.data.add(wheelsGeos);
 
         //the body of the machine
         Box[] body = {
@@ -39,7 +43,6 @@ public class Machine implements Intersectable {
                 new Box(new Point3D(800, 30, 250), new Point3D(400, 270, 175)).setEmission(emission).setMaterial(material)
         };
        data.add(body);
-
         //the kiyor of  thr machine
         Geometry[] kiyor = {
                 new Cylinder(new Ray(new Point3D(25, 285, 75), new Vector(0, 1, 0)), 20, 100).setEmission(emission).setMaterial(material),
@@ -48,7 +51,10 @@ public class Machine implements Intersectable {
                 new Cylinder(new Ray(new Point3D(775, 285, 275), new Vector(0, 1, 0)), 20, 100).setEmission(emission).setMaterial(material),
                 new Cylinder(new Ray(new Point3D(400, 285, 175), new Vector(0, 1, 0)), 130, 60).setEmission(emission).setMaterial(material)
         };
-        data.add(kiyor);
+        Geometries kiyorGeos = new Geometries(kiyor)
+                .setCollider(new BoxCollider(new Point3D(400,325,175),new Point3D(1000,300,400)));
+
+        data.add(kiyorGeos);
 
         //the head of the kiyor
         data.add(new Box(new Point3D(800, 30, 250), new Point3D(400, 400, 175)).setEmission(emission).setMaterial(material));

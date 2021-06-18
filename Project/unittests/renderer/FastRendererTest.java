@@ -1638,86 +1638,51 @@ public class FastRendererTest {
 
         Material reflectionMat = new Material()
                 .setKD(.5D)
-                .setKS(.5D)
-                .setNShininess(100)
-                .setKR(.6D);
+                .setKS(.8D)
+                .setNShininess(250)
+                .setKR(.2D);
         Material refractionMat = new Material()
                 .setKD(1D)
                 .setKS(1D)
                 .setNShininess(100)
                 .setKT(.98D);
         Material regularMat = new Material()
-                .setKD(1D)
-                .setKS(1D)
-                .setNShininess(100);
-        Color woodColor = new Color(153, 101, 21);
+                .setKD(.8D)
+                .setKS(2D)
+                .setNShininess(250);
+        Color woodColor = new Color(133,94,66);
+        Color copperColor = new Color(217,135,25);
+        Color goldColor = new Color(207,181,59);
 
-        //Machine machine = new Machine(regularMat, woodColor);
 
         Machine[] machines = {
-                //new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
-                //new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
-                     new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
-                   new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
-                new Machine(regularMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200))
+                new Machine(regularMat, refractionMat, copperColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
+                new Machine(regularMat, refractionMat, goldColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200)),
+                new Machine(regularMat, refractionMat, woodColor).setCollider(new BoxCollider(new Point3D(400, 150, 150), 1200))
         };
 
         machines[0].move(new Vector(-2400, 0, 0));
-        //machines[1].move(new Vector(-1200, 0, 0));
-        //machines[2].move(new Vector(0, 125, 0));
-        //machines[3].move(new Vector(1200, 0, 0));
-           machines[2].move(new Vector(2400, 0, 0));
+        machines[2].move(new Vector(2400, 0, 0));
 
         Intersectable floor = (Plane) new Plane(Point3D.ZERO, new Vector(0, 1, 0))
                 .setEmission(new Color(java.awt.Color.BLACK))
                 .setMaterial(reflectionMat)
                 .setCollider(new BoxCollider(Point3D.ZERO, new Point3D(99999999, .001, 99999999)))
                 .move(new Vector(0.01, 0, 0));
-        /*Intersectable pyramid = new Pyramid(new Polygon(
-                new Point3D(36.602540378444, 0, 136.60254037844),
-                new Point3D(136.60254037844, 0, -36.602540378444),
-                new Point3D(-36.602540378444, 0, -136.60254037844),
-                new Point3D(-136.60254037844, 0, 36.602540378444)
-        ), new Point3D(0, 200, 0))
-                .setMaterial(regularMat)
-                .setEmission(new Color(java.awt.Color.BLUE))
-                .move(new Vector(1300, -400, 0));
-        Intersectable sphere = new Sphere(Point3D.ZERO, 100)
-                .setEmission(new Color(java.awt.Color.GREEN))
-                .setMaterial(regularMat)
-                .move(new Vector(1000, -400, 0));
-        Intersectable hat = new Pyramid(new Polygon(
-                new Point3D(36.602540378444, 0, 136.60254037844),
-                new Point3D(136.60254037844, 0, -36.602540378444),
-                new Point3D(-36.602540378444, 0, -136.60254037844),
-                new Point3D(-136.60254037844, 0, 36.602540378444)
-        ), new Point3D(0, 200, 0)).setMaterial(refractionMat)
-                .setEmission(new Color(java.awt.Color.orange))
-                .move(new Vector(1000, -480, 0));*/
 
-        //wheel.move(new Vector(0, 50, -300));
-        //sphere.move(new Vector(-100, 50, 50));
-        //hat.move(new Vector(-100, 0, 50));
-
-        //Geometries sideShapes = new Geometries();
-        //sideShapes.add(hat, pyramid, sphere);
-        //sideShapes.setCollider(new BoxCollider(new Point3D(-50, 100, -50), new Point3D(400, 250, 300)));
-        //scene.geometries.add(floor, machine, sideShapes);
         Geometries machinesGeo = new Geometries();
         machinesGeo.add(machines);
         machinesGeo.setCollider(new BoxCollider(Point3D.ZERO, new Point3D(4000, 1000, 1000)));
         scene.geometries.add(floor/*,machines[3],machines[4]*/);
         scene.geometries.add(machinesGeo);
-        scene.lights.add(new DirectionalLight(new Color(255, 255, 255), new Vector(1, -1, -1)));
-        scene.lights.add(new SpotLight(new Color(1000,1000,1000),new Point3D(-800,800,-300), new Vector(-1,-1,1)));
-        scene.lights.add(new PointLight(new Color(500,500,500),new Point3D(0,800,0)));
+        scene.lights.add(new DirectionalLight(new Color(75, 75, 75), new Vector(1, -1, -1)));
+        scene.lights.add(new SpotLight(new Color(255, 255, 255), new Point3D(-800, 800, -300), new Vector(-1, -1, 1)));
+        scene.lights.add(new PointLight(new Color(150, 150, 150), new Point3D(0, 800, 0)));
 
         Camera camera = new Camera(new Point3D(0, 0, 5000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
                 .setViewPlaneSize(800, 800)
                 .setDistance(5000); //
 
-
-        //Vector wheelDist = new Vector(new Point3D(0, 4000, -4000)).scale(-1);
         camera.lookAtTransform(new Point3D(-6000, 500, -2000), new Point3D(1200, 200, 150));
         Render renderer = new BasicFastRenderer()
                 .setImageWriter(new ImageWriter("machine test", 5000, 5000))
@@ -1728,20 +1693,6 @@ public class FastRendererTest {
         renderer.writeToImage();
         Vector angleSpeed = new Vector(0D, 0D, -14.4D);
         Vector movementSpeed = new Vector(-1250D / (25), 0, 0);
-
-      /*
-        FunctionalVideoRenderer videoRenderer = new FunctionalVideoRenderer(renderer, scene)
-                .setFps(25)
-                .setLength(25)
-                .setName("test wheel video")
-                .setAlgorithm(data -> {
-                    wheel.move(movementSpeed);
-                    wheel.rotate(angleSpeed);
-                    return data;
-                })
-                .setTrackFunction(data -> System.out.println((data.frameNumber + 1) + "/25"));
-        videoRenderer.renderVideo();
-        */
     }
 
     private Camera setCameraForWheel() {

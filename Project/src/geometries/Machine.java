@@ -8,7 +8,7 @@ public class Machine implements Intersectable {
     Geometries data;
     Wheel[] wheels;
 
-    public Machine(Material material, Color emission) {
+    public Machine(Material material,Material kiyorMat, Color emission) {
         this.data = new Geometries();
         this.wheels = new Wheel[4];
 
@@ -49,7 +49,7 @@ public class Machine implements Intersectable {
                 new Cylinder(new Ray(new Point3D(775, 285, 75), new Vector(0, 1, 0)), 20, 100).setEmission(emission).setMaterial(material),
                 new Cylinder(new Ray(new Point3D(25, 285, 275), new Vector(0, 1, 0)), 20, 100).setEmission(emission).setMaterial(material),
                 new Cylinder(new Ray(new Point3D(775, 285, 275), new Vector(0, 1, 0)), 20, 100).setEmission(emission).setMaterial(material),
-                new Cylinder(new Ray(new Point3D(400, 285, 175), new Vector(0, 1, 0)), 130, 60).setEmission(emission).setMaterial(material)
+                new Cylinder(new Ray(new Point3D(400, 285, 175), new Vector(0, 1, 0)), 130, 60).setEmission(emission).setMaterial(kiyorMat)
         };
         Geometries kiyorGeos = new Geometries(kiyor)
                 .setCollider(new BoxCollider(new Point3D(400,325,175),new Point3D(1000,300,400)));

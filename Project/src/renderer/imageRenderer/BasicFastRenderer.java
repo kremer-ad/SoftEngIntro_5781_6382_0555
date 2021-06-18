@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.MissingResourceException;
 
-public class BasicFastRenderer extends Render{
+public class BasicFastRenderer extends Render {
     private static final Logger logger = LoggerFactory.getLogger(FastRenderer.class);
     private static final String RESOURCE_ERROR = "Renderer resource not set";
     private static final String RENDER_CLASS = "Render";
@@ -17,7 +17,7 @@ public class BasicFastRenderer extends Render{
     private int threadsCount = 0;
     private static final int SPARE_THREADS = 2; // Spare threads if trying to use all the cores
 
-    public BasicFastRenderer(){
+    public BasicFastRenderer() {
         super();
         this.setMultithreading(DEFAULT_THREADS_AMOUNT);
     }
@@ -55,7 +55,7 @@ public class BasicFastRenderer extends Render{
             threads[i] = new Thread(() -> {
                 Pixel pixel = new Pixel();
                 while (thePixel.nextPixel(pixel)) {
-                    logger.info((pixel.col * nY + pixel.row) + "/" + (nX * nY) +" , " + (pixel.col * nY + pixel.row) / (nX * nY)+"%");
+                    logger.info((pixel.row * nY + pixel.col) + "/" + (nX * nY) + " , " + Math.round(((double) (pixel.row * nY + pixel.col) / (nX * nY)) * 100) + "%");
                     super.renderPixel(pixel.col, pixel.row);
                 }
             });

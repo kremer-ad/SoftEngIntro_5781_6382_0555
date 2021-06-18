@@ -9,6 +9,7 @@ import geometries.*;
 import org.junit.Test;
 import primitives.*;
 import renderer.ImageWriter;
+import renderer.imageRenderer.BasicFastRenderer;
 import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
@@ -296,13 +297,13 @@ public class VideoRendererTest {
         scene.lights.add(new DirectionalLight(new Color(500, 500, 500), new Vector(1, -1, -1)));
         // scene.lights.add(new PointLight(new Color(255, 255, 255), wheel.getPosition()).setKL(0.00001).setKQ(0.00001));
         ImageWriter imageWriter = new ImageWriter("test", 1000, 1000);
-        Render render = new Render()//
+        Render render = new BasicFastRenderer()//
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //
                 .setRayTracer(new RayTracerBasic(scene));
         render.renderImage();
         render.writeToImage();
-
+        System.out.println("image ready");
         Vector angleSpeed = new Vector(0D, 0D, 10D);
         Vector movementSpeed = new Vector(-1250D/(25*4), 0, 0);
         BufferedImage[] images = new BufferedImage[200];
@@ -314,6 +315,7 @@ public class VideoRendererTest {
             images[i] = deepCopy(render.getBufferedImage());
             System.out.println("finish " + (i + 1) + "/" + images.length);
         }
+
         Point3D position = camera.getPosition();
         for (int i = 50; i < 200; i++) {
             camera.lookAtTransform(position.add(movementSpeed),wheel.getPosition());

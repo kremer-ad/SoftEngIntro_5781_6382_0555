@@ -4,6 +4,7 @@ import elements.Camera;
 import elements.lights.AmbientLight;
 import elements.lights.DirectionalLight;
 import elements.lights.PointLight;
+import elements.lights.SpotLight;
 import geometries.*;
 import org.junit.Test;
 import primitives.*;
@@ -11,7 +12,6 @@ import renderer.imageRenderer.BasicFastRenderer;
 import renderer.imageRenderer.FastRenderer;
 import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
-import renderer.rayTracers.RayTracerCheap;
 import renderer.videoRenderer.FunctionalVideoRenderer;
 import scene.Scene;
 
@@ -1562,7 +1562,7 @@ public class FastRendererTest {
                 new Triangle(pnts[470], pnts[469], pnts[529]).setEmission(color).setMaterial(mat), //
                 new Triangle(pnts[529], pnts[530], pnts[470]).setEmission(color).setMaterial(mat) //
         );
-        scene.geometries.setCollider(new BoxCollider(Point3D.ZERO, new Point3D(200, 200, 200)));
+        scene.geometries.setCollider(new BoxCollider(Point3D.ZERO, new Point3D(400, 400, 400)));
         scene.lights.add(new PointLight(new Color(500, 500, 500), new Point3D(100, 0, -100)) //
                 .setKQ(0.000001));
 
@@ -1709,6 +1709,8 @@ public class FastRendererTest {
         scene.geometries.add(floor/*,machines[3],machines[4]*/);
         scene.geometries.add(machinesGeo);
         scene.lights.add(new DirectionalLight(new Color(255, 255, 255), new Vector(1, -1, -1)));
+        scene.lights.add(new SpotLight(new Color(1000,1000,1000),new Point3D(-800,800,-300), new Vector(-1,-1,1)));
+        scene.lights.add(new PointLight(new Color(500,500,500),new Point3D(0,800,0)));
 
         Camera camera = new Camera(new Point3D(0, 0, 5000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
                 .setViewPlaneSize(800, 800)

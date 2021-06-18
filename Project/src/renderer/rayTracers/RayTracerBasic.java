@@ -81,8 +81,8 @@ public class RayTracerBasic extends RayTracerBase {
     public Color traceRay(Ray ray) {
         GeoPoint closestGeoPoint = scene.geometries.findClosestIntersection(ray);
         return closestGeoPoint == null ? scene.background : scene.ambientLight.getIntensity()
-                .add(calcColor(closestGeoPoint, ray))
-                .add(closestGeoPoint.geometry.getEmission());
+                .add(calcColor(closestGeoPoint, ray));
+                //.add(closestGeoPoint.geometry.getEmission());
     }
 
     /**

@@ -62,7 +62,7 @@ public class FastRenderer extends AntialiasingRenderer {
             threads[i] = new Thread(() -> {
                 Pixel pixel = new Pixel();
                 while (thePixel.nextPixel(pixel)) {
-                    logger.info("" + (pixel.col * nY + pixel.row) / (nX * nY)+"%");
+                    logger.info("" + Math.round(((double) (pixel.col * nY + pixel.row) / (nX * nY)) * 100) + "%");
                     super.renderPixel(pixel.col, pixel.row);
                 }
             });

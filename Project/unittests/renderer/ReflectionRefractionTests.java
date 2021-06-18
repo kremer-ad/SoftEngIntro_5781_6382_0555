@@ -13,6 +13,7 @@ import primitives.Color;
 import primitives.Material;
 import primitives.Point3D;
 import primitives.Vector;
+import renderer.imageRenderer.BasicFastRenderer;
 import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
@@ -45,7 +46,7 @@ public class ReflectionRefractionTests {
                 new SpotLight(new Color(1000, 600, 0), new Point3D(-100, -100, 500), new Vector(-1, -1, -2)) //
                         .setKL(0.0004).setKQ(0.0000006));
 
-        Render render = new Render() //
+        Render render = new BasicFastRenderer() //
                 .setImageWriter(new ImageWriter("refractionTwoSpheres", 500, 500)) //
                 .setCamera(camera) //
                 .setRayTracer(new RayTracerBasic(scene));
@@ -83,7 +84,7 @@ public class ReflectionRefractionTests {
                 .setKL(0.00001).setKQ(0.000005));
 
         ImageWriter imageWriter = new ImageWriter("reflectionTwoSpheresMirrored", 500, 500);
-        Render render = new Render() //
+        Render render = new BasicFastRenderer() //
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //
                 .setRayTracer(new RayTracerBasic(scene));
@@ -116,7 +117,7 @@ public class ReflectionRefractionTests {
                 .setKL(4E-5).setKQ(2E-7));
 
         ImageWriter imageWriter = new ImageWriter("refractionShadow", 600, 600);
-        Render render = new Render() //
+        Render render = new BasicFastRenderer() //
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //
                 .setRayTracer(new RayTracerBasic(scene));

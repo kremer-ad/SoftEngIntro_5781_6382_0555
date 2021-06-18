@@ -8,6 +8,7 @@ import elements.*;
 import geometries.*;
 import primitives.*;
 import renderer.*;
+import renderer.imageRenderer.BasicFastRenderer;
 import renderer.imageRenderer.Render;
 import renderer.rayTracers.RayTracerBasic;
 import scene.Scene;
@@ -39,7 +40,7 @@ public class ShadowTests {
 				new SpotLight(new Color(400, 240, 0), new Point3D(-100, -100, 200), new Vector(1, 1, -3)) //
 						.setKL(1E-5).setKQ(1.5E-7));
 
-		Render render = new Render(). //
+		Render render = new BasicFastRenderer(). //
 				setImageWriter(new ImageWriter("shadowSphereTriangleInitial", 400, 400)) //
 				.setCamera(camera) //
 				.setRayTracer(new RayTracerBasic(scene));
@@ -64,7 +65,7 @@ public class ShadowTests {
 				new SpotLight(new Color(400, 240, 0), new Point3D(-100, -100, 200), new Vector(1, 1, -3)) //
 						.setKL(1E-5).setKQ(1.5E-7));
 
-		Render render = new Render(). //
+		Render render = new BasicFastRenderer(). //
 				setImageWriter(new ImageWriter("shadowSphereTriangle2Initial", 400, 400)) //
 				.setCamera(camera) //
 				.setRayTracer(new RayTracerBasic(scene));
@@ -89,7 +90,7 @@ public class ShadowTests {
 				new SpotLight(new Color(400, 240, 0), new Point3D(-100, -100, 200), new Vector(1, 1, -3)) //
 						.setKL(1E-5).setKQ(1.5E-7));
 
-		Render render = new Render(). //
+		Render render = new BasicFastRenderer(). //
 				setImageWriter(new ImageWriter("shadowSphereTriangle3Initial", 400, 400)) //
 				.setCamera(camera) //
 				.setRayTracer(new RayTracerBasic(scene));
